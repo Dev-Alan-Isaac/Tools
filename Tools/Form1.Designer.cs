@@ -33,8 +33,11 @@
             bunifuDragControl1 = new Bunifu.Framework.UI.BunifuDragControl(components);
             bunifuDragControl2 = new Bunifu.Framework.UI.BunifuDragControl(components);
             panel_TopBar = new Panel();
+            button_Close = new Button();
             panel_Body = new Panel();
             bunifuDragControl3 = new Bunifu.Framework.UI.BunifuDragControl(components);
+            bunifuElipse1 = new Bunifu.Framework.UI.BunifuElipse(components);
+            panel_TopBar.SuspendLayout();
             SuspendLayout();
             // 
             // panel_NavBar
@@ -62,13 +65,26 @@
             // 
             // panel_TopBar
             // 
-            panel_TopBar.BackColor = Color.FromArgb(7, 85, 112);
+            panel_TopBar.BackColor = Color.White;
+            panel_TopBar.Controls.Add(button_Close);
             panel_TopBar.Dock = DockStyle.Top;
             panel_TopBar.Location = new Point(181, 0);
             panel_TopBar.Name = "panel_TopBar";
             panel_TopBar.Size = new Size(996, 48);
             panel_TopBar.TabIndex = 1;
             panel_TopBar.Paint += panel_TopBar_Paint;
+            // 
+            // button_Close
+            // 
+            button_Close.Cursor = Cursors.Hand;
+            button_Close.FlatAppearance.BorderSize = 0;
+            button_Close.FlatStyle = FlatStyle.Flat;
+            button_Close.Location = new Point(953, 3);
+            button_Close.Name = "button_Close";
+            button_Close.Size = new Size(40, 40);
+            button_Close.TabIndex = 0;
+            button_Close.Text = "X";
+            button_Close.UseVisualStyleBackColor = true;
             // 
             // panel_Body
             // 
@@ -86,6 +102,11 @@
             bunifuDragControl3.TargetControl = panel_Body;
             bunifuDragControl3.Vertical = true;
             // 
+            // bunifuElipse1
+            // 
+            bunifuElipse1.ElipseRadius = 5;
+            bunifuElipse1.TargetControl = this;
+            // 
             // Form
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -97,6 +118,7 @@
             FormBorderStyle = FormBorderStyle.None;
             Name = "Form";
             Text = "Form1";
+            panel_TopBar.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -108,5 +130,7 @@
         private Panel panel_TopBar;
         private Panel panel_Body;
         private Bunifu.Framework.UI.BunifuDragControl bunifuDragControl3;
+        private Button button_Close;
+        private Bunifu.Framework.UI.BunifuElipse bunifuElipse1;
     }
 }
