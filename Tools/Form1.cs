@@ -2,9 +2,12 @@ namespace Tools
 {
     public partial class Form : System.Windows.Forms.Form
     {
+        private Color defaultColor;
+
         public Form()
         {
             InitializeComponent();
+            defaultColor = button_Close.BackColor;
         }
 
         private void panel_TopBar_Paint(object sender, PaintEventArgs e)
@@ -25,6 +28,95 @@ namespace Tools
             // Draw original panel
             g.FillRectangle(new SolidBrush(parentBackColor), new Rectangle(0, 0, this.Width, this.Height));
             g.FillRectangle(Brushes.White, new Rectangle(shadowSize, shadowSize, this.Width - shadowSize * 2, this.Height - shadowSize * 2));
+        }
+
+        private void button_Close_MouseLeave(object sender, EventArgs e)
+        {
+            button_Close.BackColor = defaultColor; // Change to desired hover color
+        }
+
+        private void button_Close_MouseEnter(object sender, EventArgs e)
+        {
+            button_Close.BackColor = Color.Red; // Change to desired hover color
+        }
+
+   
+
+        private void button_Config_MouseLeave(object sender, EventArgs e)
+        {
+            button_Config.BackColor = defaultColor; // Change to desired hover color
+        }
+
+        private void button_Config_MouseEnter(object sender, EventArgs e)
+        {
+            button_Config.BackColor = Color.SteelBlue; // Change to desired hover color
+        }
+
+        private void FollowButton(Button button)
+        {
+            // Adjust the position of Panel_Index_Config to follow the clicked button
+            panel_NavBarIndicator.Height = button.Height;
+            panel_NavBarIndicator.Top = button.Top;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            FollowButton(sender as Button);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            FollowButton(sender as Button);
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            FollowButton(sender as Button);
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            FollowButton(sender as Button);
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            FollowButton(sender as Button);
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            FollowButton(sender as Button);
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            FollowButton(sender as Button);
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            FollowButton(sender as Button);
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            FollowButton(sender as Button);
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            FollowButton(sender as Button);
+        }
+
+        private void button_Close_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void button_Config_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
