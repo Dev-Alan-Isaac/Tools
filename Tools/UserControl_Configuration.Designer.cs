@@ -219,7 +219,7 @@
             // 
             // userControl_Configuration_Filter1
             // 
-            userControl_Configuration_Filter1.Dock = DockStyle.Fill;
+            userControl_Configuration_Filter1.Dock = DockStyle.Bottom;
             userControl_Configuration_Filter1.Location = new Point(0, 0);
             userControl_Configuration_Filter1.Name = "userControl_Configuration_Filter1";
             userControl_Configuration_Filter1.Size = new Size(632, 562);

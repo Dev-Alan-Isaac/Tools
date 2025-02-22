@@ -45,15 +45,15 @@
             button_Play = new Button();
             button_Path = new Button();
             panel_Body = new Panel();
-            panel1 = new Panel();
-            progressBar1 = new ProgressBar();
             panel2 = new Panel();
             treeView1 = new TreeView();
+            panel1 = new Panel();
+            progressBar1 = new ProgressBar();
             panel_NavBar.SuspendLayout();
             panel_TopBar.SuspendLayout();
             panel_Body.SuspendLayout();
-            panel1.SuspendLayout();
             panel2.SuspendLayout();
+            panel1.SuspendLayout();
             SuspendLayout();
             // 
             // panel_NavBar
@@ -279,23 +279,6 @@
             panel_Body.Size = new Size(632, 562);
             panel_Body.TabIndex = 2;
             // 
-            // panel1
-            // 
-            panel1.Controls.Add(progressBar1);
-            panel1.Dock = DockStyle.Bottom;
-            panel1.Location = new Point(0, 526);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(632, 36);
-            panel1.TabIndex = 0;
-            // 
-            // progressBar1
-            // 
-            progressBar1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            progressBar1.Location = new Point(3, 3);
-            progressBar1.Name = "progressBar1";
-            progressBar1.Size = new Size(626, 30);
-            progressBar1.TabIndex = 0;
-            // 
             // panel2
             // 
             panel2.Controls.Add(treeView1);
@@ -313,6 +296,23 @@
             treeView1.Size = new Size(280, 526);
             treeView1.TabIndex = 0;
             // 
+            // panel1
+            // 
+            panel1.Controls.Add(progressBar1);
+            panel1.Dock = DockStyle.Bottom;
+            panel1.Location = new Point(0, 526);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(632, 36);
+            panel1.TabIndex = 0;
+            // 
+            // progressBar1
+            // 
+            progressBar1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            progressBar1.Location = new Point(3, 3);
+            progressBar1.Name = "progressBar1";
+            progressBar1.Size = new Size(626, 30);
+            progressBar1.TabIndex = 0;
+            // 
             // UserControl_Filter
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -322,13 +322,14 @@
             Controls.Add(panel_NavBar);
             Name = "UserControl_Filter";
             Size = new Size(818, 612);
+            Load += UserControl_Filter_Load;
             panel_NavBar.ResumeLayout(false);
             panel_NavBar.PerformLayout();
             panel_TopBar.ResumeLayout(false);
             panel_TopBar.PerformLayout();
             panel_Body.ResumeLayout(false);
-            panel1.ResumeLayout(false);
             panel2.ResumeLayout(false);
+            panel1.ResumeLayout(false);
             ResumeLayout(false);
         }
 

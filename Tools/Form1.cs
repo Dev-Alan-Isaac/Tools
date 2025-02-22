@@ -77,11 +77,13 @@ namespace Tools
         private void button3_Click(object sender, EventArgs e)
         {
             FollowButton(sender as Button);
+            userControl_Extract1.BringToFront();
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
             FollowButton(sender as Button);
+            userControl_Merge1.BringToFront();
         }
 
         private void button5_Click(object sender, EventArgs e)
@@ -124,5 +126,7 @@ namespace Tools
             userControl_Configuration1.BringToFront();
             panel_NavBarIndicator.BackgroundImage = Resources.icons8_minus_50;
         }
+
+
     }
 }

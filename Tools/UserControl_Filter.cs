@@ -17,5 +17,21 @@ namespace Tools
             InitializeComponent();
         }
 
+        private void UserControl_Filter_Load(object sender, EventArgs e)
+        {
+            while (true)
+            {
+                if (File.Exists("Config_Sort.json"))
+                {
+                    // File already exists; get the filepath
+                    string filePath = Path.GetFullPath("Config_Sort.json");
+                    break;
+                }
+                else
+                {
+
+                }
+            }
+        }
     }
 }

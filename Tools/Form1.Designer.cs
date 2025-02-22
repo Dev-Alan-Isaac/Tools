@@ -48,8 +48,11 @@
             label_Title = new Label();
             button_Close = new Button();
             panel_Body = new Panel();
-            userControl_Configuration1 = new UserControl_Configuration();
+            userControl_Merge1 = new UserControl_Merge();
+            userControl_Extract1 = new UserControl_Extract();
             userControl_Filter1 = new UserControl_Filter();
+            userControl_Convert1 = new UserControl_Convert();
+            userControl_Configuration1 = new UserControl_Configuration();
             bunifuDragControl3 = new Bunifu.Framework.UI.BunifuDragControl(components);
             bunifuElipse1 = new Bunifu.Framework.UI.BunifuElipse(components);
             bunifuElipse2 = new Bunifu.Framework.UI.BunifuElipse(components);
@@ -66,7 +69,6 @@
             bunifuElipse13 = new Bunifu.Framework.UI.BunifuElipse(components);
             bunifuElipse14 = new Bunifu.Framework.UI.BunifuElipse(components);
             bunifuDragControl4 = new Bunifu.Framework.UI.BunifuDragControl(components);
-            userControl_Convert1 = new UserControl_Convert();
             panel_NavBar.SuspendLayout();
             panel_TopBar.SuspendLayout();
             panel_Body.SuspendLayout();
@@ -326,22 +328,32 @@
             // panel_Body
             // 
             panel_Body.BackColor = Color.WhiteSmoke;
+            panel_Body.Controls.Add(userControl_Merge1);
+            panel_Body.Controls.Add(userControl_Extract1);
+            panel_Body.Controls.Add(userControl_Filter1);
             panel_Body.Controls.Add(userControl_Convert1);
             panel_Body.Controls.Add(userControl_Configuration1);
-            panel_Body.Controls.Add(userControl_Filter1);
             panel_Body.Dock = DockStyle.Fill;
             panel_Body.Location = new Point(181, 48);
             panel_Body.Name = "panel_Body";
             panel_Body.Size = new Size(996, 680);
             panel_Body.TabIndex = 2;
             // 
-            // userControl_Configuration1
+            // userControl_Merge1
             // 
-            userControl_Configuration1.Dock = DockStyle.Fill;
-            userControl_Configuration1.Location = new Point(0, 0);
-            userControl_Configuration1.Name = "userControl_Configuration1";
-            userControl_Configuration1.Size = new Size(996, 680);
-            userControl_Configuration1.TabIndex = 11;
+            userControl_Merge1.Dock = DockStyle.Fill;
+            userControl_Merge1.Location = new Point(0, 0);
+            userControl_Merge1.Name = "userControl_Merge1";
+            userControl_Merge1.Size = new Size(996, 680);
+            userControl_Merge1.TabIndex = 11;
+            // 
+            // userControl_Extract1
+            // 
+            userControl_Extract1.Dock = DockStyle.Fill;
+            userControl_Extract1.Location = new Point(0, 0);
+            userControl_Extract1.Name = "userControl_Extract1";
+            userControl_Extract1.Size = new Size(996, 680);
+            userControl_Extract1.TabIndex = 11;
             // 
             // userControl_Filter1
             // 
@@ -350,6 +362,22 @@
             userControl_Filter1.Name = "userControl_Filter1";
             userControl_Filter1.Size = new Size(996, 680);
             userControl_Filter1.TabIndex = 0;
+            // 
+            // userControl_Convert1
+            // 
+            userControl_Convert1.Dock = DockStyle.Fill;
+            userControl_Convert1.Location = new Point(0, 0);
+            userControl_Convert1.Name = "userControl_Convert1";
+            userControl_Convert1.Size = new Size(996, 680);
+            userControl_Convert1.TabIndex = 11;
+            // 
+            // userControl_Configuration1
+            // 
+            userControl_Configuration1.Dock = DockStyle.Fill;
+            userControl_Configuration1.Location = new Point(0, 0);
+            userControl_Configuration1.Name = "userControl_Configuration1";
+            userControl_Configuration1.Size = new Size(996, 680);
+            userControl_Configuration1.TabIndex = 11;
             // 
             // bunifuDragControl3
             // 
@@ -435,14 +463,6 @@
             bunifuDragControl4.TargetControl = label_Title;
             bunifuDragControl4.Vertical = true;
             // 
-            // userControl_Convert1
-            // 
-            userControl_Convert1.Dock = DockStyle.Fill;
-            userControl_Convert1.Location = new Point(0, 0);
-            userControl_Convert1.Name = "userControl_Convert1";
-            userControl_Convert1.Size = new Size(996, 680);
-            userControl_Convert1.TabIndex = 11;
-            // 
             // Form
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -502,5 +522,7 @@
         private UserControl_Filter userControl_Filter1;
         private UserControl_Configuration userControl_Configuration1;
         private UserControl_Convert userControl_Convert1;
+        private UserControl_Merge userControl_Merge1;
+        private UserControl_Extract userControl_Extract1;
     }
 }

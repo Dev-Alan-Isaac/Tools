@@ -39,10 +39,10 @@
             panel_TopBar = new Panel();
             button_Play = new Button();
             panel_NavBar = new Panel();
-            radioButton1 = new RadioButton();
-            radioButton2 = new RadioButton();
-            radioButton3 = new RadioButton();
             radioButton4 = new RadioButton();
+            radioButton3 = new RadioButton();
+            radioButton2 = new RadioButton();
+            radioButton1 = new RadioButton();
             panel2.SuspendLayout();
             panel_Body.SuspendLayout();
             panel1.SuspendLayout();
@@ -55,7 +55,7 @@
             progressBar1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             progressBar1.Location = new Point(3, 3);
             progressBar1.Name = "progressBar1";
-            progressBar1.Size = new Size(1058, 30);
+            progressBar1.Size = new Size(626, 30);
             progressBar1.TabIndex = 0;
             // 
             // treeView1
@@ -171,29 +171,17 @@
             panel_NavBar.Size = new Size(186, 612);
             panel_NavBar.TabIndex = 3;
             // 
-            // radioButton1
+            // radioButton4
             // 
-            radioButton1.AutoSize = true;
-            radioButton1.Font = new Font("Arial Rounded MT Bold", 12F);
-            radioButton1.Location = new Point(28, 28);
-            radioButton1.Name = "radioButton1";
-            radioButton1.Size = new Size(131, 22);
-            radioButton1.TabIndex = 0;
-            radioButton1.TabStop = true;
-            radioButton1.Text = "radioButton1";
-            radioButton1.UseVisualStyleBackColor = true;
-            // 
-            // radioButton2
-            // 
-            radioButton2.AutoSize = true;
-            radioButton2.Font = new Font("Arial Rounded MT Bold", 12F);
-            radioButton2.Location = new Point(28, 80);
-            radioButton2.Name = "radioButton2";
-            radioButton2.Size = new Size(131, 22);
-            radioButton2.TabIndex = 1;
-            radioButton2.TabStop = true;
-            radioButton2.Text = "radioButton2";
-            radioButton2.UseVisualStyleBackColor = true;
+            radioButton4.AutoSize = true;
+            radioButton4.Font = new Font("Arial Rounded MT Bold", 12F);
+            radioButton4.Location = new Point(28, 184);
+            radioButton4.Name = "radioButton4";
+            radioButton4.Size = new Size(131, 22);
+            radioButton4.TabIndex = 3;
+            radioButton4.TabStop = true;
+            radioButton4.Text = "radioButton4";
+            radioButton4.UseVisualStyleBackColor = true;
             // 
             // radioButton3
             // 
@@ -207,17 +195,29 @@
             radioButton3.Text = "radioButton3";
             radioButton3.UseVisualStyleBackColor = true;
             // 
-            // radioButton4
+            // radioButton2
             // 
-            radioButton4.AutoSize = true;
-            radioButton4.Font = new Font("Arial Rounded MT Bold", 12F);
-            radioButton4.Location = new Point(28, 184);
-            radioButton4.Name = "radioButton4";
-            radioButton4.Size = new Size(131, 22);
-            radioButton4.TabIndex = 3;
-            radioButton4.TabStop = true;
-            radioButton4.Text = "radioButton4";
-            radioButton4.UseVisualStyleBackColor = true;
+            radioButton2.AutoSize = true;
+            radioButton2.Font = new Font("Arial Rounded MT Bold", 12F);
+            radioButton2.Location = new Point(28, 80);
+            radioButton2.Name = "radioButton2";
+            radioButton2.Size = new Size(131, 22);
+            radioButton2.TabIndex = 1;
+            radioButton2.TabStop = true;
+            radioButton2.Text = "radioButton2";
+            radioButton2.UseVisualStyleBackColor = true;
+            // 
+            // radioButton1
+            // 
+            radioButton1.AutoSize = true;
+            radioButton1.Font = new Font("Arial Rounded MT Bold", 12F);
+            radioButton1.Location = new Point(28, 28);
+            radioButton1.Name = "radioButton1";
+            radioButton1.Size = new Size(131, 22);
+            radioButton1.TabIndex = 0;
+            radioButton1.TabStop = true;
+            radioButton1.Text = "radioButton1";
+            radioButton1.UseVisualStyleBackColor = true;
             // 
             // UserControl_Convert
             // 
