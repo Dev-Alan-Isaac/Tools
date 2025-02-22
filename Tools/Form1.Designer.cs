@@ -48,6 +48,7 @@
             label_Title = new Label();
             button_Close = new Button();
             panel_Body = new Panel();
+            userControl_Filter1 = new UserControl_Filter();
             bunifuDragControl3 = new Bunifu.Framework.UI.BunifuDragControl(components);
             bunifuElipse1 = new Bunifu.Framework.UI.BunifuElipse(components);
             bunifuElipse2 = new Bunifu.Framework.UI.BunifuElipse(components);
@@ -66,6 +67,7 @@
             bunifuDragControl4 = new Bunifu.Framework.UI.BunifuDragControl(components);
             panel_NavBar.SuspendLayout();
             panel_TopBar.SuspendLayout();
+            panel_Body.SuspendLayout();
             SuspendLayout();
             // 
             // panel_NavBar
@@ -275,6 +277,7 @@
             // 
             // button_Config
             // 
+            button_Config.Cursor = Cursors.Hand;
             button_Config.FlatAppearance.BorderSize = 0;
             button_Config.FlatStyle = FlatStyle.Flat;
             button_Config.Font = new Font("Arial Rounded MT Bold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
@@ -317,11 +320,20 @@
             // panel_Body
             // 
             panel_Body.BackColor = Color.WhiteSmoke;
+            panel_Body.Controls.Add(userControl_Filter1);
             panel_Body.Dock = DockStyle.Fill;
             panel_Body.Location = new Point(181, 48);
             panel_Body.Name = "panel_Body";
             panel_Body.Size = new Size(996, 680);
             panel_Body.TabIndex = 2;
+            // 
+            // userControl_Filter1
+            // 
+            userControl_Filter1.Dock = DockStyle.Fill;
+            userControl_Filter1.Location = new Point(0, 0);
+            userControl_Filter1.Name = "userControl_Filter1";
+            userControl_Filter1.Size = new Size(996, 680);
+            userControl_Filter1.TabIndex = 0;
             // 
             // bunifuDragControl3
             // 
@@ -422,6 +434,7 @@
             panel_NavBar.ResumeLayout(false);
             panel_TopBar.ResumeLayout(false);
             panel_TopBar.PerformLayout();
+            panel_Body.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -462,5 +475,6 @@
         private Bunifu.Framework.UI.BunifuElipse bunifuElipse13;
         private Bunifu.Framework.UI.BunifuElipse bunifuElipse14;
         private Bunifu.Framework.UI.BunifuDragControl bunifuDragControl4;
+        private UserControl_Filter userControl_Filter1;
     }
 }

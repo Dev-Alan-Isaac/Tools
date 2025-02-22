@@ -40,8 +40,6 @@ namespace Tools
             button_Close.BackColor = Color.Red; // Change to desired hover color
         }
 
-   
-
         private void button_Config_MouseLeave(object sender, EventArgs e)
         {
             button_Config.BackColor = defaultColor; // Change to desired hover color
