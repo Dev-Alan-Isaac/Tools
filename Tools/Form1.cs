@@ -71,6 +71,7 @@ namespace Tools
         private void button2_Click(object sender, EventArgs e)
         {
             FollowButton(sender as Button);
+            userControl_Convert1.BringToFront();
         }
 
         private void button3_Click(object sender, EventArgs e)

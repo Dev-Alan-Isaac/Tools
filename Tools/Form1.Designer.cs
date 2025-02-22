@@ -66,6 +66,7 @@
             bunifuElipse13 = new Bunifu.Framework.UI.BunifuElipse(components);
             bunifuElipse14 = new Bunifu.Framework.UI.BunifuElipse(components);
             bunifuDragControl4 = new Bunifu.Framework.UI.BunifuDragControl(components);
+            userControl_Convert1 = new UserControl_Convert();
             panel_NavBar.SuspendLayout();
             panel_TopBar.SuspendLayout();
             panel_Body.SuspendLayout();
@@ -325,6 +326,7 @@
             // panel_Body
             // 
             panel_Body.BackColor = Color.WhiteSmoke;
+            panel_Body.Controls.Add(userControl_Convert1);
             panel_Body.Controls.Add(userControl_Configuration1);
             panel_Body.Controls.Add(userControl_Filter1);
             panel_Body.Dock = DockStyle.Fill;
@@ -433,6 +435,14 @@
             bunifuDragControl4.TargetControl = label_Title;
             bunifuDragControl4.Vertical = true;
             // 
+            // userControl_Convert1
+            // 
+            userControl_Convert1.Dock = DockStyle.Fill;
+            userControl_Convert1.Location = new Point(0, 0);
+            userControl_Convert1.Name = "userControl_Convert1";
+            userControl_Convert1.Size = new Size(996, 680);
+            userControl_Convert1.TabIndex = 11;
+            // 
             // Form
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -491,5 +501,6 @@
         private Bunifu.Framework.UI.BunifuDragControl bunifuDragControl4;
         private UserControl_Filter userControl_Filter1;
         private UserControl_Configuration userControl_Configuration1;
+        private UserControl_Convert userControl_Convert1;
     }
 }
