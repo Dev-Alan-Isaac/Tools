@@ -29,21 +29,24 @@
         private void InitializeComponent()
         {
             panel_NavBar = new Panel();
-            radioButton10 = new RadioButton();
-            radioButton1 = new RadioButton();
-            radioButton9 = new RadioButton();
-            radioButton2 = new RadioButton();
-            radioButton8 = new RadioButton();
-            radioButton5 = new RadioButton();
-            radioButton4 = new RadioButton();
-            radioButton7 = new RadioButton();
-            radioButton6 = new RadioButton();
-            radioButton3 = new RadioButton();
+            checkBox10 = new CheckBox();
+            checkBox9 = new CheckBox();
+            checkBox8 = new CheckBox();
+            checkBox7 = new CheckBox();
+            checkBox6 = new CheckBox();
+            checkBox5 = new CheckBox();
+            checkBox4 = new CheckBox();
+            checkBox3 = new CheckBox();
+            checkBox2 = new CheckBox();
+            checkBox1 = new CheckBox();
             panel_TopBar = new Panel();
+            button2 = new Button();
+            button1 = new Button();
             panel_Body = new Panel();
             panel1 = new Panel();
             progressBar1 = new ProgressBar();
             panel_NavBar.SuspendLayout();
+            panel_TopBar.SuspendLayout();
             panel_Body.SuspendLayout();
             panel1.SuspendLayout();
             SuspendLayout();
@@ -51,190 +54,171 @@
             // panel_NavBar
             // 
             panel_NavBar.BackColor = Color.White;
-            panel_NavBar.Controls.Add(radioButton10);
-            panel_NavBar.Controls.Add(radioButton1);
-            panel_NavBar.Controls.Add(radioButton9);
-            panel_NavBar.Controls.Add(radioButton2);
-            panel_NavBar.Controls.Add(radioButton8);
-            panel_NavBar.Controls.Add(radioButton5);
-            panel_NavBar.Controls.Add(radioButton4);
-            panel_NavBar.Controls.Add(radioButton7);
-            panel_NavBar.Controls.Add(radioButton6);
-            panel_NavBar.Controls.Add(radioButton3);
+            panel_NavBar.Controls.Add(checkBox10);
+            panel_NavBar.Controls.Add(checkBox9);
+            panel_NavBar.Controls.Add(checkBox8);
+            panel_NavBar.Controls.Add(checkBox7);
+            panel_NavBar.Controls.Add(checkBox6);
+            panel_NavBar.Controls.Add(checkBox5);
+            panel_NavBar.Controls.Add(checkBox4);
+            panel_NavBar.Controls.Add(checkBox3);
+            panel_NavBar.Controls.Add(checkBox2);
+            panel_NavBar.Controls.Add(checkBox1);
             panel_NavBar.Dock = DockStyle.Left;
             panel_NavBar.Location = new Point(0, 0);
             panel_NavBar.Name = "panel_NavBar";
             panel_NavBar.Size = new Size(186, 612);
             panel_NavBar.TabIndex = 0;
             // 
-            // radioButton10
+            // checkBox10
             // 
-            radioButton10.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            radioButton10.AutoSize = true;
-            radioButton10.BackColor = Color.Transparent;
-            radioButton10.Cursor = Cursors.Hand;
-            radioButton10.FlatAppearance.BorderSize = 0;
-            radioButton10.Font = new Font("Arial Rounded MT Bold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            radioButton10.Location = new Point(28, 478);
-            radioButton10.Name = "radioButton10";
-            radioButton10.Size = new Size(141, 22);
-            radioButton10.TabIndex = 9;
-            radioButton10.TabStop = true;
-            radioButton10.Text = "radioButton10";
-            radioButton10.UseVisualStyleBackColor = false;
+            checkBox10.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            checkBox10.AutoSize = true;
+            checkBox10.Font = new Font("Arial Rounded MT Bold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            checkBox10.Location = new Point(29, 497);
+            checkBox10.Name = "checkBox10";
+            checkBox10.Size = new Size(126, 22);
+            checkBox10.TabIndex = 9;
+            checkBox10.Text = "checkBox10";
+            checkBox10.UseVisualStyleBackColor = true;
             // 
-            // radioButton1
+            // checkBox9
             // 
-            radioButton1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            radioButton1.AutoSize = true;
-            radioButton1.BackColor = Color.Transparent;
-            radioButton1.Cursor = Cursors.Hand;
-            radioButton1.FlatAppearance.BorderSize = 0;
-            radioButton1.Font = new Font("Arial Rounded MT Bold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            radioButton1.Location = new Point(38, 28);
-            radioButton1.Name = "radioButton1";
-            radioButton1.Size = new Size(131, 22);
-            radioButton1.TabIndex = 0;
-            radioButton1.TabStop = true;
-            radioButton1.Text = "radioButton1";
-            radioButton1.UseVisualStyleBackColor = false;
+            checkBox9.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            checkBox9.AutoSize = true;
+            checkBox9.Font = new Font("Arial Rounded MT Bold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            checkBox9.Location = new Point(34, 445);
+            checkBox9.Name = "checkBox9";
+            checkBox9.Size = new Size(116, 22);
+            checkBox9.TabIndex = 8;
+            checkBox9.Text = "checkBox9";
+            checkBox9.UseVisualStyleBackColor = true;
             // 
-            // radioButton9
+            // checkBox8
             // 
-            radioButton9.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            radioButton9.AutoSize = true;
-            radioButton9.BackColor = Color.Transparent;
-            radioButton9.Cursor = Cursors.Hand;
-            radioButton9.FlatAppearance.BorderSize = 0;
-            radioButton9.Font = new Font("Arial Rounded MT Bold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            radioButton9.Location = new Point(38, 428);
-            radioButton9.Name = "radioButton9";
-            radioButton9.Size = new Size(131, 22);
-            radioButton9.TabIndex = 8;
-            radioButton9.TabStop = true;
-            radioButton9.Text = "radioButton9";
-            radioButton9.UseVisualStyleBackColor = false;
+            checkBox8.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            checkBox8.AutoSize = true;
+            checkBox8.Font = new Font("Arial Rounded MT Bold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            checkBox8.Location = new Point(41, 393);
+            checkBox8.Name = "checkBox8";
+            checkBox8.Size = new Size(102, 22);
+            checkBox8.TabIndex = 7;
+            checkBox8.Text = "Metadata";
+            checkBox8.UseVisualStyleBackColor = true;
             // 
-            // radioButton2
+            // checkBox7
             // 
-            radioButton2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            radioButton2.AutoSize = true;
-            radioButton2.BackColor = Color.Transparent;
-            radioButton2.Cursor = Cursors.Hand;
-            radioButton2.FlatAppearance.BorderSize = 0;
-            radioButton2.Font = new Font("Arial Rounded MT Bold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            radioButton2.Location = new Point(38, 78);
-            radioButton2.Name = "radioButton2";
-            radioButton2.Size = new Size(131, 22);
-            radioButton2.TabIndex = 1;
-            radioButton2.TabStop = true;
-            radioButton2.Text = "radioButton2";
-            radioButton2.UseVisualStyleBackColor = false;
+            checkBox7.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            checkBox7.AutoSize = true;
+            checkBox7.Font = new Font("Arial Rounded MT Bold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            checkBox7.Location = new Point(27, 341);
+            checkBox7.Name = "checkBox7";
+            checkBox7.Size = new Size(131, 22);
+            checkBox7.TabIndex = 6;
+            checkBox7.Text = "Tags / Labels";
+            checkBox7.UseVisualStyleBackColor = true;
             // 
-            // radioButton8
+            // checkBox6
             // 
-            radioButton8.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            radioButton8.AutoSize = true;
-            radioButton8.BackColor = Color.Transparent;
-            radioButton8.Cursor = Cursors.Hand;
-            radioButton8.FlatAppearance.BorderSize = 0;
-            radioButton8.Font = new Font("Arial Rounded MT Bold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            radioButton8.Location = new Point(38, 378);
-            radioButton8.Name = "radioButton8";
-            radioButton8.Size = new Size(131, 22);
-            radioButton8.TabIndex = 7;
-            radioButton8.TabStop = true;
-            radioButton8.Text = "radioButton8";
-            radioButton8.UseVisualStyleBackColor = false;
+            checkBox6.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            checkBox6.AutoSize = true;
+            checkBox6.Font = new Font("Arial Rounded MT Bold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            checkBox6.Location = new Point(40, 289);
+            checkBox6.Name = "checkBox6";
+            checkBox6.Size = new Size(105, 22);
+            checkBox6.TabIndex = 5;
+            checkBox6.Text = "Extension";
+            checkBox6.UseVisualStyleBackColor = true;
             // 
-            // radioButton5
+            // checkBox5
             // 
-            radioButton5.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            radioButton5.AutoSize = true;
-            radioButton5.BackColor = Color.Transparent;
-            radioButton5.Cursor = Cursors.Hand;
-            radioButton5.FlatAppearance.BorderSize = 0;
-            radioButton5.Font = new Font("Arial Rounded MT Bold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            radioButton5.Location = new Point(38, 228);
-            radioButton5.Name = "radioButton5";
-            radioButton5.Size = new Size(131, 22);
-            radioButton5.TabIndex = 4;
-            radioButton5.TabStop = true;
-            radioButton5.Text = "radioButton5";
-            radioButton5.UseVisualStyleBackColor = false;
+            checkBox5.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            checkBox5.AutoSize = true;
+            checkBox5.Font = new Font("Arial Rounded MT Bold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            checkBox5.Location = new Point(58, 237);
+            checkBox5.Name = "checkBox5";
+            checkBox5.Size = new Size(68, 22);
+            checkBox5.TabIndex = 4;
+            checkBox5.Text = "Hash";
+            checkBox5.UseVisualStyleBackColor = true;
             // 
-            // radioButton4
+            // checkBox4
             // 
-            radioButton4.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            radioButton4.AutoSize = true;
-            radioButton4.BackColor = Color.Transparent;
-            radioButton4.Cursor = Cursors.Hand;
-            radioButton4.FlatAppearance.BorderSize = 0;
-            radioButton4.Font = new Font("Arial Rounded MT Bold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            radioButton4.Location = new Point(38, 178);
-            radioButton4.Name = "radioButton4";
-            radioButton4.Size = new Size(131, 22);
-            radioButton4.TabIndex = 3;
-            radioButton4.TabStop = true;
-            radioButton4.Text = "radioButton4";
-            radioButton4.UseVisualStyleBackColor = false;
+            checkBox4.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            checkBox4.AutoSize = true;
+            checkBox4.Font = new Font("Arial Rounded MT Bold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            checkBox4.Location = new Point(56, 185);
+            checkBox4.Name = "checkBox4";
+            checkBox4.Size = new Size(73, 22);
+            checkBox4.TabIndex = 3;
+            checkBox4.Text = "Name";
+            checkBox4.UseVisualStyleBackColor = true;
             // 
-            // radioButton7
+            // checkBox3
             // 
-            radioButton7.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            radioButton7.AutoSize = true;
-            radioButton7.BackColor = Color.Transparent;
-            radioButton7.Cursor = Cursors.Hand;
-            radioButton7.FlatAppearance.BorderSize = 0;
-            radioButton7.Font = new Font("Arial Rounded MT Bold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            radioButton7.Location = new Point(38, 328);
-            radioButton7.Name = "radioButton7";
-            radioButton7.Size = new Size(131, 22);
-            radioButton7.TabIndex = 6;
-            radioButton7.TabStop = true;
-            radioButton7.Text = "radioButton7";
-            radioButton7.UseVisualStyleBackColor = false;
+            checkBox3.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            checkBox3.AutoSize = true;
+            checkBox3.Font = new Font("Arial Rounded MT Bold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            checkBox3.Location = new Point(60, 133);
+            checkBox3.Name = "checkBox3";
+            checkBox3.Size = new Size(65, 22);
+            checkBox3.TabIndex = 2;
+            checkBox3.Text = "Date";
+            checkBox3.UseVisualStyleBackColor = true;
             // 
-            // radioButton6
+            // checkBox2
             // 
-            radioButton6.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            radioButton6.AutoSize = true;
-            radioButton6.BackColor = Color.Transparent;
-            radioButton6.Cursor = Cursors.Hand;
-            radioButton6.FlatAppearance.BorderSize = 0;
-            radioButton6.Font = new Font("Arial Rounded MT Bold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            radioButton6.Location = new Point(38, 278);
-            radioButton6.Name = "radioButton6";
-            radioButton6.Size = new Size(131, 22);
-            radioButton6.TabIndex = 5;
-            radioButton6.TabStop = true;
-            radioButton6.Text = "radioButton6";
-            radioButton6.UseVisualStyleBackColor = false;
+            checkBox2.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            checkBox2.AutoSize = true;
+            checkBox2.Font = new Font("Arial Rounded MT Bold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            checkBox2.Location = new Point(62, 81);
+            checkBox2.Name = "checkBox2";
+            checkBox2.Size = new Size(60, 22);
+            checkBox2.TabIndex = 1;
+            checkBox2.Text = "Size";
+            checkBox2.UseVisualStyleBackColor = true;
             // 
-            // radioButton3
+            // checkBox1
             // 
-            radioButton3.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            radioButton3.AutoSize = true;
-            radioButton3.BackColor = Color.Transparent;
-            radioButton3.Cursor = Cursors.Hand;
-            radioButton3.FlatAppearance.BorderSize = 0;
-            radioButton3.Font = new Font("Arial Rounded MT Bold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            radioButton3.Location = new Point(38, 128);
-            radioButton3.Name = "radioButton3";
-            radioButton3.Size = new Size(131, 22);
-            radioButton3.TabIndex = 2;
-            radioButton3.TabStop = true;
-            radioButton3.Text = "radioButton3";
-            radioButton3.UseVisualStyleBackColor = false;
+            checkBox1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            checkBox1.AutoSize = true;
+            checkBox1.Font = new Font("Arial Rounded MT Bold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            checkBox1.Location = new Point(59, 29);
+            checkBox1.Name = "checkBox1";
+            checkBox1.Size = new Size(66, 22);
+            checkBox1.TabIndex = 0;
+            checkBox1.Text = "Type";
+            checkBox1.UseVisualStyleBackColor = true;
             // 
             // panel_TopBar
             // 
             panel_TopBar.BackColor = SystemColors.Control;
+            panel_TopBar.Controls.Add(button2);
+            panel_TopBar.Controls.Add(button1);
             panel_TopBar.Dock = DockStyle.Top;
             panel_TopBar.Location = new Point(186, 0);
             panel_TopBar.Name = "panel_TopBar";
             panel_TopBar.Size = new Size(632, 50);
             panel_TopBar.TabIndex = 1;
+            // 
+            // button2
+            // 
+            button2.Location = new Point(6, 4);
+            button2.Name = "button2";
+            button2.Size = new Size(40, 40);
+            button2.TabIndex = 1;
+            button2.Text = "button2";
+            button2.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            button1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button1.Location = new Point(52, 4);
+            button1.Name = "button1";
+            button1.Size = new Size(40, 40);
+            button1.TabIndex = 0;
+            button1.Text = "button1";
+            button1.UseVisualStyleBackColor = true;
             // 
             // panel_Body
             // 
@@ -274,6 +258,7 @@
             Size = new Size(818, 612);
             panel_NavBar.ResumeLayout(false);
             panel_NavBar.PerformLayout();
+            panel_TopBar.ResumeLayout(false);
             panel_Body.ResumeLayout(false);
             panel1.ResumeLayout(false);
             ResumeLayout(false);
@@ -282,19 +267,21 @@
         #endregion
 
         private Panel panel_NavBar;
-        private RadioButton radioButton10;
-        private RadioButton radioButton9;
-        private RadioButton radioButton8;
-        private RadioButton radioButton7;
-        private RadioButton radioButton6;
-        private RadioButton radioButton5;
-        private RadioButton radioButton4;
-        private RadioButton radioButton3;
-        private RadioButton radioButton2;
-        private RadioButton radioButton1;
         private Panel panel_Body;
         private Panel panel_TopBar;
         private Panel panel1;
         private ProgressBar progressBar1;
+        private CheckBox checkBox7;
+        private CheckBox checkBox6;
+        private CheckBox checkBox5;
+        private CheckBox checkBox4;
+        private CheckBox checkBox3;
+        private CheckBox checkBox2;
+        private CheckBox checkBox1;
+        private CheckBox checkBox10;
+        private CheckBox checkBox9;
+        private CheckBox checkBox8;
+        private Button button2;
+        private Button button1;
     }
 }
