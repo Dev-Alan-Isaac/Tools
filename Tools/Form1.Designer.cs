@@ -48,6 +48,7 @@
             label_Title = new Label();
             button_Close = new Button();
             panel_Body = new Panel();
+            userControl_Configuration1 = new UserControl_Configuration();
             userControl_Filter1 = new UserControl_Filter();
             bunifuDragControl3 = new Bunifu.Framework.UI.BunifuDragControl(components);
             bunifuElipse1 = new Bunifu.Framework.UI.BunifuElipse(components);
@@ -92,7 +93,9 @@
             // 
             // panel_NavBarIndicator
             // 
-            panel_NavBarIndicator.BackColor = Color.FromArgb(224, 224, 224);
+            panel_NavBarIndicator.BackColor = Color.Transparent;
+            panel_NavBarIndicator.BackgroundImage = Properties.Resources.icons8_double_right_50;
+            panel_NavBarIndicator.BackgroundImageLayout = ImageLayout.Zoom;
             panel_NavBarIndicator.Location = new Point(3, 48);
             panel_NavBarIndicator.Name = "panel_NavBarIndicator";
             panel_NavBarIndicator.Size = new Size(21, 40);
@@ -103,7 +106,7 @@
             button10.Cursor = Cursors.Hand;
             button10.FlatAppearance.BorderSize = 0;
             button10.FlatStyle = FlatStyle.Flat;
-            button10.Font = new Font("Arial Rounded MT Bold", 11.25F);
+            button10.Font = new Font("Arial Rounded MT Bold", 14.25F);
             button10.ForeColor = Color.WhiteSmoke;
             button10.Location = new Point(32, 606);
             button10.Name = "button10";
@@ -118,7 +121,7 @@
             button9.Cursor = Cursors.Hand;
             button9.FlatAppearance.BorderSize = 0;
             button9.FlatStyle = FlatStyle.Flat;
-            button9.Font = new Font("Arial Rounded MT Bold", 11.25F);
+            button9.Font = new Font("Arial Rounded MT Bold", 14.25F);
             button9.ForeColor = Color.WhiteSmoke;
             button9.Location = new Point(32, 544);
             button9.Name = "button9";
@@ -133,7 +136,7 @@
             button8.Cursor = Cursors.Hand;
             button8.FlatAppearance.BorderSize = 0;
             button8.FlatStyle = FlatStyle.Flat;
-            button8.Font = new Font("Arial Rounded MT Bold", 11.25F);
+            button8.Font = new Font("Arial Rounded MT Bold", 14.25F);
             button8.ForeColor = Color.WhiteSmoke;
             button8.Location = new Point(32, 482);
             button8.Name = "button8";
@@ -148,7 +151,7 @@
             button7.Cursor = Cursors.Hand;
             button7.FlatAppearance.BorderSize = 0;
             button7.FlatStyle = FlatStyle.Flat;
-            button7.Font = new Font("Arial Rounded MT Bold", 11.25F);
+            button7.Font = new Font("Arial Rounded MT Bold", 14.25F);
             button7.ForeColor = Color.WhiteSmoke;
             button7.Location = new Point(32, 420);
             button7.Name = "button7";
@@ -163,7 +166,7 @@
             button6.Cursor = Cursors.Hand;
             button6.FlatAppearance.BorderSize = 0;
             button6.FlatStyle = FlatStyle.Flat;
-            button6.Font = new Font("Arial Rounded MT Bold", 11.25F);
+            button6.Font = new Font("Arial Rounded MT Bold", 14.25F);
             button6.ForeColor = Color.WhiteSmoke;
             button6.Location = new Point(32, 358);
             button6.Name = "button6";
@@ -178,7 +181,7 @@
             button5.Cursor = Cursors.Hand;
             button5.FlatAppearance.BorderSize = 0;
             button5.FlatStyle = FlatStyle.Flat;
-            button5.Font = new Font("Arial Rounded MT Bold", 11.25F);
+            button5.Font = new Font("Arial Rounded MT Bold", 14.25F);
             button5.ForeColor = Color.WhiteSmoke;
             button5.Location = new Point(32, 296);
             button5.Name = "button5";
@@ -193,7 +196,7 @@
             button4.Cursor = Cursors.Hand;
             button4.FlatAppearance.BorderSize = 0;
             button4.FlatStyle = FlatStyle.Flat;
-            button4.Font = new Font("Arial Rounded MT Bold", 11.25F);
+            button4.Font = new Font("Arial Rounded MT Bold", 14.25F);
             button4.ForeColor = Color.WhiteSmoke;
             button4.Location = new Point(32, 234);
             button4.Name = "button4";
@@ -208,7 +211,7 @@
             button3.Cursor = Cursors.Hand;
             button3.FlatAppearance.BorderSize = 0;
             button3.FlatStyle = FlatStyle.Flat;
-            button3.Font = new Font("Arial Rounded MT Bold", 11.25F);
+            button3.Font = new Font("Arial Rounded MT Bold", 14.25F);
             button3.ForeColor = Color.WhiteSmoke;
             button3.Location = new Point(32, 172);
             button3.Name = "button3";
@@ -223,7 +226,7 @@
             button2.Cursor = Cursors.Hand;
             button2.FlatAppearance.BorderSize = 0;
             button2.FlatStyle = FlatStyle.Flat;
-            button2.Font = new Font("Arial Rounded MT Bold", 11.25F);
+            button2.Font = new Font("Arial Rounded MT Bold", 14.25F);
             button2.ForeColor = Color.WhiteSmoke;
             button2.Location = new Point(32, 110);
             button2.Name = "button2";
@@ -238,13 +241,13 @@
             button1.Cursor = Cursors.Hand;
             button1.FlatAppearance.BorderSize = 0;
             button1.FlatStyle = FlatStyle.Flat;
-            button1.Font = new Font("Arial Rounded MT Bold", 11.25F);
+            button1.Font = new Font("Arial Rounded MT Bold", 14.25F);
             button1.ForeColor = Color.WhiteSmoke;
             button1.Location = new Point(32, 48);
             button1.Name = "button1";
             button1.Size = new Size(143, 40);
             button1.TabIndex = 0;
-            button1.Text = "button1";
+            button1.Text = "FILTER";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
@@ -277,15 +280,16 @@
             // 
             // button_Config
             // 
+            button_Config.BackgroundImage = Properties.Resources.icons8_settings_50;
+            button_Config.BackgroundImageLayout = ImageLayout.Zoom;
             button_Config.Cursor = Cursors.Hand;
             button_Config.FlatAppearance.BorderSize = 0;
             button_Config.FlatStyle = FlatStyle.Flat;
             button_Config.Font = new Font("Arial Rounded MT Bold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            button_Config.Location = new Point(907, 5);
+            button_Config.Location = new Point(907, 4);
             button_Config.Name = "button_Config";
             button_Config.Size = new Size(40, 40);
             button_Config.TabIndex = 2;
-            button_Config.Text = "Config";
             button_Config.UseVisualStyleBackColor = true;
             button_Config.Click += button_Config_Click;
             button_Config.MouseEnter += button_Config_MouseEnter;
@@ -303,6 +307,8 @@
             // 
             // button_Close
             // 
+            button_Close.BackgroundImage = Properties.Resources.icons8_close_50;
+            button_Close.BackgroundImageLayout = ImageLayout.Zoom;
             button_Close.Cursor = Cursors.Hand;
             button_Close.FlatAppearance.BorderSize = 0;
             button_Close.FlatStyle = FlatStyle.Flat;
@@ -311,7 +317,6 @@
             button_Close.Name = "button_Close";
             button_Close.Size = new Size(40, 40);
             button_Close.TabIndex = 0;
-            button_Close.Text = "X";
             button_Close.UseVisualStyleBackColor = true;
             button_Close.Click += button_Close_Click;
             button_Close.MouseEnter += button_Close_MouseEnter;
@@ -320,12 +325,21 @@
             // panel_Body
             // 
             panel_Body.BackColor = Color.WhiteSmoke;
+            panel_Body.Controls.Add(userControl_Configuration1);
             panel_Body.Controls.Add(userControl_Filter1);
             panel_Body.Dock = DockStyle.Fill;
             panel_Body.Location = new Point(181, 48);
             panel_Body.Name = "panel_Body";
             panel_Body.Size = new Size(996, 680);
             panel_Body.TabIndex = 2;
+            // 
+            // userControl_Configuration1
+            // 
+            userControl_Configuration1.Dock = DockStyle.Fill;
+            userControl_Configuration1.Location = new Point(0, 0);
+            userControl_Configuration1.Name = "userControl_Configuration1";
+            userControl_Configuration1.Size = new Size(996, 680);
+            userControl_Configuration1.TabIndex = 11;
             // 
             // userControl_Filter1
             // 
@@ -476,5 +490,6 @@
         private Bunifu.Framework.UI.BunifuElipse bunifuElipse14;
         private Bunifu.Framework.UI.BunifuDragControl bunifuDragControl4;
         private UserControl_Filter userControl_Filter1;
+        private UserControl_Configuration userControl_Configuration1;
     }
 }

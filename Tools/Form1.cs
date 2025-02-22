@@ -60,6 +60,7 @@ namespace Tools
         private void button1_Click(object sender, EventArgs e)
         {
             FollowButton(sender as Button);
+            userControl_Filter1.BringToFront();
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -114,7 +115,7 @@ namespace Tools
 
         private void button_Config_Click(object sender, EventArgs e)
         {
-
+            userControl_Configuration1.BringToFront();
         }
     }
 }
