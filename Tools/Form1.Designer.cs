@@ -202,7 +202,7 @@
             button4.Name = "button4";
             button4.Size = new Size(143, 40);
             button4.TabIndex = 3;
-            button4.Text = "button4";
+            button4.Text = "MERGE";
             button4.UseVisualStyleBackColor = true;
             button4.Click += button4_Click;
             // 
@@ -217,7 +217,7 @@
             button3.Name = "button3";
             button3.Size = new Size(143, 40);
             button3.TabIndex = 2;
-            button3.Text = "button3";
+            button3.Text = "EXTRACT";
             button3.UseVisualStyleBackColor = true;
             button3.Click += button3_Click;
             // 
@@ -232,7 +232,7 @@
             button2.Name = "button2";
             button2.Size = new Size(143, 40);
             button2.TabIndex = 1;
-            button2.Text = "button2";
+            button2.Text = "CONVERT";
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click;
             // 

@@ -45,15 +45,15 @@
             button_Play = new Button();
             button_Path = new Button();
             panel_Body = new Panel();
-            panel2 = new Panel();
-            treeView1 = new TreeView();
             panel1 = new Panel();
             progressBar1 = new ProgressBar();
+            panel2 = new Panel();
+            treeView1 = new TreeView();
             panel_NavBar.SuspendLayout();
             panel_TopBar.SuspendLayout();
             panel_Body.SuspendLayout();
-            panel2.SuspendLayout();
             panel1.SuspendLayout();
+            panel2.SuspendLayout();
             SuspendLayout();
             // 
             // panel_NavBar
@@ -246,24 +246,26 @@
             // 
             // button_Play
             // 
+            button_Play.BackgroundImage = Properties.Resources.icons8_play_50;
+            button_Play.BackgroundImageLayout = ImageLayout.Zoom;
             button_Play.Cursor = Cursors.Hand;
             button_Play.FlatAppearance.BorderSize = 0;
             button_Play.Location = new Point(6, 5);
             button_Play.Name = "button_Play";
             button_Play.Size = new Size(40, 40);
             button_Play.TabIndex = 1;
-            button_Play.Text = "button2";
             button_Play.UseVisualStyleBackColor = true;
             // 
             // button_Path
             // 
+            button_Path.BackgroundImage = Properties.Resources.icons8_file_50;
+            button_Path.BackgroundImageLayout = ImageLayout.Zoom;
             button_Path.Cursor = Cursors.Hand;
             button_Path.FlatAppearance.BorderSize = 0;
             button_Path.Location = new Point(51, 5);
             button_Path.Name = "button_Path";
             button_Path.Size = new Size(40, 40);
             button_Path.TabIndex = 0;
-            button_Path.Text = "button1";
             button_Path.UseVisualStyleBackColor = true;
             // 
             // panel_Body
@@ -276,23 +278,6 @@
             panel_Body.Name = "panel_Body";
             panel_Body.Size = new Size(632, 562);
             panel_Body.TabIndex = 2;
-            // 
-            // panel2
-            // 
-            panel2.Controls.Add(treeView1);
-            panel2.Dock = DockStyle.Right;
-            panel2.Location = new Point(349, 0);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(283, 526);
-            panel2.TabIndex = 1;
-            // 
-            // treeView1
-            // 
-            treeView1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            treeView1.Location = new Point(0, 0);
-            treeView1.Name = "treeView1";
-            treeView1.Size = new Size(280, 526);
-            treeView1.TabIndex = 0;
             // 
             // panel1
             // 
@@ -311,6 +296,23 @@
             progressBar1.Size = new Size(626, 30);
             progressBar1.TabIndex = 0;
             // 
+            // panel2
+            // 
+            panel2.Controls.Add(treeView1);
+            panel2.Dock = DockStyle.Right;
+            panel2.Location = new Point(349, 0);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(283, 526);
+            panel2.TabIndex = 1;
+            // 
+            // treeView1
+            // 
+            treeView1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            treeView1.Location = new Point(0, 0);
+            treeView1.Name = "treeView1";
+            treeView1.Size = new Size(280, 526);
+            treeView1.TabIndex = 0;
+            // 
             // UserControl_Filter
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -325,8 +327,8 @@
             panel_TopBar.ResumeLayout(false);
             panel_TopBar.PerformLayout();
             panel_Body.ResumeLayout(false);
-            panel2.ResumeLayout(false);
             panel1.ResumeLayout(false);
+            panel2.ResumeLayout(false);
             ResumeLayout(false);
         }
 

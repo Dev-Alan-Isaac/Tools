@@ -1,13 +1,17 @@
+using Tools.Properties;
+
 namespace Tools
 {
     public partial class Form : System.Windows.Forms.Form
     {
         private Color defaultColor;
+        private Image defaultIndicator = Resources.icons8_double_right_50;
 
         public Form()
         {
             InitializeComponent();
             defaultColor = button_Close.BackColor;
+            userControl_Filter1.BringToFront();
         }
 
         private void panel_TopBar_Paint(object sender, PaintEventArgs e)
@@ -55,6 +59,7 @@ namespace Tools
             // Adjust the position of Panel_Index_Config to follow the clicked button
             panel_NavBarIndicator.Height = button.Height;
             panel_NavBarIndicator.Top = button.Top;
+            panel_NavBarIndicator.BackgroundImage = defaultIndicator;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -116,6 +121,7 @@ namespace Tools
         private void button_Config_Click(object sender, EventArgs e)
         {
             userControl_Configuration1.BringToFront();
+            panel_NavBarIndicator.BackgroundImage = Resources.icons8_minus_50;
         }
     }
 }
