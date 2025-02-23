@@ -45,14 +45,11 @@
             button_Play = new Button();
             button_Path = new Button();
             panel_Body = new Panel();
-            panel2 = new Panel();
-            treeView1 = new TreeView();
             panel1 = new Panel();
             progressBar1 = new ProgressBar();
             panel_NavBar.SuspendLayout();
             panel_TopBar.SuspendLayout();
             panel_Body.SuspendLayout();
-            panel2.SuspendLayout();
             panel1.SuspendLayout();
             SuspendLayout();
             // 
@@ -81,7 +78,7 @@
             checkBox10.AutoSize = true;
             checkBox10.Cursor = Cursors.Hand;
             checkBox10.Font = new Font("Arial Rounded MT Bold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            checkBox10.Location = new Point(29, 497);
+            checkBox10.Location = new Point(27, 496);
             checkBox10.Name = "checkBox10";
             checkBox10.Size = new Size(126, 22);
             checkBox10.TabIndex = 9;
@@ -94,7 +91,7 @@
             checkBox9.AutoSize = true;
             checkBox9.Cursor = Cursors.Hand;
             checkBox9.Font = new Font("Arial Rounded MT Bold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            checkBox9.Location = new Point(34, 445);
+            checkBox9.Location = new Point(32, 444);
             checkBox9.Name = "checkBox9";
             checkBox9.Size = new Size(116, 22);
             checkBox9.TabIndex = 8;
@@ -107,11 +104,11 @@
             checkBox8.AutoSize = true;
             checkBox8.Cursor = Cursors.Hand;
             checkBox8.Font = new Font("Arial Rounded MT Bold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            checkBox8.Location = new Point(41, 393);
+            checkBox8.Location = new Point(53, 392);
             checkBox8.Name = "checkBox8";
-            checkBox8.Size = new Size(102, 22);
+            checkBox8.Size = new Size(74, 22);
             checkBox8.TabIndex = 7;
-            checkBox8.Text = "Metadata";
+            checkBox8.Text = "Media";
             checkBox8.UseVisualStyleBackColor = true;
             // 
             // checkBox7
@@ -120,7 +117,7 @@
             checkBox7.AutoSize = true;
             checkBox7.Cursor = Cursors.Hand;
             checkBox7.Font = new Font("Arial Rounded MT Bold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            checkBox7.Location = new Point(27, 341);
+            checkBox7.Location = new Point(25, 340);
             checkBox7.Name = "checkBox7";
             checkBox7.Size = new Size(131, 22);
             checkBox7.TabIndex = 6;
@@ -133,7 +130,7 @@
             checkBox6.AutoSize = true;
             checkBox6.Cursor = Cursors.Hand;
             checkBox6.Font = new Font("Arial Rounded MT Bold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            checkBox6.Location = new Point(40, 289);
+            checkBox6.Location = new Point(38, 288);
             checkBox6.Name = "checkBox6";
             checkBox6.Size = new Size(105, 22);
             checkBox6.TabIndex = 5;
@@ -146,7 +143,7 @@
             checkBox5.AutoSize = true;
             checkBox5.Cursor = Cursors.Hand;
             checkBox5.Font = new Font("Arial Rounded MT Bold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            checkBox5.Location = new Point(58, 237);
+            checkBox5.Location = new Point(56, 236);
             checkBox5.Name = "checkBox5";
             checkBox5.Size = new Size(68, 22);
             checkBox5.TabIndex = 4;
@@ -159,7 +156,7 @@
             checkBox4.AutoSize = true;
             checkBox4.Cursor = Cursors.Hand;
             checkBox4.Font = new Font("Arial Rounded MT Bold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            checkBox4.Location = new Point(56, 185);
+            checkBox4.Location = new Point(54, 184);
             checkBox4.Name = "checkBox4";
             checkBox4.Size = new Size(73, 22);
             checkBox4.TabIndex = 3;
@@ -172,7 +169,7 @@
             checkBox3.AutoSize = true;
             checkBox3.Cursor = Cursors.Hand;
             checkBox3.Font = new Font("Arial Rounded MT Bold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            checkBox3.Location = new Point(60, 133);
+            checkBox3.Location = new Point(58, 132);
             checkBox3.Name = "checkBox3";
             checkBox3.Size = new Size(65, 22);
             checkBox3.TabIndex = 2;
@@ -185,7 +182,7 @@
             checkBox2.AutoSize = true;
             checkBox2.Cursor = Cursors.Hand;
             checkBox2.Font = new Font("Arial Rounded MT Bold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            checkBox2.Location = new Point(62, 81);
+            checkBox2.Location = new Point(60, 80);
             checkBox2.Name = "checkBox2";
             checkBox2.Size = new Size(60, 22);
             checkBox2.TabIndex = 1;
@@ -198,7 +195,7 @@
             checkBox1.AutoSize = true;
             checkBox1.Cursor = Cursors.Hand;
             checkBox1.Font = new Font("Arial Rounded MT Bold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            checkBox1.Location = new Point(59, 29);
+            checkBox1.Location = new Point(57, 28);
             checkBox1.Name = "checkBox1";
             checkBox1.Size = new Size(66, 22);
             checkBox1.TabIndex = 0;
@@ -271,30 +268,12 @@
             // panel_Body
             // 
             panel_Body.BackColor = SystemColors.Control;
-            panel_Body.Controls.Add(panel2);
             panel_Body.Controls.Add(panel1);
             panel_Body.Dock = DockStyle.Fill;
             panel_Body.Location = new Point(186, 50);
             panel_Body.Name = "panel_Body";
             panel_Body.Size = new Size(632, 562);
             panel_Body.TabIndex = 2;
-            // 
-            // panel2
-            // 
-            panel2.Controls.Add(treeView1);
-            panel2.Dock = DockStyle.Right;
-            panel2.Location = new Point(349, 0);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(283, 526);
-            panel2.TabIndex = 1;
-            // 
-            // treeView1
-            // 
-            treeView1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            treeView1.Location = new Point(0, 0);
-            treeView1.Name = "treeView1";
-            treeView1.Size = new Size(280, 526);
-            treeView1.TabIndex = 0;
             // 
             // panel1
             // 
@@ -322,13 +301,11 @@
             Controls.Add(panel_NavBar);
             Name = "UserControl_Filter";
             Size = new Size(818, 612);
-            Load += UserControl_Filter_Load;
             panel_NavBar.ResumeLayout(false);
             panel_NavBar.PerformLayout();
             panel_TopBar.ResumeLayout(false);
             panel_TopBar.PerformLayout();
             panel_Body.ResumeLayout(false);
-            panel2.ResumeLayout(false);
             panel1.ResumeLayout(false);
             ResumeLayout(false);
         }
@@ -354,7 +331,5 @@
         private Button button_Path;
         private TextBox textBox1;
         private TextBox textBox2;
-        private Panel panel2;
-        private TreeView treeView1;
     }
 }
