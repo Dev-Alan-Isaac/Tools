@@ -38,7 +38,7 @@ namespace Tools
             var name = filterSection["Name"] as JArray;
 
             ProcessTypes(types);
-            //ProcessAdditional(additional);
+            ProcessAdditional(additional);
             //ProcessDate(date);
             //ProcessMedia(media);
             //ProcessTags(tags);
@@ -57,7 +57,7 @@ namespace Tools
                     if (property.Value.Type == JTokenType.Boolean)
                     {
                         // Process key-value pairs like "Image": false
-                        Set_CheckboxState(property.Name, (bool)property.Value);
+                        Set_CheckboxStateType(property.Name, (bool)property.Value);
                     }
                     else if (property.Value.Type == JTokenType.Array)
                     {
@@ -71,7 +71,7 @@ namespace Tools
             Set_TreeViewNodesType(lists);
         }
 
-        private void Set_CheckboxState(string propertyName, bool state)
+        private void Set_CheckboxStateType(string propertyName, bool state)
         {
             switch (propertyName)
             {
@@ -122,15 +122,37 @@ namespace Tools
             }
         }
 
-
         private void ProcessAdditional(JArray additional)
         {
-            // Process the "Additional" section
-            foreach (var item in additional)
+            foreach (var type in additional)
             {
-                Debug.WriteLine(item);
+                foreach (var property in (type as JObject).Properties())
+                {
+                    if (property.Value.Type == JTokenType.Boolean)
+                    {
+                        // Process key-value pairs like "Image": false
+                        Set_CheckboxStateAdditional(property.Name, (bool)property.Value);
+                    }
+                }
             }
         }
+
+        private void Set_CheckboxStateAdditional(string propertyName, bool state)
+        {
+            switch (propertyName)
+            {
+                case "Delete":
+                    checkBox_Additional_Delete.Checked = state;
+                    break;
+                case "Subfolder":
+                    checkBox_Additional_subfiles.Checked = state;
+                    break;
+                default:
+                    Debug.WriteLine($"Unknown property: {propertyName}");
+                    break;
+            }
+        }
+
 
         private void ProcessDate(JArray date)
         {
