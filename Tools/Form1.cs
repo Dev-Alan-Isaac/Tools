@@ -131,17 +131,16 @@ namespace Tools
 
         private void Form_Load(object sender, EventArgs e)
         {
-            while (true)
+            if (!File.Exists("appsettings.json"))
             {
-                if (!File.Exists("appsettings.json"))
-                {
-                    set_Jsonfile();
-                }
-                break;
+                set_Jsonfile();
             }
         }
 
-        private void set_Jsonfile()
+    
+
+
+        public void set_Jsonfile()
         {
             var jsonObject = new JObject(
                 new JProperty("Filter", new JObject(
