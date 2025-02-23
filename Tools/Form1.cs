@@ -146,13 +146,13 @@ namespace Tools
             var jsonObject = new JObject(
                 new JProperty("Filter", new JObject(
                     new JProperty("Types", new JArray(
-                        new JObject(new JProperty("Image", false)),
-                        new JObject(new JProperty("Video", false)),
-                        new JObject(new JProperty("Document", false)),
-                        new JObject(new JProperty("Audio", false)),
-                        new JObject(new JProperty("Archive", false)),
-                        new JObject(new JProperty("Executable", false)),
-                        new JObject(new JProperty("Other", false)),
+                        new JObject(new JProperty("Image", true)),
+                        new JObject(new JProperty("Video", true)),
+                        new JObject(new JProperty("Document", true)),
+                        new JObject(new JProperty("Audio", true)),
+                        new JObject(new JProperty("Archive", true)),
+                        new JObject(new JProperty("Executable", true)),
+                        new JObject(new JProperty("Other", true)),
                         new JObject(new JProperty("Image_List", new JArray("jpg", "png", "gif", "bmp", "jpeg"))),
                         new JObject(new JProperty("Video_List", new JArray("mp4", "m4v", "avi", "mkv", "3gp", "mov", "wmv", "webm", "ts", "mpg", "asf", "flv", "mpeg"))),
                         new JObject(new JProperty("Document_List", new JArray("txt", "docx", "pdf", "pptx"))),
@@ -162,16 +162,16 @@ namespace Tools
                         new JObject(new JProperty("Other_List", new JArray("")))
                     )),
                     new JProperty("Additional", new JArray(
-                        new JObject(new JProperty("Delete", false)),
-                        new JObject(new JProperty("Subfolder", false))
+                        new JObject(new JProperty("Delete", true)),
+                        new JObject(new JProperty("Subfolder", true))
                     )),
                     new JProperty("Date", new JArray(
-                        new JObject(new JProperty("Creation", false)),
+                        new JObject(new JProperty("Creation", true)),
                         new JObject(new JProperty("Access", false)),
                         new JObject(new JProperty("Modify", false))
                     )),
                     new JProperty("Media", new JArray(
-                        new JObject(new JProperty("Duration", false)),
+                        new JObject(new JProperty("Duration", true)),
                         new JObject(new JProperty("Resolution", false)),
                         new JObject(new JProperty("FrameRate", false)),
                         new JObject(new JProperty("Codec", false)),
@@ -181,7 +181,7 @@ namespace Tools
                         new JObject(new JProperty("Tag_List", new JArray("")))
                     )),
                     new JProperty("Size", new JArray(
-                        new JObject(new JProperty("Range", false)),
+                        new JObject(new JProperty("Range", true)),
                         new JObject(new JProperty("Resolution", false)),
                         new JObject(new JProperty("Range_List", new JArray(
                             new JObject(new JProperty("Small", new JArray("100", "MB"))),
@@ -191,15 +191,15 @@ namespace Tools
                         )))
                     )),
                     new JProperty("Name", new JArray(
-                        new JObject(new JProperty("Caps", false)),
-                        new JObject(new JProperty("Chars", false))
+                        new JObject(new JProperty("Caps", true)),
+                        new JObject(new JProperty("Chars", true))
                     ))
                 )),
                 new JProperty("Convert", new JObject(
                     new JProperty("Additional", new JArray(
-                        new JObject(new JProperty("Delete", false)),
-                        new JObject(new JProperty("Subfolder", false)),
-                        new JObject(new JProperty("Keep", false))
+                        new JObject(new JProperty("Delete", true)),
+                        new JObject(new JProperty("Subfolder", true)),
+                        new JObject(new JProperty("Keep", true))
                     )),
                     new JProperty("Selection", new JArray(
                         new JObject(new JProperty("Image", "")),
@@ -210,15 +210,15 @@ namespace Tools
                 )),
                 new JProperty("Extract", new JObject(
                     new JProperty("Additional", new JArray(
-                        new JObject(new JProperty("Delete", false)),
-                        new JObject(new JProperty("Subfolder", false))
+                        new JObject(new JProperty("Delete", true)),
+                        new JObject(new JProperty("Subfolder", true))
                     ))
                 )),
                 new JProperty("Merge", new JObject(
                     new JProperty("Additional", new JArray(
-                        new JObject(new JProperty("Delete", false)),
-                        new JObject(new JProperty("Subfolder", false)),
-                        new JObject(new JProperty("Keep", false))
+                        new JObject(new JProperty("Delete", true)),
+                        new JObject(new JProperty("Subfolder", true)),
+                        new JObject(new JProperty("Keep", true))
                     ))
                 ))
             );

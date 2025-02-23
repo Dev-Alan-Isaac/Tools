@@ -12,10 +12,14 @@ namespace Tools
 
         private void UserControl_Configuration_Filter_Load(object sender, EventArgs e)
         {
-            if (File.Exists("appsettings.json"))
+            while (true)
             {
-                string settingPath = Path.GetFullPath("appsettings.json");
-                Get_FilterSection(settingPath);
+                if (File.Exists("appsettings.json"))
+                {
+                    string settingPath = Path.GetFullPath("appsettings.json");
+                    Get_FilterSection(settingPath);
+                    break;
+                }
             }
         }
 
