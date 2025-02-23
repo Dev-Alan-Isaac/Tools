@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Diagnostics;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Tools
 {
@@ -10,16 +11,12 @@ namespace Tools
             InitializeComponent();
         }
 
-        private void UserControl_Configuration_Filter_Load(object sender, EventArgs e)
+        public void ReloadSettings()
         {
-            while (true)
+            if (File.Exists("appsettings.json"))
             {
-                if (File.Exists("appsettings.json"))
-                {
-                    string settingPath = Path.GetFullPath("appsettings.json");
-                    Get_FilterSection(settingPath);
-                    break;
-                }
+                string settingPath = Path.GetFullPath("appsettings.json");
+                Get_FilterSection(settingPath);
             }
         }
 
@@ -43,8 +40,8 @@ namespace Tools
 
             ProcessTypes(types);
             ProcessAdditional(additional);
-            //ProcessDate(date);
-            //ProcessMedia(media);
+            ProcessDate(date);
+            ProcessMedia(media);
             //ProcessTags(tags);
             //ProcessSize(size);
             //ProcessName(name);
@@ -157,22 +154,101 @@ namespace Tools
             }
         }
 
-
         private void ProcessDate(JArray date)
         {
-            // Process the "Date" section
+            bool isAnyTrue = false;
+
             foreach (var item in date)
             {
-                Debug.WriteLine(item);
+                foreach (var property in (item as JObject).Properties())
+                {
+                    if (property.Value.Type == JTokenType.Boolean && (bool)property.Value)
+                    {
+                        if (isAnyTrue)
+                        {
+                            // Handle the error for multiple true values
+                            Debug.WriteLine("Error: More than one radio button is set to true.");
+                            return;
+                        }
+                        isAnyTrue = true;
+                        Set_RadioButtonStateDate(property.Name, true);
+                    }
+                    else if (property.Value.Type == JTokenType.Boolean)
+                    {
+                        Set_RadioButtonStateDate(property.Name, false);
+                    }
+                }
+            }
+        }
+
+        private void Set_RadioButtonStateDate(string propertyName, bool state)
+        {
+            switch (propertyName)
+            {
+                case "Creation":
+                    radioButton_Date_Creation.Checked = state;
+                    break;
+                case "Access":
+                    radioButton_Date_Access.Checked = state;
+                    break;
+                case "Modify":
+                    radioButton_Date_Modify.Checked = state;
+                    break;
+                default:
+                    Debug.WriteLine($"Unknown property: {propertyName}");
+                    break;
             }
         }
 
         private void ProcessMedia(JArray media)
         {
-            // Process the "Media" section
+            bool isAnyTrue = false;
+
             foreach (var item in media)
             {
-                Debug.WriteLine(item);
+                foreach (var property in (item as JObject).Properties())
+                {
+                    if (property.Value.Type == JTokenType.Boolean && (bool)property.Value)
+                    {
+                        if (isAnyTrue)
+                        {
+                            // Handle the error for multiple true values
+                            Debug.WriteLine("Error: More than one radio button is set to true.");
+                            return;
+                        }
+                        isAnyTrue = true;
+                        Set_RadioButtonStateMedia(property.Name, true);
+                    }
+                    else if (property.Value.Type == JTokenType.Boolean)
+                    {
+                        Set_RadioButtonStateMedia(property.Name, false);
+                    }
+                }
+            }
+        }
+
+        private void Set_RadioButtonStateMedia(string propertyName, bool state)
+        {
+            switch (propertyName)
+            {
+                case "Duration":
+                    radioButton_Media_Duration.Checked = state;
+                    break;
+                case "Resolution":
+                    radioButton_Media_Resolution.Checked = state;
+                    break;
+                case "FrameRate":
+                    radioButton_Media_FrameRate.Checked = state;
+                    break;
+                case "Codec":
+                    radioButton_Media_Codec.Checked = state;
+                    break;
+                case "AspectRatio":
+                    radioButton_Media_AspectRatio.Checked = state;
+                    break;
+                default:
+                    Debug.WriteLine($"Unknown property: {propertyName}");
+                    break;
             }
         }
 

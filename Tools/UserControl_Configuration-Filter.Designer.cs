@@ -511,7 +511,6 @@
             Controls.Add(groupBox1);
             Name = "UserControl_Configuration_Filter";
             Size = new Size(818, 612);
-            Load += UserControl_Configuration_Filter_Load;
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             groupBox5.ResumeLayout(false);

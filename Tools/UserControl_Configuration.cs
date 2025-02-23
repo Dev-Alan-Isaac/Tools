@@ -19,6 +19,12 @@ namespace Tools
             InitializeComponent();
             label_Title.Text = "FILTER";
             userControl_Configuration_Filter1.BringToFront();
+
+        }
+
+        public void ReloadConfigFilterSettings()
+        {
+            userControl_Configuration_Filter1.ReloadSettings();
         }
 
         private void FollowButton(Button button)

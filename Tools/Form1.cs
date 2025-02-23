@@ -1,3 +1,4 @@
+using System.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Tools.Properties;
@@ -135,10 +136,8 @@ namespace Tools
             {
                 set_Jsonfile();
             }
+            userControl_Configuration1.ReloadConfigFilterSettings();
         }
-
-    
-
 
         public void set_Jsonfile()
         {
