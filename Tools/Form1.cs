@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Linq;
 using Tools.Properties;
 
 namespace Tools
@@ -127,6 +128,69 @@ namespace Tools
             panel_NavBarIndicator.BackgroundImage = Resources.icons8_minus_50;
         }
 
+        private void Form_Load(object sender, EventArgs e)
+        {
+            while (true)
+            {
+                if (File.Exists("appsettings.json"))
+                {
+                    // File already exists; get the filepath
+                    string filePath = Path.GetFullPath("appsettings.json");
+                    break;
+                }
+                else
+                {
+                    //set_Jsonfile();
+                    break;
+                }
+            }
+        }
 
+        private void set_Jsonfile()
+        {
+            // Create the JSON structure
+            var jsonObject = new JObject(
+                new JProperty("Filter", new JObject(
+                    new JProperty("Types", new JArray(
+                        new JObject(new JProperty("Image",false)),
+                        new JObject(new JProperty("Video", false)),
+                        new JObject(new JProperty("Document", false)),
+                        new JObject(new JProperty("Audio", false)),
+                        new JObject(new JProperty("Archive", false)),
+                        new JObject(new JProperty("Executable", false)),
+                        new JObject(new JProperty("Other", false)),
+
+                        new JObject(new JProperty("Image_List", new JArray("itemA", "itemB", "itemC"))),
+                        new JObject(new JProperty("Video_List", new JArray("itemA", "itemB", "itemC"))),
+                        new JObject(new JProperty("Document_List", new JArray("itemA", "itemB", "itemC")))),
+                        new JObject(new JProperty("Audio_List", new JArray("itemA", "itemB", "itemC"))),
+                        new JObject(new JProperty("Archive_List", new JArray("itemA", "itemB", "itemC"))),
+                        new JObject(new JProperty("Executable_List", new JArray("itemA", "itemB", "itemC"))),
+                        new JObject(new JProperty("Other_List", new JArray("itemA", "itemB", "itemC")))
+                    )),
+                    new JProperty("Additional", new JArray(
+                        new JObject(new JProperty("Delete", false)),
+                        new JObject(new JProperty("Subfolder", false))
+                    )),
+                    new JProperty("Date", new JArray(
+                            new JObject(new JProperty("Creation", false)),
+                            new JObject(new JProperty("Access", false)),
+                            new JObject(new JProperty("Modify", false))
+                    )),
+                    new JProperty("var2", "example_string"),
+                    new JProperty("var2", "example_string"),
+                    new JProperty("var2", "example_string"),
+                    new JProperty("Convert", new JObject(
+                        new JProperty("var1", "another_string"),
+                        new JProperty("var2", "yet_another_string")
+                    ))
+            );
+
+            // Convert the JObject to a JSON string
+            string jsonString = jsonObject.ToString();
+
+            // Write the JSON string to the file appsettings.json
+            File.WriteAllText("appsettings.json", jsonString);
+        }
     }
 }
