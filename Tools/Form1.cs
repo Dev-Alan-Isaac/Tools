@@ -136,8 +136,8 @@ namespace Tools
                 if (!File.Exists("appsettings.json"))
                 {
                     set_Jsonfile();
-                    break;
                 }
+                break;
             }
         }
 

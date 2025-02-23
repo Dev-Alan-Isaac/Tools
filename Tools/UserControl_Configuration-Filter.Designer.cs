@@ -35,36 +35,37 @@
             treeView1 = new TreeView();
             button2 = new Button();
             button1 = new Button();
-            checkBox6 = new CheckBox();
-            checkBox5 = new CheckBox();
-            checkBox4 = new CheckBox();
-            checkBox3 = new CheckBox();
-            checkBox2 = new CheckBox();
-            checkBox1 = new CheckBox();
+            checkBox_Type_Other = new CheckBox();
+            checkBox_Type_Archive = new CheckBox();
+            checkBox_Type_Video = new CheckBox();
+            checkBox_Type_Audio = new CheckBox();
+            checkBox_Type_Image = new CheckBox();
+            checkBox_Type_Document = new CheckBox();
             groupBox2 = new GroupBox();
             groupBox3 = new GroupBox();
             treeView2 = new TreeView();
             button4 = new Button();
             button3 = new Button();
             groupBox4 = new GroupBox();
-            checkBox8 = new CheckBox();
-            checkBox7 = new CheckBox();
+            checkBox_Additional_subfiles = new CheckBox();
+            checkBox_Additional_Delete = new CheckBox();
             groupBox6 = new GroupBox();
-            radioButton5 = new RadioButton();
-            radioButton4 = new RadioButton();
+            radioButton_Size_Dynamic = new RadioButton();
+            radioButton_Size_Range = new RadioButton();
             groupBox7 = new GroupBox();
-            radioButton10 = new RadioButton();
-            radioButton9 = new RadioButton();
-            radioButton8 = new RadioButton();
-            radioButton7 = new RadioButton();
-            radioButton6 = new RadioButton();
+            radioButton_Media_AspectRatio = new RadioButton();
+            radioButton_Media_Codec = new RadioButton();
+            radioButton_Media_FrameRate = new RadioButton();
+            radioButton_Media_Resolution = new RadioButton();
+            radioButton_Media_Duration = new RadioButton();
             groupBox8 = new GroupBox();
-            radioButton3 = new RadioButton();
-            radioButton2 = new RadioButton();
-            radioButton1 = new RadioButton();
+            radioButton_Date_Modify = new RadioButton();
+            radioButton_Date_Access = new RadioButton();
+            radioButton_Date_Creation = new RadioButton();
             groupBox9 = new GroupBox();
-            checkBox10 = new CheckBox();
-            checkBox9 = new CheckBox();
+            checkBox_Name_Characters = new CheckBox();
+            checkBox_Name_Caps = new CheckBox();
+            checkBox_Type_Executable = new CheckBox();
             groupBox1.SuspendLayout();
             groupBox5.SuspendLayout();
             groupBox2.SuspendLayout();
@@ -83,15 +84,16 @@
             // groupBox1
             // 
             groupBox1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox1.Controls.Add(checkBox_Type_Executable);
             groupBox1.Controls.Add(groupBox5);
             groupBox1.Controls.Add(button2);
             groupBox1.Controls.Add(button1);
-            groupBox1.Controls.Add(checkBox6);
-            groupBox1.Controls.Add(checkBox5);
-            groupBox1.Controls.Add(checkBox4);
-            groupBox1.Controls.Add(checkBox3);
-            groupBox1.Controls.Add(checkBox2);
-            groupBox1.Controls.Add(checkBox1);
+            groupBox1.Controls.Add(checkBox_Type_Other);
+            groupBox1.Controls.Add(checkBox_Type_Archive);
+            groupBox1.Controls.Add(checkBox_Type_Video);
+            groupBox1.Controls.Add(checkBox_Type_Audio);
+            groupBox1.Controls.Add(checkBox_Type_Image);
+            groupBox1.Controls.Add(checkBox_Type_Document);
             groupBox1.Font = new Font("Arial Rounded MT Bold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             groupBox1.Location = new Point(3, 3);
             groupBox1.Name = "groupBox1";
@@ -105,9 +107,9 @@
             groupBox5.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             groupBox5.Controls.Add(treeView1);
             groupBox5.FlatStyle = FlatStyle.Flat;
-            groupBox5.Location = new Point(121, 25);
+            groupBox5.Location = new Point(128, 25);
             groupBox5.Name = "groupBox5";
-            groupBox5.Size = new Size(291, 312);
+            groupBox5.Size = new Size(284, 312);
             groupBox5.TabIndex = 9;
             groupBox5.TabStop = false;
             groupBox5.Text = "Groups / Extensions";
@@ -117,7 +119,7 @@
             treeView1.Dock = DockStyle.Fill;
             treeView1.Location = new Point(3, 22);
             treeView1.Name = "treeView1";
-            treeView1.Size = new Size(285, 287);
+            treeView1.Size = new Size(278, 287);
             treeView1.TabIndex = 0;
             // 
             // button2
@@ -144,71 +146,71 @@
             button1.TabIndex = 7;
             button1.UseVisualStyleBackColor = true;
             // 
-            // checkBox6
+            // checkBox_Type_Other
             // 
-            checkBox6.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            checkBox6.AutoSize = true;
-            checkBox6.Location = new Point(6, 267);
-            checkBox6.Name = "checkBox6";
-            checkBox6.Size = new Size(73, 22);
-            checkBox6.TabIndex = 6;
-            checkBox6.Text = "Other";
-            checkBox6.UseVisualStyleBackColor = true;
+            checkBox_Type_Other.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            checkBox_Type_Other.AutoSize = true;
+            checkBox_Type_Other.Location = new Point(6, 293);
+            checkBox_Type_Other.Name = "checkBox_Type_Other";
+            checkBox_Type_Other.Size = new Size(73, 22);
+            checkBox_Type_Other.TabIndex = 6;
+            checkBox_Type_Other.Text = "Other";
+            checkBox_Type_Other.UseVisualStyleBackColor = true;
             // 
-            // checkBox5
+            // checkBox_Type_Archive
             // 
-            checkBox5.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            checkBox5.AutoSize = true;
-            checkBox5.Location = new Point(6, 223);
-            checkBox5.Name = "checkBox5";
-            checkBox5.Size = new Size(89, 22);
-            checkBox5.TabIndex = 5;
-            checkBox5.Text = "Archive";
-            checkBox5.UseVisualStyleBackColor = true;
+            checkBox_Type_Archive.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            checkBox_Type_Archive.AutoSize = true;
+            checkBox_Type_Archive.Location = new Point(6, 211);
+            checkBox_Type_Archive.Name = "checkBox_Type_Archive";
+            checkBox_Type_Archive.Size = new Size(89, 22);
+            checkBox_Type_Archive.TabIndex = 5;
+            checkBox_Type_Archive.Text = "Archive";
+            checkBox_Type_Archive.UseVisualStyleBackColor = true;
             // 
-            // checkBox4
+            // checkBox_Type_Video
             // 
-            checkBox4.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            checkBox4.AutoSize = true;
-            checkBox4.Location = new Point(6, 179);
-            checkBox4.Name = "checkBox4";
-            checkBox4.Size = new Size(72, 22);
-            checkBox4.TabIndex = 4;
-            checkBox4.Text = "Video";
-            checkBox4.UseVisualStyleBackColor = true;
+            checkBox_Type_Video.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            checkBox_Type_Video.AutoSize = true;
+            checkBox_Type_Video.Location = new Point(6, 170);
+            checkBox_Type_Video.Name = "checkBox_Type_Video";
+            checkBox_Type_Video.Size = new Size(72, 22);
+            checkBox_Type_Video.TabIndex = 4;
+            checkBox_Type_Video.Text = "Video";
+            checkBox_Type_Video.UseVisualStyleBackColor = true;
             // 
-            // checkBox3
+            // checkBox_Type_Audio
             // 
-            checkBox3.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            checkBox3.AutoSize = true;
-            checkBox3.Location = new Point(6, 135);
-            checkBox3.Name = "checkBox3";
-            checkBox3.Size = new Size(73, 22);
-            checkBox3.TabIndex = 3;
-            checkBox3.Text = "Audio";
-            checkBox3.UseVisualStyleBackColor = true;
+            checkBox_Type_Audio.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            checkBox_Type_Audio.AutoSize = true;
+            checkBox_Type_Audio.Location = new Point(6, 129);
+            checkBox_Type_Audio.Name = "checkBox_Type_Audio";
+            checkBox_Type_Audio.Size = new Size(73, 22);
+            checkBox_Type_Audio.TabIndex = 3;
+            checkBox_Type_Audio.Text = "Audio";
+            checkBox_Type_Audio.UseVisualStyleBackColor = true;
             // 
-            // checkBox2
+            // checkBox_Type_Image
             // 
-            checkBox2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            checkBox2.AutoSize = true;
-            checkBox2.Location = new Point(6, 91);
-            checkBox2.Name = "checkBox2";
-            checkBox2.Size = new Size(76, 22);
-            checkBox2.TabIndex = 2;
-            checkBox2.Text = "Image";
-            checkBox2.UseVisualStyleBackColor = true;
+            checkBox_Type_Image.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            checkBox_Type_Image.AutoSize = true;
+            checkBox_Type_Image.Location = new Point(6, 88);
+            checkBox_Type_Image.Name = "checkBox_Type_Image";
+            checkBox_Type_Image.Size = new Size(76, 22);
+            checkBox_Type_Image.TabIndex = 2;
+            checkBox_Type_Image.Text = "Image";
+            checkBox_Type_Image.UseVisualStyleBackColor = true;
             // 
-            // checkBox1
+            // checkBox_Type_Document
             // 
-            checkBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            checkBox1.AutoSize = true;
-            checkBox1.Location = new Point(6, 47);
-            checkBox1.Name = "checkBox1";
-            checkBox1.Size = new Size(109, 22);
-            checkBox1.TabIndex = 1;
-            checkBox1.Text = "Document";
-            checkBox1.UseVisualStyleBackColor = true;
+            checkBox_Type_Document.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            checkBox_Type_Document.AutoSize = true;
+            checkBox_Type_Document.Location = new Point(6, 47);
+            checkBox_Type_Document.Name = "checkBox_Type_Document";
+            checkBox_Type_Document.Size = new Size(109, 22);
+            checkBox_Type_Document.TabIndex = 1;
+            checkBox_Type_Document.Text = "Document";
+            checkBox_Type_Document.UseVisualStyleBackColor = true;
             // 
             // groupBox2
             // 
@@ -269,8 +271,8 @@
             // groupBox4
             // 
             groupBox4.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            groupBox4.Controls.Add(checkBox8);
-            groupBox4.Controls.Add(checkBox7);
+            groupBox4.Controls.Add(checkBox_Additional_subfiles);
+            groupBox4.Controls.Add(checkBox_Additional_Delete);
             groupBox4.Font = new Font("Arial Rounded MT Bold", 12F);
             groupBox4.Location = new Point(3, 409);
             groupBox4.Name = "groupBox4";
@@ -279,31 +281,31 @@
             groupBox4.TabStop = false;
             groupBox4.Text = "Additional";
             // 
-            // checkBox8
+            // checkBox_Additional_subfiles
             // 
-            checkBox8.AutoSize = true;
-            checkBox8.Location = new Point(6, 53);
-            checkBox8.Name = "checkBox8";
-            checkBox8.Size = new Size(158, 22);
-            checkBox8.TabIndex = 1;
-            checkBox8.Text = "Process subfiles";
-            checkBox8.UseVisualStyleBackColor = true;
+            checkBox_Additional_subfiles.AutoSize = true;
+            checkBox_Additional_subfiles.Location = new Point(6, 53);
+            checkBox_Additional_subfiles.Name = "checkBox_Additional_subfiles";
+            checkBox_Additional_subfiles.Size = new Size(158, 22);
+            checkBox_Additional_subfiles.TabIndex = 1;
+            checkBox_Additional_subfiles.Text = "Process subfiles";
+            checkBox_Additional_subfiles.UseVisualStyleBackColor = true;
             // 
-            // checkBox7
+            // checkBox_Additional_Delete
             // 
-            checkBox7.AutoSize = true;
-            checkBox7.Location = new Point(6, 25);
-            checkBox7.Name = "checkBox7";
-            checkBox7.Size = new Size(191, 22);
-            checkBox7.TabIndex = 0;
-            checkBox7.Text = "Delete empty folders";
-            checkBox7.UseVisualStyleBackColor = true;
+            checkBox_Additional_Delete.AutoSize = true;
+            checkBox_Additional_Delete.Location = new Point(6, 25);
+            checkBox_Additional_Delete.Name = "checkBox_Additional_Delete";
+            checkBox_Additional_Delete.Size = new Size(191, 22);
+            checkBox_Additional_Delete.TabIndex = 0;
+            checkBox_Additional_Delete.Text = "Delete empty folders";
+            checkBox_Additional_Delete.UseVisualStyleBackColor = true;
             // 
             // groupBox6
             // 
             groupBox6.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            groupBox6.Controls.Add(radioButton5);
-            groupBox6.Controls.Add(radioButton4);
+            groupBox6.Controls.Add(radioButton_Size_Dynamic);
+            groupBox6.Controls.Add(radioButton_Size_Range);
             groupBox6.Font = new Font("Arial Rounded MT Bold", 12F);
             groupBox6.Location = new Point(520, 409);
             groupBox6.Name = "groupBox6";
@@ -312,36 +314,36 @@
             groupBox6.TabStop = false;
             groupBox6.Text = "Size";
             // 
-            // radioButton5
+            // radioButton_Size_Dynamic
             // 
-            radioButton5.AutoSize = true;
-            radioButton5.Location = new Point(6, 53);
-            radioButton5.Name = "radioButton5";
-            radioButton5.Size = new Size(95, 22);
-            radioButton5.TabIndex = 1;
-            radioButton5.TabStop = true;
-            radioButton5.Text = "Dynamic";
-            radioButton5.UseVisualStyleBackColor = true;
+            radioButton_Size_Dynamic.AutoSize = true;
+            radioButton_Size_Dynamic.Location = new Point(6, 53);
+            radioButton_Size_Dynamic.Name = "radioButton_Size_Dynamic";
+            radioButton_Size_Dynamic.Size = new Size(95, 22);
+            radioButton_Size_Dynamic.TabIndex = 1;
+            radioButton_Size_Dynamic.TabStop = true;
+            radioButton_Size_Dynamic.Text = "Dynamic";
+            radioButton_Size_Dynamic.UseVisualStyleBackColor = true;
             // 
-            // radioButton4
+            // radioButton_Size_Range
             // 
-            radioButton4.AutoSize = true;
-            radioButton4.Location = new Point(6, 25);
-            radioButton4.Name = "radioButton4";
-            radioButton4.Size = new Size(78, 22);
-            radioButton4.TabIndex = 0;
-            radioButton4.TabStop = true;
-            radioButton4.Text = "Range";
-            radioButton4.UseVisualStyleBackColor = true;
+            radioButton_Size_Range.AutoSize = true;
+            radioButton_Size_Range.Location = new Point(6, 25);
+            radioButton_Size_Range.Name = "radioButton_Size_Range";
+            radioButton_Size_Range.Size = new Size(78, 22);
+            radioButton_Size_Range.TabIndex = 0;
+            radioButton_Size_Range.TabStop = true;
+            radioButton_Size_Range.Text = "Range";
+            radioButton_Size_Range.UseVisualStyleBackColor = true;
             // 
             // groupBox7
             // 
             groupBox7.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
-            groupBox7.Controls.Add(radioButton10);
-            groupBox7.Controls.Add(radioButton9);
-            groupBox7.Controls.Add(radioButton8);
-            groupBox7.Controls.Add(radioButton7);
-            groupBox7.Controls.Add(radioButton6);
+            groupBox7.Controls.Add(radioButton_Media_AspectRatio);
+            groupBox7.Controls.Add(radioButton_Media_Codec);
+            groupBox7.Controls.Add(radioButton_Media_FrameRate);
+            groupBox7.Controls.Add(radioButton_Media_Resolution);
+            groupBox7.Controls.Add(radioButton_Media_Duration);
             groupBox7.Font = new Font("Arial Rounded MT Bold", 12F);
             groupBox7.Location = new Point(284, 409);
             groupBox7.Name = "groupBox7";
@@ -350,67 +352,67 @@
             groupBox7.TabStop = false;
             groupBox7.Text = "Media";
             // 
-            // radioButton10
+            // radioButton_Media_AspectRatio
             // 
-            radioButton10.AutoSize = true;
-            radioButton10.Location = new Point(6, 169);
-            radioButton10.Name = "radioButton10";
-            radioButton10.Size = new Size(124, 22);
-            radioButton10.TabIndex = 4;
-            radioButton10.TabStop = true;
-            radioButton10.Text = "Aspect ratio";
-            radioButton10.UseVisualStyleBackColor = true;
+            radioButton_Media_AspectRatio.AutoSize = true;
+            radioButton_Media_AspectRatio.Location = new Point(6, 169);
+            radioButton_Media_AspectRatio.Name = "radioButton_Media_AspectRatio";
+            radioButton_Media_AspectRatio.Size = new Size(124, 22);
+            radioButton_Media_AspectRatio.TabIndex = 4;
+            radioButton_Media_AspectRatio.TabStop = true;
+            radioButton_Media_AspectRatio.Text = "Aspect ratio";
+            radioButton_Media_AspectRatio.UseVisualStyleBackColor = true;
             // 
-            // radioButton9
+            // radioButton_Media_Codec
             // 
-            radioButton9.AutoSize = true;
-            radioButton9.Location = new Point(6, 133);
-            radioButton9.Name = "radioButton9";
-            radioButton9.Size = new Size(78, 22);
-            radioButton9.TabIndex = 3;
-            radioButton9.TabStop = true;
-            radioButton9.Text = "Codec";
-            radioButton9.UseVisualStyleBackColor = true;
+            radioButton_Media_Codec.AutoSize = true;
+            radioButton_Media_Codec.Location = new Point(6, 133);
+            radioButton_Media_Codec.Name = "radioButton_Media_Codec";
+            radioButton_Media_Codec.Size = new Size(78, 22);
+            radioButton_Media_Codec.TabIndex = 3;
+            radioButton_Media_Codec.TabStop = true;
+            radioButton_Media_Codec.Text = "Codec";
+            radioButton_Media_Codec.UseVisualStyleBackColor = true;
             // 
-            // radioButton8
+            // radioButton_Media_FrameRate
             // 
-            radioButton8.AutoSize = true;
-            radioButton8.Location = new Point(6, 97);
-            radioButton8.Name = "radioButton8";
-            radioButton8.Size = new Size(114, 22);
-            radioButton8.TabIndex = 2;
-            radioButton8.TabStop = true;
-            radioButton8.Text = "Frame rate";
-            radioButton8.UseVisualStyleBackColor = true;
+            radioButton_Media_FrameRate.AutoSize = true;
+            radioButton_Media_FrameRate.Location = new Point(6, 97);
+            radioButton_Media_FrameRate.Name = "radioButton_Media_FrameRate";
+            radioButton_Media_FrameRate.Size = new Size(114, 22);
+            radioButton_Media_FrameRate.TabIndex = 2;
+            radioButton_Media_FrameRate.TabStop = true;
+            radioButton_Media_FrameRate.Text = "Frame rate";
+            radioButton_Media_FrameRate.UseVisualStyleBackColor = true;
             // 
-            // radioButton7
+            // radioButton_Media_Resolution
             // 
-            radioButton7.AutoSize = true;
-            radioButton7.Location = new Point(6, 61);
-            radioButton7.Name = "radioButton7";
-            radioButton7.Size = new Size(111, 22);
-            radioButton7.TabIndex = 1;
-            radioButton7.TabStop = true;
-            radioButton7.Text = "Resolution";
-            radioButton7.UseVisualStyleBackColor = true;
+            radioButton_Media_Resolution.AutoSize = true;
+            radioButton_Media_Resolution.Location = new Point(6, 61);
+            radioButton_Media_Resolution.Name = "radioButton_Media_Resolution";
+            radioButton_Media_Resolution.Size = new Size(111, 22);
+            radioButton_Media_Resolution.TabIndex = 1;
+            radioButton_Media_Resolution.TabStop = true;
+            radioButton_Media_Resolution.Text = "Resolution";
+            radioButton_Media_Resolution.UseVisualStyleBackColor = true;
             // 
-            // radioButton6
+            // radioButton_Media_Duration
             // 
-            radioButton6.AutoSize = true;
-            radioButton6.Location = new Point(6, 25);
-            radioButton6.Name = "radioButton6";
-            radioButton6.Size = new Size(95, 22);
-            radioButton6.TabIndex = 0;
-            radioButton6.TabStop = true;
-            radioButton6.Text = "Duration";
-            radioButton6.UseVisualStyleBackColor = true;
+            radioButton_Media_Duration.AutoSize = true;
+            radioButton_Media_Duration.Location = new Point(6, 25);
+            radioButton_Media_Duration.Name = "radioButton_Media_Duration";
+            radioButton_Media_Duration.Size = new Size(95, 22);
+            radioButton_Media_Duration.TabIndex = 0;
+            radioButton_Media_Duration.TabStop = true;
+            radioButton_Media_Duration.Text = "Duration";
+            radioButton_Media_Duration.UseVisualStyleBackColor = true;
             // 
             // groupBox8
             // 
             groupBox8.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            groupBox8.Controls.Add(radioButton3);
-            groupBox8.Controls.Add(radioButton2);
-            groupBox8.Controls.Add(radioButton1);
+            groupBox8.Controls.Add(radioButton_Date_Modify);
+            groupBox8.Controls.Add(radioButton_Date_Access);
+            groupBox8.Controls.Add(radioButton_Date_Creation);
             groupBox8.Font = new Font("Arial Rounded MT Bold", 12F);
             groupBox8.Location = new Point(3, 501);
             groupBox8.Name = "groupBox8";
@@ -419,44 +421,44 @@
             groupBox8.TabStop = false;
             groupBox8.Text = "Date";
             // 
-            // radioButton3
+            // radioButton_Date_Modify
             // 
-            radioButton3.AutoSize = true;
-            radioButton3.Location = new Point(6, 77);
-            radioButton3.Name = "radioButton3";
-            radioButton3.Size = new Size(117, 22);
-            radioButton3.TabIndex = 2;
-            radioButton3.TabStop = true;
-            radioButton3.Text = "Last modify";
-            radioButton3.UseVisualStyleBackColor = true;
+            radioButton_Date_Modify.AutoSize = true;
+            radioButton_Date_Modify.Location = new Point(6, 77);
+            radioButton_Date_Modify.Name = "radioButton_Date_Modify";
+            radioButton_Date_Modify.Size = new Size(117, 22);
+            radioButton_Date_Modify.TabIndex = 2;
+            radioButton_Date_Modify.TabStop = true;
+            radioButton_Date_Modify.Text = "Last modify";
+            radioButton_Date_Modify.UseVisualStyleBackColor = true;
             // 
-            // radioButton2
+            // radioButton_Date_Access
             // 
-            radioButton2.AutoSize = true;
-            radioButton2.Location = new Point(6, 51);
-            radioButton2.Name = "radioButton2";
-            radioButton2.Size = new Size(123, 22);
-            radioButton2.TabIndex = 1;
-            radioButton2.TabStop = true;
-            radioButton2.Text = "Last access";
-            radioButton2.UseVisualStyleBackColor = true;
+            radioButton_Date_Access.AutoSize = true;
+            radioButton_Date_Access.Location = new Point(6, 51);
+            radioButton_Date_Access.Name = "radioButton_Date_Access";
+            radioButton_Date_Access.Size = new Size(123, 22);
+            radioButton_Date_Access.TabIndex = 1;
+            radioButton_Date_Access.TabStop = true;
+            radioButton_Date_Access.Text = "Last access";
+            radioButton_Date_Access.UseVisualStyleBackColor = true;
             // 
-            // radioButton1
+            // radioButton_Date_Creation
             // 
-            radioButton1.AutoSize = true;
-            radioButton1.Location = new Point(6, 25);
-            radioButton1.Name = "radioButton1";
-            radioButton1.Size = new Size(95, 22);
-            radioButton1.TabIndex = 0;
-            radioButton1.TabStop = true;
-            radioButton1.Text = "Creation";
-            radioButton1.UseVisualStyleBackColor = true;
+            radioButton_Date_Creation.AutoSize = true;
+            radioButton_Date_Creation.Location = new Point(6, 25);
+            radioButton_Date_Creation.Name = "radioButton_Date_Creation";
+            radioButton_Date_Creation.Size = new Size(95, 22);
+            radioButton_Date_Creation.TabIndex = 0;
+            radioButton_Date_Creation.TabStop = true;
+            radioButton_Date_Creation.Text = "Creation";
+            radioButton_Date_Creation.UseVisualStyleBackColor = true;
             // 
             // groupBox9
             // 
             groupBox9.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            groupBox9.Controls.Add(checkBox10);
-            groupBox9.Controls.Add(checkBox9);
+            groupBox9.Controls.Add(checkBox_Name_Characters);
+            groupBox9.Controls.Add(checkBox_Name_Caps);
             groupBox9.Font = new Font("Arial Rounded MT Bold", 12F);
             groupBox9.Location = new Point(520, 501);
             groupBox9.Name = "groupBox9";
@@ -465,25 +467,36 @@
             groupBox9.TabStop = false;
             groupBox9.Text = "Name";
             // 
-            // checkBox10
+            // checkBox_Name_Characters
             // 
-            checkBox10.AutoSize = true;
-            checkBox10.Location = new Point(6, 54);
-            checkBox10.Name = "checkBox10";
-            checkBox10.Size = new Size(233, 22);
-            checkBox10.TabIndex = 1;
-            checkBox10.Text = "Ignore special characters";
-            checkBox10.UseVisualStyleBackColor = true;
+            checkBox_Name_Characters.AutoSize = true;
+            checkBox_Name_Characters.Location = new Point(6, 54);
+            checkBox_Name_Characters.Name = "checkBox_Name_Characters";
+            checkBox_Name_Characters.Size = new Size(233, 22);
+            checkBox_Name_Characters.TabIndex = 1;
+            checkBox_Name_Characters.Text = "Ignore special characters";
+            checkBox_Name_Characters.UseVisualStyleBackColor = true;
             // 
-            // checkBox9
+            // checkBox_Name_Caps
             // 
-            checkBox9.AutoSize = true;
-            checkBox9.Location = new Point(6, 26);
-            checkBox9.Name = "checkBox9";
-            checkBox9.Size = new Size(132, 22);
-            checkBox9.TabIndex = 0;
-            checkBox9.Text = "Ingnore caps";
-            checkBox9.UseVisualStyleBackColor = true;
+            checkBox_Name_Caps.AutoSize = true;
+            checkBox_Name_Caps.Location = new Point(6, 26);
+            checkBox_Name_Caps.Name = "checkBox_Name_Caps";
+            checkBox_Name_Caps.Size = new Size(122, 22);
+            checkBox_Name_Caps.TabIndex = 0;
+            checkBox_Name_Caps.Text = "Ignore caps";
+            checkBox_Name_Caps.UseVisualStyleBackColor = true;
+            // 
+            // checkBox_Type_Executable
+            // 
+            checkBox_Type_Executable.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            checkBox_Type_Executable.AutoSize = true;
+            checkBox_Type_Executable.Location = new Point(6, 252);
+            checkBox_Type_Executable.Name = "checkBox_Type_Executable";
+            checkBox_Type_Executable.Size = new Size(116, 22);
+            checkBox_Type_Executable.TabIndex = 10;
+            checkBox_Type_Executable.Text = "Executable";
+            checkBox_Type_Executable.UseVisualStyleBackColor = true;
             // 
             // UserControl_Configuration_Filter
             // 
@@ -498,6 +511,7 @@
             Controls.Add(groupBox1);
             Name = "UserControl_Configuration_Filter";
             Size = new Size(818, 612);
+            Load += UserControl_Configuration_Filter_Load;
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             groupBox5.ResumeLayout(false);
@@ -520,12 +534,12 @@
         private ToolTip toolTip1;
         private GroupBox groupBox1;
         private GroupBox groupBox2;
-        private CheckBox checkBox6;
-        private CheckBox checkBox5;
-        private CheckBox checkBox4;
-        private CheckBox checkBox3;
-        private CheckBox checkBox2;
-        private CheckBox checkBox1;
+        private CheckBox checkBox_Type_Other;
+        private CheckBox checkBox_Type_Archive;
+        private CheckBox checkBox_Type_Video;
+        private CheckBox checkBox_Type_Audio;
+        private CheckBox checkBox_Type_Image;
+        private CheckBox checkBox_Type_Document;
         private Button button2;
         private Button button1;
         private GroupBox groupBox5;
@@ -539,19 +553,20 @@
         private GroupBox groupBox7;
         private GroupBox groupBox8;
         private GroupBox groupBox9;
-        private CheckBox checkBox8;
-        private CheckBox checkBox7;
-        private RadioButton radioButton3;
-        private RadioButton radioButton2;
-        private RadioButton radioButton1;
-        private RadioButton radioButton5;
-        private RadioButton radioButton4;
-        private RadioButton radioButton10;
-        private RadioButton radioButton9;
-        private RadioButton radioButton8;
-        private RadioButton radioButton7;
-        private RadioButton radioButton6;
-        private CheckBox checkBox10;
-        private CheckBox checkBox9;
+        private CheckBox checkBox_Additional_subfiles;
+        private CheckBox checkBox_Additional_Delete;
+        private RadioButton radioButton_Date_Modify;
+        private RadioButton radioButton_Date_Access;
+        private RadioButton radioButton_Date_Creation;
+        private RadioButton radioButton_Size_Dynamic;
+        private RadioButton radioButton_Size_Range;
+        private RadioButton radioButton_Media_AspectRatio;
+        private RadioButton radioButton_Media_Codec;
+        private RadioButton radioButton_Media_FrameRate;
+        private RadioButton radioButton_Media_Resolution;
+        private RadioButton radioButton_Media_Duration;
+        private CheckBox checkBox_Name_Characters;
+        private CheckBox checkBox_Name_Caps;
+        private CheckBox checkBox_Type_Executable;
     }
 }
