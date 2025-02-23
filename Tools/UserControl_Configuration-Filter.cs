@@ -42,9 +42,9 @@ namespace Tools
             ProcessAdditional(additional);
             ProcessDate(date);
             ProcessMedia(media);
-            //ProcessTags(tags);
-            //ProcessSize(size);
-            //ProcessName(name);
+            ProcessTags(tags);
+            ProcessSize(size);
+            ProcessName(name);
         }
 
         private void ProcessTypes(JArray types)
@@ -254,30 +254,113 @@ namespace Tools
 
         private void ProcessTags(JArray tags)
         {
-            // Process the "Tags" section
-            foreach (var item in tags)
+            // Assuming you want to call Set_TreeViewNodeTags with the appropriate dictionary
+            Dictionary<string, JArray> lists = new Dictionary<string, JArray>
             {
-                Debug.WriteLine(item);
-            }
+                { "Tags", tags }
+            };
+
+            Set_TreeViewNodeTags(lists);
+        }
+
+        private void Set_TreeViewNodeTags(Dictionary<string, JArray> lists)
+        {
+            treeView_Tags.Invoke(() =>
+            {
+                treeView_Tags.Nodes.Clear();
+
+                foreach (var kvp in lists)
+                {
+                    foreach (var item in kvp.Value)
+                    {
+                        var tagObject = (JObject)item;
+                        var tagList = tagObject["Tag_List"] as JArray;
+
+                        if (tagList != null)
+                        {
+                            foreach (var tag in tagList)
+                            {
+                                TreeNode rootNode = new TreeNode(tag.ToString());
+                                treeView_Tags.Nodes.Add(rootNode);
+                            }
+                        }
+                    }
+                }
+            });
         }
 
         private void ProcessSize(JArray size)
         {
-            // Process the "Size" section
+            bool isAnyTrue = false;
+
             foreach (var item in size)
             {
-                Debug.WriteLine(item);
+                foreach (var property in (item as JObject).Properties())
+                {
+                    if (property.Value.Type == JTokenType.Boolean && (bool)property.Value)
+                    {
+                        if (isAnyTrue)
+                        {
+                            // Handle the error for multiple true values
+                            Debug.WriteLine("Error: More than one radio button is set to true.");
+                            return;
+                        }
+                        isAnyTrue = true;
+                        Set_RadioButtonStateSize(property.Name, true);
+                    }
+                    else if (property.Value.Type == JTokenType.Boolean)
+                    {
+                        Set_RadioButtonStateSize(property.Name, false);
+                    }
+                }
+            }
+        }
+
+        private void Set_RadioButtonStateSize(string propertyName, bool state)
+        {
+            switch (propertyName)
+            {
+                case "Range":
+                    radioButton_Size_Range.Checked = state;
+                    break;
+                case "Dynamic":
+                    radioButton_Size_Dynamic.Checked = state;
+                    break;
+                default:
+                    Debug.WriteLine($"Unknown property: {propertyName}");
+                    break;
             }
         }
 
         private void ProcessName(JArray name)
         {
-            // Process the "Name" section
-            foreach (var item in name)
+            foreach (var type in name)
             {
-                Debug.WriteLine(item);
+                foreach (var property in (type as JObject).Properties())
+                {
+                    if (property.Value.Type == JTokenType.Boolean)
+                    {
+                        // Process key-value pairs like "Image": false
+                        Set_CheckboxStateName(property.Name, (bool)property.Value);
+                    }
+                }
             }
         }
 
+        private void Set_CheckboxStateName(string propertyName, bool state)
+        {
+            switch (propertyName)
+            {
+                case "Caps":
+                    checkBox_Name_Caps.Checked = state;
+                    break;
+                case "Chars":
+                    checkBox_Name_Characters.Checked = state;
+                    break;
+                default:
+                    Debug.WriteLine($"Unknown property: {propertyName}");
+                    break;
+            }
+        }
     }
 }

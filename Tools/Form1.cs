@@ -180,7 +180,7 @@ namespace Tools
                     )),
                     new JProperty("Size", new JArray(
                         new JObject(new JProperty("Range", true)),
-                        new JObject(new JProperty("Resolution", false)),
+                        new JObject(new JProperty("Dynamic", false)),
                         new JObject(new JProperty("Range_List", new JArray(
                             new JObject(new JProperty("Small", new JArray("100", "MB"))),
                             new JObject(new JProperty("Medium", new JArray("100", "MB", "1", "GB"))),

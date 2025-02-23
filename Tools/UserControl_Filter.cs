@@ -12,14 +12,30 @@ namespace Tools
 {
     public partial class UserControl_Filter : UserControl
     {
+        private string SettingPath;
+
         public UserControl_Filter()
         {
             InitializeComponent();
         }
 
-        private void UserControl_Filter_Load(object sender, EventArgs e)
+        private void button_Play_Click(object sender, EventArgs e)
         {
-          
+
+        }
+
+        private void button_Path_Click(object sender, EventArgs e)
+        {
+            using (var fbd = new FolderBrowserDialog())
+            {
+                DialogResult result = fbd.ShowDialog();
+
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
+                {
+                    SettingPath = fbd.SelectedPath;
+                    textBox_Path.Text = SettingPath;
+                }
+            }
         }
     }
 }

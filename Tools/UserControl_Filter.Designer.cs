@@ -40,11 +40,12 @@
             checkBox2 = new CheckBox();
             checkBox1 = new CheckBox();
             panel_TopBar = new Panel();
-            textBox2 = new TextBox();
-            textBox1 = new TextBox();
+            textBox_Files = new TextBox();
+            textBox_Path = new TextBox();
             button_Play = new Button();
             button_Path = new Button();
             panel_Body = new Panel();
+            panel2 = new Panel();
             panel1 = new Panel();
             progressBar1 = new ProgressBar();
             panel_NavBar.SuspendLayout();
@@ -69,7 +70,7 @@
             panel_NavBar.Dock = DockStyle.Left;
             panel_NavBar.Location = new Point(0, 0);
             panel_NavBar.Name = "panel_NavBar";
-            panel_NavBar.Size = new Size(186, 612);
+            panel_NavBar.Size = new Size(196, 612);
             panel_NavBar.TabIndex = 0;
             // 
             // checkBox10
@@ -78,7 +79,7 @@
             checkBox10.AutoSize = true;
             checkBox10.Cursor = Cursors.Hand;
             checkBox10.Font = new Font("Arial Rounded MT Bold", 15.75F);
-            checkBox10.Location = new Point(15, 497);
+            checkBox10.Location = new Point(22, 497);
             checkBox10.Name = "checkBox10";
             checkBox10.Size = new Size(153, 28);
             checkBox10.TabIndex = 9;
@@ -91,7 +92,7 @@
             checkBox9.AutoSize = true;
             checkBox9.Cursor = Cursors.Hand;
             checkBox9.Font = new Font("Arial Rounded MT Bold", 15.75F);
-            checkBox9.Location = new Point(20, 445);
+            checkBox9.Location = new Point(28, 445);
             checkBox9.Name = "checkBox9";
             checkBox9.Size = new Size(141, 28);
             checkBox9.TabIndex = 8;
@@ -104,11 +105,11 @@
             checkBox8.AutoSize = true;
             checkBox8.Cursor = Cursors.Hand;
             checkBox8.Font = new Font("Arial Rounded MT Bold", 15.75F);
-            checkBox8.Location = new Point(41, 393);
+            checkBox8.Location = new Point(49, 393);
             checkBox8.Name = "checkBox8";
-            checkBox8.Size = new Size(89, 28);
+            checkBox8.Size = new Size(98, 28);
             checkBox8.TabIndex = 7;
-            checkBox8.Text = "Media";
+            checkBox8.Text = "MEDIA";
             checkBox8.UseVisualStyleBackColor = true;
             // 
             // checkBox7
@@ -117,11 +118,11 @@
             checkBox7.AutoSize = true;
             checkBox7.Cursor = Cursors.Hand;
             checkBox7.Font = new Font("Arial Rounded MT Bold", 15.75F);
-            checkBox7.Location = new Point(13, 341);
+            checkBox7.Location = new Point(4, 340);
             checkBox7.Name = "checkBox7";
-            checkBox7.Size = new Size(161, 28);
+            checkBox7.Size = new Size(188, 28);
             checkBox7.TabIndex = 6;
-            checkBox7.Text = "Tags / Labels";
+            checkBox7.Text = "TAGS / LABELS";
             checkBox7.UseVisualStyleBackColor = true;
             // 
             // checkBox6
@@ -130,11 +131,11 @@
             checkBox6.AutoSize = true;
             checkBox6.Cursor = Cursors.Hand;
             checkBox6.Font = new Font("Arial Rounded MT Bold", 15.75F);
-            checkBox6.Location = new Point(26, 289);
+            checkBox6.Location = new Point(22, 289);
             checkBox6.Name = "checkBox6";
-            checkBox6.Size = new Size(129, 28);
+            checkBox6.Size = new Size(153, 28);
             checkBox6.TabIndex = 5;
-            checkBox6.Text = "Extension";
+            checkBox6.Text = "EXTENSION";
             checkBox6.UseVisualStyleBackColor = true;
             // 
             // checkBox5
@@ -143,11 +144,11 @@
             checkBox5.AutoSize = true;
             checkBox5.Cursor = Cursors.Hand;
             checkBox5.Font = new Font("Arial Rounded MT Bold", 15.75F);
-            checkBox5.Location = new Point(44, 237);
+            checkBox5.Location = new Point(53, 237);
             checkBox5.Name = "checkBox5";
-            checkBox5.Size = new Size(81, 28);
+            checkBox5.Size = new Size(90, 28);
             checkBox5.TabIndex = 4;
-            checkBox5.Text = "Hash";
+            checkBox5.Text = "HASH";
             checkBox5.UseVisualStyleBackColor = true;
             // 
             // checkBox4
@@ -156,11 +157,11 @@
             checkBox4.AutoSize = true;
             checkBox4.Cursor = Cursors.Hand;
             checkBox4.Font = new Font("Arial Rounded MT Bold", 15.75F);
-            checkBox4.Location = new Point(42, 185);
+            checkBox4.Location = new Point(53, 185);
             checkBox4.Name = "checkBox4";
-            checkBox4.Size = new Size(88, 28);
+            checkBox4.Size = new Size(91, 28);
             checkBox4.TabIndex = 3;
-            checkBox4.Text = "Name";
+            checkBox4.Text = "NAME";
             checkBox4.UseVisualStyleBackColor = true;
             // 
             // checkBox3
@@ -169,11 +170,11 @@
             checkBox3.AutoSize = true;
             checkBox3.Cursor = Cursors.Hand;
             checkBox3.Font = new Font("Arial Rounded MT Bold", 15.75F);
-            checkBox3.Location = new Point(46, 133);
+            checkBox3.Location = new Point(55, 133);
             checkBox3.Name = "checkBox3";
-            checkBox3.Size = new Size(76, 28);
+            checkBox3.Size = new Size(87, 28);
             checkBox3.TabIndex = 2;
-            checkBox3.Text = "Date";
+            checkBox3.Text = "DATE";
             checkBox3.UseVisualStyleBackColor = true;
             // 
             // checkBox2
@@ -182,11 +183,11 @@
             checkBox2.AutoSize = true;
             checkBox2.Cursor = Cursors.Hand;
             checkBox2.Font = new Font("Arial Rounded MT Bold", 15.75F);
-            checkBox2.Location = new Point(48, 81);
+            checkBox2.Location = new Point(59, 81);
             checkBox2.Name = "checkBox2";
-            checkBox2.Size = new Size(72, 28);
+            checkBox2.Size = new Size(78, 28);
             checkBox2.TabIndex = 1;
-            checkBox2.Text = "Size";
+            checkBox2.Text = "SIZE";
             checkBox2.UseVisualStyleBackColor = true;
             // 
             // checkBox1
@@ -195,51 +196,51 @@
             checkBox1.AutoSize = true;
             checkBox1.Cursor = Cursors.Hand;
             checkBox1.Font = new Font("Arial Rounded MT Bold", 15.75F);
-            checkBox1.Location = new Point(45, 29);
+            checkBox1.Location = new Point(57, 29);
             checkBox1.Name = "checkBox1";
-            checkBox1.Size = new Size(78, 28);
+            checkBox1.Size = new Size(83, 28);
             checkBox1.TabIndex = 0;
-            checkBox1.Text = "Type";
+            checkBox1.Text = "TYPE";
             checkBox1.UseVisualStyleBackColor = true;
             // 
             // panel_TopBar
             // 
             panel_TopBar.BackColor = SystemColors.Control;
-            panel_TopBar.Controls.Add(textBox2);
-            panel_TopBar.Controls.Add(textBox1);
+            panel_TopBar.Controls.Add(textBox_Files);
+            panel_TopBar.Controls.Add(textBox_Path);
             panel_TopBar.Controls.Add(button_Play);
             panel_TopBar.Controls.Add(button_Path);
             panel_TopBar.Dock = DockStyle.Top;
-            panel_TopBar.Location = new Point(186, 0);
+            panel_TopBar.Location = new Point(196, 0);
             panel_TopBar.Name = "panel_TopBar";
-            panel_TopBar.Size = new Size(632, 50);
+            panel_TopBar.Size = new Size(622, 50);
             panel_TopBar.TabIndex = 1;
             // 
-            // textBox2
+            // textBox_Files
             // 
-            textBox2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            textBox2.BorderStyle = BorderStyle.FixedSingle;
-            textBox2.Cursor = Cursors.No;
-            textBox2.Font = new Font("Arial Rounded MT Bold", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            textBox2.Location = new Point(445, 10);
-            textBox2.Name = "textBox2";
-            textBox2.ReadOnly = true;
-            textBox2.ScrollBars = ScrollBars.Horizontal;
-            textBox2.Size = new Size(176, 29);
-            textBox2.TabIndex = 3;
+            textBox_Files.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            textBox_Files.BorderStyle = BorderStyle.FixedSingle;
+            textBox_Files.Cursor = Cursors.No;
+            textBox_Files.Font = new Font("Arial Rounded MT Bold", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            textBox_Files.Location = new Point(435, 10);
+            textBox_Files.Name = "textBox_Files";
+            textBox_Files.ReadOnly = true;
+            textBox_Files.ScrollBars = ScrollBars.Horizontal;
+            textBox_Files.Size = new Size(176, 29);
+            textBox_Files.TabIndex = 3;
             // 
-            // textBox1
+            // textBox_Path
             // 
-            textBox1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            textBox1.BorderStyle = BorderStyle.FixedSingle;
-            textBox1.Cursor = Cursors.No;
-            textBox1.Font = new Font("Arial Rounded MT Bold", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            textBox1.Location = new Point(98, 10);
-            textBox1.Name = "textBox1";
-            textBox1.ReadOnly = true;
-            textBox1.ScrollBars = ScrollBars.Horizontal;
-            textBox1.Size = new Size(341, 29);
-            textBox1.TabIndex = 2;
+            textBox_Path.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            textBox_Path.BorderStyle = BorderStyle.FixedSingle;
+            textBox_Path.Cursor = Cursors.No;
+            textBox_Path.Font = new Font("Arial Rounded MT Bold", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            textBox_Path.Location = new Point(98, 10);
+            textBox_Path.Name = "textBox_Path";
+            textBox_Path.ReadOnly = true;
+            textBox_Path.ScrollBars = ScrollBars.Horizontal;
+            textBox_Path.Size = new Size(331, 29);
+            textBox_Path.TabIndex = 2;
             // 
             // button_Play
             // 
@@ -252,6 +253,7 @@
             button_Play.Size = new Size(40, 40);
             button_Play.TabIndex = 1;
             button_Play.UseVisualStyleBackColor = true;
+            button_Play.Click += button_Play_Click;
             // 
             // button_Path
             // 
@@ -264,16 +266,26 @@
             button_Path.Size = new Size(40, 40);
             button_Path.TabIndex = 0;
             button_Path.UseVisualStyleBackColor = true;
+            button_Path.Click += button_Path_Click;
             // 
             // panel_Body
             // 
             panel_Body.BackColor = SystemColors.Control;
+            panel_Body.Controls.Add(panel2);
             panel_Body.Controls.Add(panel1);
             panel_Body.Dock = DockStyle.Fill;
-            panel_Body.Location = new Point(186, 50);
+            panel_Body.Location = new Point(196, 50);
             panel_Body.Name = "panel_Body";
-            panel_Body.Size = new Size(632, 562);
+            panel_Body.Size = new Size(622, 562);
             panel_Body.TabIndex = 2;
+            // 
+            // panel2
+            // 
+            panel2.Dock = DockStyle.Right;
+            panel2.Location = new Point(409, 0);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(213, 526);
+            panel2.TabIndex = 1;
             // 
             // panel1
             // 
@@ -281,7 +293,7 @@
             panel1.Dock = DockStyle.Bottom;
             panel1.Location = new Point(0, 526);
             panel1.Name = "panel1";
-            panel1.Size = new Size(632, 36);
+            panel1.Size = new Size(622, 36);
             panel1.TabIndex = 0;
             // 
             // progressBar1
@@ -289,7 +301,7 @@
             progressBar1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             progressBar1.Location = new Point(3, 3);
             progressBar1.Name = "progressBar1";
-            progressBar1.Size = new Size(626, 30);
+            progressBar1.Size = new Size(616, 30);
             progressBar1.TabIndex = 0;
             // 
             // UserControl_Filter
@@ -329,7 +341,8 @@
         private CheckBox checkBox8;
         private Button button_Play;
         private Button button_Path;
-        private TextBox textBox1;
-        private TextBox textBox2;
+        private TextBox textBox_Path;
+        private TextBox textBox_Files;
+        private Panel panel2;
     }
 }

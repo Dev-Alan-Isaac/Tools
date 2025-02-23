@@ -1,6 +1,6 @@
 ﻿namespace Tools
 {
-    partial class UserControl_Configuration_Convert
+    partial class UserControl_Configuration_Merge
     {
         /// <summary> 
         /// Required designer variable.
@@ -30,11 +30,11 @@
         {
             SuspendLayout();
             // 
-            // UserControl_Configuration_Convert
+            // UserControl_Configuration_Merge
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            Name = "UserControl_Configuration_Convert";
+            Name = "UserControl_Configuration_Merge";
             Size = new Size(818, 612);
             ResumeLayout(false);
         }
