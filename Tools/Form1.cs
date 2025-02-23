@@ -152,14 +152,13 @@ namespace Tools
             var jsonObject = new JObject(
                 new JProperty("Filter", new JObject(
                     new JProperty("Types", new JArray(
-                        new JObject(new JProperty("Image",false)),
+                        new JObject(new JProperty("Image", false)),
                         new JObject(new JProperty("Video", false)),
                         new JObject(new JProperty("Document", false)),
                         new JObject(new JProperty("Audio", false)),
                         new JObject(new JProperty("Archive", false)),
                         new JObject(new JProperty("Executable", false)),
                         new JObject(new JProperty("Other", false)),
-
                         new JObject(new JProperty("Image_List", new JArray("itemA", "itemB", "itemC"))),
                         new JObject(new JProperty("Video_List", new JArray("itemA", "itemB", "itemC"))),
                         new JObject(new JProperty("Document_List", new JArray("itemA", "itemB", "itemC")))),
@@ -173,13 +172,25 @@ namespace Tools
                         new JObject(new JProperty("Subfolder", false))
                     )),
                     new JProperty("Date", new JArray(
-                            new JObject(new JProperty("Creation", false)),
-                            new JObject(new JProperty("Access", false)),
-                            new JObject(new JProperty("Modify", false))
+                        new JObject(new JProperty("Creation", false)),
+                        new JObject(new JProperty("Access", false)),
+                        new JObject(new JProperty("Modify", false))
                     )),
-                    new JProperty("var2", "example_string"),
-                    new JProperty("var2", "example_string"),
-                    new JProperty("var2", "example_string"),
+                    new JProperty("Media", new JArray(
+                        new JObject(new JProperty("Duration", false)),
+                        new JObject(new JProperty("Resolution", false)),
+                        new JObject(new JProperty("FrameRate", false)),
+                        new JObject(new JProperty("Codec", false)),
+                        new JObject(new JProperty("AspectRatio", false))
+                    )),
+                    new JProperty("Size", new JArray(
+                        new JObject(new JProperty("Range", false)),
+                        new JObject(new JProperty("Resolution", false)),
+                        new JProperty("var4", new JArray(
+                             new JObject(new JProperty("key1", new JArray("value1a", "value1b"))),
+                             new JObject(new JProperty("key2", new JArray("value2a", "value2b")))
+                        ))
+                    )),
                     new JProperty("Convert", new JObject(
                         new JProperty("var1", "another_string"),
                         new JProperty("var2", "yet_another_string")
