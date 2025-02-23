@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Tools.Properties;
 
@@ -132,15 +133,9 @@ namespace Tools
         {
             while (true)
             {
-                if (File.Exists("appsettings.json"))
+                if (!File.Exists("appsettings.json"))
                 {
-                    // File already exists; get the filepath
-                    string filePath = Path.GetFullPath("appsettings.json");
-                    break;
-                }
-                else
-                {
-                    //set_Jsonfile();
+                    set_Jsonfile();
                     break;
                 }
             }
@@ -148,7 +143,6 @@ namespace Tools
 
         private void set_Jsonfile()
         {
-            // Create the JSON structure
             var jsonObject = new JObject(
                 new JProperty("Filter", new JObject(
                     new JProperty("Types", new JArray(
@@ -159,13 +153,13 @@ namespace Tools
                         new JObject(new JProperty("Archive", false)),
                         new JObject(new JProperty("Executable", false)),
                         new JObject(new JProperty("Other", false)),
-                        new JObject(new JProperty("Image_List", new JArray("itemA", "itemB", "itemC"))),
-                        new JObject(new JProperty("Video_List", new JArray("itemA", "itemB", "itemC"))),
-                        new JObject(new JProperty("Document_List", new JArray("itemA", "itemB", "itemC")))),
-                        new JObject(new JProperty("Audio_List", new JArray("itemA", "itemB", "itemC"))),
-                        new JObject(new JProperty("Archive_List", new JArray("itemA", "itemB", "itemC"))),
-                        new JObject(new JProperty("Executable_List", new JArray("itemA", "itemB", "itemC"))),
-                        new JObject(new JProperty("Other_List", new JArray("itemA", "itemB", "itemC")))
+                        new JObject(new JProperty("Image_List", new JArray("jpg", "png", "gif", "bmp", "jpeg"))),
+                        new JObject(new JProperty("Video_List", new JArray("mp4", "m4v", "avi", "mkv", "3gp", "mov", "wmv", "webm", "ts", "mpg", "asf", "flv", "mpeg"))),
+                        new JObject(new JProperty("Document_List", new JArray("txt", "docx", "pdf", "pptx"))),
+                        new JObject(new JProperty("Audio_List", new JArray("mp3", "wav", "aac", "flac", "ogg", "m4a", "wma", "alac", "aiff"))),
+                        new JObject(new JProperty("Archive_List", new JArray("zip", "rar", "7z", "tar", "gz", "bz2", "iso", "xz"))),
+                        new JObject(new JProperty("Executable_List", new JArray("exe", "bat", "sh", "msi", "bin", "cmd", "apk", "com", "jar"))),
+                        new JObject(new JProperty("Other_List", new JArray("")))
                     )),
                     new JProperty("Additional", new JArray(
                         new JObject(new JProperty("Delete", false)),
@@ -183,18 +177,50 @@ namespace Tools
                         new JObject(new JProperty("Codec", false)),
                         new JObject(new JProperty("AspectRatio", false))
                     )),
+                    new JProperty("Tags", new JArray(
+                        new JObject(new JProperty("Tag_List", new JArray("")))
+                    )),
                     new JProperty("Size", new JArray(
                         new JObject(new JProperty("Range", false)),
                         new JObject(new JProperty("Resolution", false)),
-                        new JProperty("var4", new JArray(
-                             new JObject(new JProperty("key1", new JArray("value1a", "value1b"))),
-                             new JObject(new JProperty("key2", new JArray("value2a", "value2b")))
-                        ))
+                        new JObject(new JProperty("Range_List", new JArray(
+                            new JObject(new JProperty("Small", new JArray("100", "MB"))),
+                            new JObject(new JProperty("Medium", new JArray("100", "MB", "1", "GB"))),
+                            new JObject(new JProperty("Large", new JArray("1", "GB", "10", "GB"))),
+                            new JObject(new JProperty("Extra_Large", new JArray("10", "GB")))
+                        )))
                     )),
-                    new JProperty("Convert", new JObject(
-                        new JProperty("var1", "another_string"),
-                        new JProperty("var2", "yet_another_string")
+                    new JProperty("Name", new JArray(
+                        new JObject(new JProperty("Caps", false)),
+                        new JObject(new JProperty("Chars", false))
                     ))
+                )),
+                new JProperty("Convert", new JObject(
+                    new JProperty("Additional", new JArray(
+                        new JObject(new JProperty("Delete", false)),
+                        new JObject(new JProperty("Subfolder", false)),
+                        new JObject(new JProperty("Keep", false))
+                    )),
+                    new JProperty("Selection", new JArray(
+                        new JObject(new JProperty("Image", "")),
+                        new JObject(new JProperty("Audio", "")),
+                        new JObject(new JProperty("Video", "")),
+                        new JObject(new JProperty("Document", ""))
+                    ))
+                )),
+                new JProperty("Extract", new JObject(
+                    new JProperty("Additional", new JArray(
+                        new JObject(new JProperty("Delete", false)),
+                        new JObject(new JProperty("Subfolder", false))
+                    ))
+                )),
+                new JProperty("Merge", new JObject(
+                    new JProperty("Additional", new JArray(
+                        new JObject(new JProperty("Delete", false)),
+                        new JObject(new JProperty("Subfolder", false)),
+                        new JObject(new JProperty("Keep", false))
+                    ))
+                ))
             );
 
             // Convert the JObject to a JSON string
