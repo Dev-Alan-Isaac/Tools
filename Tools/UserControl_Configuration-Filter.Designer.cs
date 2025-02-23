@@ -31,8 +31,9 @@
             components = new System.ComponentModel.Container();
             toolTip1 = new ToolTip(components);
             groupBox1 = new GroupBox();
+            checkBox_Type_Executable = new CheckBox();
             groupBox5 = new GroupBox();
-            treeView1 = new TreeView();
+            treeView_Type = new TreeView();
             button2 = new Button();
             button1 = new Button();
             checkBox_Type_Other = new CheckBox();
@@ -43,7 +44,7 @@
             checkBox_Type_Document = new CheckBox();
             groupBox2 = new GroupBox();
             groupBox3 = new GroupBox();
-            treeView2 = new TreeView();
+            treeView_Tags = new TreeView();
             button4 = new Button();
             button3 = new Button();
             groupBox4 = new GroupBox();
@@ -65,7 +66,6 @@
             groupBox9 = new GroupBox();
             checkBox_Name_Characters = new CheckBox();
             checkBox_Name_Caps = new CheckBox();
-            checkBox_Type_Executable = new CheckBox();
             groupBox1.SuspendLayout();
             groupBox5.SuspendLayout();
             groupBox2.SuspendLayout();
@@ -102,10 +102,21 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "Type";
             // 
+            // checkBox_Type_Executable
+            // 
+            checkBox_Type_Executable.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            checkBox_Type_Executable.AutoSize = true;
+            checkBox_Type_Executable.Location = new Point(6, 252);
+            checkBox_Type_Executable.Name = "checkBox_Type_Executable";
+            checkBox_Type_Executable.Size = new Size(116, 22);
+            checkBox_Type_Executable.TabIndex = 10;
+            checkBox_Type_Executable.Text = "Executable";
+            checkBox_Type_Executable.UseVisualStyleBackColor = true;
+            // 
             // groupBox5
             // 
             groupBox5.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            groupBox5.Controls.Add(treeView1);
+            groupBox5.Controls.Add(treeView_Type);
             groupBox5.FlatStyle = FlatStyle.Flat;
             groupBox5.Location = new Point(128, 25);
             groupBox5.Name = "groupBox5";
@@ -114,13 +125,13 @@
             groupBox5.TabStop = false;
             groupBox5.Text = "Groups / Extensions";
             // 
-            // treeView1
+            // treeView_Type
             // 
-            treeView1.Dock = DockStyle.Fill;
-            treeView1.Location = new Point(3, 22);
-            treeView1.Name = "treeView1";
-            treeView1.Size = new Size(278, 287);
-            treeView1.TabIndex = 0;
+            treeView_Type.Dock = DockStyle.Fill;
+            treeView_Type.Location = new Point(3, 22);
+            treeView_Type.Name = "treeView_Type";
+            treeView_Type.Size = new Size(278, 287);
+            treeView_Type.TabIndex = 0;
             // 
             // button2
             // 
@@ -228,7 +239,7 @@
             // 
             // groupBox3
             // 
-            groupBox3.Controls.Add(treeView2);
+            groupBox3.Controls.Add(treeView_Tags);
             groupBox3.Location = new Point(6, 25);
             groupBox3.Name = "groupBox3";
             groupBox3.Size = new Size(376, 309);
@@ -236,13 +247,13 @@
             groupBox3.TabStop = false;
             groupBox3.Text = "Tags List";
             // 
-            // treeView2
+            // treeView_Tags
             // 
-            treeView2.Dock = DockStyle.Fill;
-            treeView2.Location = new Point(3, 22);
-            treeView2.Name = "treeView2";
-            treeView2.Size = new Size(370, 284);
-            treeView2.TabIndex = 0;
+            treeView_Tags.Dock = DockStyle.Fill;
+            treeView_Tags.Location = new Point(3, 22);
+            treeView_Tags.Name = "treeView_Tags";
+            treeView_Tags.Size = new Size(370, 284);
+            treeView_Tags.TabIndex = 0;
             // 
             // button4
             // 
@@ -487,17 +498,6 @@
             checkBox_Name_Caps.Text = "Ignore caps";
             checkBox_Name_Caps.UseVisualStyleBackColor = true;
             // 
-            // checkBox_Type_Executable
-            // 
-            checkBox_Type_Executable.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            checkBox_Type_Executable.AutoSize = true;
-            checkBox_Type_Executable.Location = new Point(6, 252);
-            checkBox_Type_Executable.Name = "checkBox_Type_Executable";
-            checkBox_Type_Executable.Size = new Size(116, 22);
-            checkBox_Type_Executable.TabIndex = 10;
-            checkBox_Type_Executable.Text = "Executable";
-            checkBox_Type_Executable.UseVisualStyleBackColor = true;
-            // 
             // UserControl_Configuration_Filter
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -545,9 +545,9 @@
         private GroupBox groupBox5;
         private Button button4;
         private Button button3;
-        private TreeView treeView1;
+        private TreeView treeView_Type;
         private GroupBox groupBox3;
-        private TreeView treeView2;
+        private TreeView treeView_Tags;
         private GroupBox groupBox4;
         private GroupBox groupBox6;
         private GroupBox groupBox7;

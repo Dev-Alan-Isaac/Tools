@@ -5,7 +5,6 @@ namespace Tools
 {
     public partial class UserControl_Configuration_Filter : UserControl
     {
-
         public UserControl_Configuration_Filter()
         {
             InitializeComponent();
@@ -49,6 +48,8 @@ namespace Tools
 
         private void ProcessTypes(JArray types)
         {
+            var lists = new Dictionary<string, JArray>();
+
             foreach (var type in types)
             {
                 foreach (var property in (type as JObject).Properties())
@@ -56,22 +57,21 @@ namespace Tools
                     if (property.Value.Type == JTokenType.Boolean)
                     {
                         // Process key-value pairs like "Image": false
-                        SetCheckboxState(property.Name, (bool)property.Value);
+                        Set_CheckboxState(property.Name, (bool)property.Value);
                     }
                     else if (property.Value.Type == JTokenType.Array)
                     {
-                        // Process lists like "Image_List": [...]
-                        Debug.WriteLine($"{property.Name}:");
-                        foreach (var item in (JArray)property.Value)
-                        {
-                            Debug.WriteLine($" - {item}");
-                        }
+                        // Collect lists like "Image_List": [...]
+                        lists[property.Name] = (JArray)property.Value;
                     }
                 }
             }
+
+            // Call Set_TreeViewNodesType after collecting all lists
+            Set_TreeViewNodesType(lists);
         }
 
-        private void SetCheckboxState(string propertyName, bool state)
+        private void Set_CheckboxState(string propertyName, bool state)
         {
             switch (propertyName)
             {
@@ -100,6 +100,25 @@ namespace Tools
                 default:
                     Debug.WriteLine($"Unknown property: {propertyName}");
                     break;
+            }
+        }
+
+        private void Set_TreeViewNodesType(Dictionary<string, JArray> lists)
+        {
+            treeView_Type.Invoke(() => treeView_Type.Nodes.Clear());
+
+            foreach (var list in lists)
+            {
+                // Remove "_List" from the root node name
+                string rootNodeName = list.Key.Replace("_List", "");
+                TreeNode rootNode = new TreeNode(rootNodeName);
+
+                foreach (var item in list.Value)
+                {
+                    rootNode.Nodes.Add(new TreeNode(item.ToString()));
+                }
+
+                treeView_Type.Invoke(() => treeView_Type.Nodes.Add(rootNode));
             }
         }
 
