@@ -19,11 +19,6 @@ namespace Tools
             InitializeComponent();
         }
 
-        private void button_Play_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void button_Path_Click(object sender, EventArgs e)
         {
             using (var fbd = new FolderBrowserDialog())
@@ -36,6 +31,16 @@ namespace Tools
                     textBox_Path.Text = SettingPath;
                 }
             }
+        }
+
+        private void Set_Settings(string SettingPath)
+        {
+
+        }
+
+        private void button_Play_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
