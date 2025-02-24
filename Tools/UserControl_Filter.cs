@@ -260,8 +260,67 @@ namespace Tools
 
         private void button_Play_Click(object sender, EventArgs e)
         {
-            Get_ClassValues();
+
         }
+
+        private async Task FilterType(string PathSort)
+        {
+            // Define a dictionary to map file types to their corresponding lists
+            var typeToExtensions = new Dictionary<string, List<string>>()
+            {
+                { "Image", filterSettings.Image_List },
+                { "Video", filterSettings.Video_List },
+                { "Document", filterSettings.Document_List },
+                { "Audio", filterSettings.Audio_List },
+                { "Archive", filterSettings.Archive_List },
+                { "Executable", filterSettings.Executable_List },
+                { "Other", filterSettings.Other_List }
+            };
+
+            // Loop through each type and filter files accordingly
+            foreach (var type in typeToExtensions.Keys)
+            {
+                // Check if the type is enabled in filterSettings
+                if ((bool)filterSettings.GetType().GetProperty(type).GetValue(filterSettings))
+                {
+                    var extensions = typeToExtensions[type];
+                    if (extensions != null && extensions.Count > 0)
+                    {
+                        // Get all files in the directory with the specified extensions
+                        var files = Directory.EnumerateFiles(PathSort, "*.*", SearchOption.AllDirectories)
+                                             .Where(file => extensions.Contains(Path.GetExtension(file).ToLower()))
+                                             .ToList();
+
+                        // Process each file asynchronously
+                        foreach (var file in files)
+                        {
+                            //await ProcessFileAsync(file, type);
+                            Debug.WriteLine(file + "" + type);
+                        }
+                    }
+                }
+            }
+        }
+
+        //private async Task ProcessFileAsync(string filePath, string type)
+        //{
+        //    // Example: Just log the file processing
+        //    Debug.WriteLine($"Processing {type} File: {filePath}");
+
+        //    // Example: Asynchronous file operation (e.g., copy to another directory)
+        //    string destinationFolder = Path.Combine("SortedFiles", type);
+        //    Directory.CreateDirectory(destinationFolder);
+        //    string destinationPath = Path.Combine(destinationFolder, Path.GetFileName(filePath));
+
+        //    // Copy file asynchronously
+        //    using (var sourceStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, true))
+        //    using (var destinationStream = new FileStream(destinationPath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, true))
+        //    {
+        //        await sourceStream.CopyToAsync(destinationStream);
+        //    }
+        //}
+
+
     }
 }
 
