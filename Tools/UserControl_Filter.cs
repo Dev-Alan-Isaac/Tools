@@ -17,7 +17,7 @@ namespace Tools
         private string PathSort, CountFile;
         private FilterSettings filterSettings;
         private int totalFiles = 0;
-        private Object files;
+        private string[] files;
 
         public UserControl_Filter()
         {
@@ -191,16 +191,18 @@ namespace Tools
                     {
                         files = await ProcessFiles(PathSort);
                         Invoke(new Action(() => textBox_Files.Text = "Files: " + totalFiles.ToString()));
+
+                        // Call the FilterType method with the list of files
+                        await FilterType(files);
                     });
                 }
             }
         }
 
-
         private void button_Play_Click(object sender, EventArgs e)
         {
             // Run the FilterType method asynchronously
-            Task.Run(() => FilterType(PathSort));
+            Task.Run(() => FilterType(files));
         }
 
         public async Task<string[]> ProcessFiles(string parentPath)
@@ -217,9 +219,18 @@ namespace Tools
             return files; // Return the list of file paths
         }
 
-        private async Task FilterType(string PathSort)
+        private async Task FilterType(string[] files)
         {
+            foreach (string file in files)
+            {
+                string fileExtension = System.IO.Path.GetExtension(file).TrimStart('.').ToLower();
+                if(filterSettings.Image||filterSettings.Video||)
+                // You can now use the fileExtension variable as needed
+                Debug.WriteLine($"File: {file}, Extension: {fileExtension}");
+            }
         }
+
+
     }
 }
 
