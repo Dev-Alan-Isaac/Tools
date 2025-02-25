@@ -317,32 +317,119 @@ namespace Tools
                 foreach (string file in files)
                 {
                     long fileSize = new FileInfo(file).Length;
+                    string folderName = "";
 
                     if (fileSize <= smallMax)
                     {
-                        Debug.WriteLine($"File: {file}, Size: {fileSize} bytes, Range: Small");
-                        // Add your code to move the file to the "Small" folder
+                        folderName = "Small";
                     }
                     else if (fileSize >= mediumMin && fileSize <= mediumMax)
                     {
-                        Debug.WriteLine($"File: {file}, Size: {fileSize} bytes, Range: Medium");
-                        // Add your code to move the file to the "Medium" folder
+                        folderName = "Medium";
                     }
                     else if (fileSize >= largeMin && fileSize <= largeMax)
                     {
-                        Debug.WriteLine($"File: {file}, Size: {fileSize} bytes, Range: Large");
-                        // Add your code to move the file to the "Large" folder
+                        folderName = "Large";
                     }
                     else if (fileSize >= extraLargeMin)
                     {
-                        Debug.WriteLine($"File: {file}, Size: {fileSize} bytes, Range: Extra Large");
-                        // Add your code to move the file to the "Extra Large" folder
+                        folderName = "Extra Large";
+                    }
+
+                    if (!string.IsNullOrEmpty(folderName))
+                    {
+                        string folderPath = Path.Combine(PathSort, folderName);
+                        if (!Directory.Exists(folderPath))
+                        {
+                            Directory.CreateDirectory(folderPath);
+                        }
+
+                        // Handle files with the same name
+                        string destinationFilePath = Path.Combine(folderPath, Path.GetFileName(file));
+                        int counter = 1;
+                        while (File.Exists(destinationFilePath))
+                        {
+                            string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file);
+                            string newFileName = $"{fileNameWithoutExtension} ({counter}){Path.GetExtension(file)}";
+                            destinationFilePath = Path.Combine(folderPath, newFileName);
+                            counter++;
+                        }
+
+                        // Move the file to the created folder
+                        File.Move(file, destinationFilePath);
+
+                        // Log the file processing
+                        Debug.WriteLine($"File: {file}, Size: {fileSize} bytes, Range: {folderName}, Moved to: {destinationFilePath}");
                     }
                 }
             }
             else if (filterSettings.Dynamic)
             {
-                // Handle dynamic size filtering
+                // Define the file size thresholds in bytes for KB, MB, GB, and TB
+                long kbThreshold = 1024; // 1 KB
+                long mbThreshold = 1024 * kbThreshold; // 1 MB
+                long gbThreshold = 1024 * mbThreshold; // 1 GB
+                long tbThreshold = 1024 * gbThreshold; // 1 TB
+
+                // Process each file
+                foreach (string file in files)
+                {
+                    long fileSize = new FileInfo(file).Length;
+
+                    // Determine the appropriate folder based on size
+                    string sizeCategory = "";
+                    long sizeValue = 0;
+
+                    if (fileSize < mbThreshold)
+                    {
+                        sizeCategory = "KB";
+                        sizeValue = fileSize / kbThreshold;
+                    }
+                    else if (fileSize < gbThreshold)
+                    {
+                        sizeCategory = "MB";
+                        sizeValue = fileSize / mbThreshold;
+                    }
+                    else if (fileSize < tbThreshold)
+                    {
+                        sizeCategory = "GB";
+                        sizeValue = fileSize / gbThreshold;
+                    }
+                    else
+                    {
+                        sizeCategory = "TB";
+                        sizeValue = fileSize / tbThreshold;
+                    }
+
+                    // Build the directory path based on the size category and size value
+                    string parentFolder = Path.Combine("RootDirectory", sizeCategory);
+                    string targetFolder = Path.Combine(parentFolder, sizeValue.ToString());
+
+                    // Create the target folder if it doesn't exist
+                    if (!Directory.Exists(targetFolder))
+                    {
+                        Directory.CreateDirectory(targetFolder);
+                    }
+
+                    // Move the file into the appropriate folder
+                    string targetFilePath = Path.Combine(targetFolder, Path.GetFileName(file));
+                    int counter = 1;
+
+                    // Handle files with the same name
+                    while (File.Exists(targetFilePath))
+                    {
+                        string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file);
+                        string newFileName = $"{fileNameWithoutExtension} ({counter}){Path.GetExtension(file)}";
+                        targetFilePath = Path.Combine(targetFolder, newFileName);
+                        counter++;
+                    }
+
+                    // Move the file
+                    File.Move(file, targetFilePath);
+
+                    // Log the file processing
+                    Debug.WriteLine($"File: {file}, Size: {fileSize} bytes, Category: {sizeCategory}, Size Value: {sizeValue}, Moved to: {targetFilePath}");
+                }
             }
         }
 
@@ -367,7 +454,14 @@ namespace Tools
 
         private async Task FilterDate(string[] files)
         {
+            if (filterSettings.Caps)
+            {
 
+            }
+            else if (filterSettings.Chars)
+            {
+
+            }
         }
 
         private async Task FilterName(string[] files)

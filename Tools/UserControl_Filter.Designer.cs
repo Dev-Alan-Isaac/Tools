@@ -31,14 +31,14 @@
             panel_NavBar = new Panel();
             checkBox10 = new CheckBox();
             checkBox9 = new CheckBox();
-            checkBox8 = new CheckBox();
-            checkBox7 = new CheckBox();
-            checkBox6 = new CheckBox();
-            checkBox5 = new CheckBox();
-            checkBox4 = new CheckBox();
-            checkBox3 = new CheckBox();
-            checkBox2 = new CheckBox();
-            checkBox1 = new CheckBox();
+            checkBox_media = new CheckBox();
+            checkBox_tags = new CheckBox();
+            checkBox_extension = new CheckBox();
+            checkBox_hash = new CheckBox();
+            checkBox_name = new CheckBox();
+            checkBox_date = new CheckBox();
+            checkBox_size = new CheckBox();
+            checkBox_type = new CheckBox();
             panel_TopBar = new Panel();
             textBox_Files = new TextBox();
             textBox_Path = new TextBox();
@@ -59,14 +59,14 @@
             panel_NavBar.BackColor = Color.White;
             panel_NavBar.Controls.Add(checkBox10);
             panel_NavBar.Controls.Add(checkBox9);
-            panel_NavBar.Controls.Add(checkBox8);
-            panel_NavBar.Controls.Add(checkBox7);
-            panel_NavBar.Controls.Add(checkBox6);
-            panel_NavBar.Controls.Add(checkBox5);
-            panel_NavBar.Controls.Add(checkBox4);
-            panel_NavBar.Controls.Add(checkBox3);
-            panel_NavBar.Controls.Add(checkBox2);
-            panel_NavBar.Controls.Add(checkBox1);
+            panel_NavBar.Controls.Add(checkBox_media);
+            panel_NavBar.Controls.Add(checkBox_tags);
+            panel_NavBar.Controls.Add(checkBox_extension);
+            panel_NavBar.Controls.Add(checkBox_hash);
+            panel_NavBar.Controls.Add(checkBox_name);
+            panel_NavBar.Controls.Add(checkBox_date);
+            panel_NavBar.Controls.Add(checkBox_size);
+            panel_NavBar.Controls.Add(checkBox_type);
             panel_NavBar.Dock = DockStyle.Left;
             panel_NavBar.Location = new Point(0, 0);
             panel_NavBar.Name = "panel_NavBar";
@@ -78,10 +78,10 @@
             checkBox10.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             checkBox10.AutoSize = true;
             checkBox10.Cursor = Cursors.Hand;
-            checkBox10.Font = new Font("Arial Rounded MT Bold", 12F);
+            checkBox10.Font = new Font("Microsoft Sans Serif", 12F);
             checkBox10.Location = new Point(32, 496);
             checkBox10.Name = "checkBox10";
-            checkBox10.Size = new Size(126, 22);
+            checkBox10.Size = new Size(115, 24);
             checkBox10.TabIndex = 9;
             checkBox10.Text = "checkBox10";
             checkBox10.UseVisualStyleBackColor = true;
@@ -91,117 +91,117 @@
             checkBox9.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             checkBox9.AutoSize = true;
             checkBox9.Cursor = Cursors.Hand;
-            checkBox9.Font = new Font("Arial Rounded MT Bold", 12F);
+            checkBox9.Font = new Font("Microsoft Sans Serif", 12F);
             checkBox9.Location = new Point(37, 444);
             checkBox9.Name = "checkBox9";
-            checkBox9.Size = new Size(116, 22);
+            checkBox9.Size = new Size(106, 24);
             checkBox9.TabIndex = 8;
             checkBox9.Text = "checkBox9";
             checkBox9.UseVisualStyleBackColor = true;
             // 
-            // checkBox8
+            // checkBox_media
             // 
-            checkBox8.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            checkBox8.AutoSize = true;
-            checkBox8.Cursor = Cursors.Hand;
-            checkBox8.Font = new Font("Arial Rounded MT Bold", 12F);
-            checkBox8.Location = new Point(55, 392);
-            checkBox8.Name = "checkBox8";
-            checkBox8.Size = new Size(80, 22);
-            checkBox8.TabIndex = 7;
-            checkBox8.Text = "MEDIA";
-            checkBox8.UseVisualStyleBackColor = true;
+            checkBox_media.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            checkBox_media.AutoSize = true;
+            checkBox_media.Cursor = Cursors.Hand;
+            checkBox_media.Font = new Font("Microsoft Sans Serif", 12F);
+            checkBox_media.Location = new Point(55, 392);
+            checkBox_media.Name = "checkBox_media";
+            checkBox_media.Size = new Size(80, 24);
+            checkBox_media.TabIndex = 7;
+            checkBox_media.Text = "MEDIA";
+            checkBox_media.UseVisualStyleBackColor = true;
             // 
-            // checkBox7
+            // checkBox_tags
             // 
-            checkBox7.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            checkBox7.AutoSize = true;
-            checkBox7.Cursor = Cursors.Hand;
-            checkBox7.Font = new Font("Arial Rounded MT Bold", 12F);
-            checkBox7.Location = new Point(20, 340);
-            checkBox7.Name = "checkBox7";
-            checkBox7.Size = new Size(151, 22);
-            checkBox7.TabIndex = 6;
-            checkBox7.Text = "TAGS / LABELS";
-            checkBox7.UseVisualStyleBackColor = true;
+            checkBox_tags.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            checkBox_tags.AutoSize = true;
+            checkBox_tags.Cursor = Cursors.Hand;
+            checkBox_tags.Font = new Font("Microsoft Sans Serif", 12F);
+            checkBox_tags.Location = new Point(20, 340);
+            checkBox_tags.Name = "checkBox_tags";
+            checkBox_tags.Size = new Size(146, 24);
+            checkBox_tags.TabIndex = 6;
+            checkBox_tags.Text = "TAGS / LABELS";
+            checkBox_tags.UseVisualStyleBackColor = true;
             // 
-            // checkBox6
+            // checkBox_extension
             // 
-            checkBox6.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            checkBox6.AutoSize = true;
-            checkBox6.Cursor = Cursors.Hand;
-            checkBox6.Font = new Font("Arial Rounded MT Bold", 12F);
-            checkBox6.Location = new Point(34, 288);
-            checkBox6.Name = "checkBox6";
-            checkBox6.Size = new Size(122, 22);
-            checkBox6.TabIndex = 5;
-            checkBox6.Text = "EXTENSION";
-            checkBox6.UseVisualStyleBackColor = true;
+            checkBox_extension.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            checkBox_extension.AutoSize = true;
+            checkBox_extension.Cursor = Cursors.Hand;
+            checkBox_extension.Font = new Font("Microsoft Sans Serif", 12F);
+            checkBox_extension.Location = new Point(34, 288);
+            checkBox_extension.Name = "checkBox_extension";
+            checkBox_extension.Size = new Size(120, 24);
+            checkBox_extension.TabIndex = 5;
+            checkBox_extension.Text = "EXTENSION";
+            checkBox_extension.UseVisualStyleBackColor = true;
             // 
-            // checkBox5
+            // checkBox_hash
             // 
-            checkBox5.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            checkBox5.AutoSize = true;
-            checkBox5.Cursor = Cursors.Hand;
-            checkBox5.Font = new Font("Arial Rounded MT Bold", 12F);
-            checkBox5.Location = new Point(58, 236);
-            checkBox5.Name = "checkBox5";
-            checkBox5.Size = new Size(74, 22);
-            checkBox5.TabIndex = 4;
-            checkBox5.Text = "HASH";
-            checkBox5.UseVisualStyleBackColor = true;
+            checkBox_hash.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            checkBox_hash.AutoSize = true;
+            checkBox_hash.Cursor = Cursors.Hand;
+            checkBox_hash.Font = new Font("Microsoft Sans Serif", 12F);
+            checkBox_hash.Location = new Point(58, 236);
+            checkBox_hash.Name = "checkBox_hash";
+            checkBox_hash.Size = new Size(74, 24);
+            checkBox_hash.TabIndex = 4;
+            checkBox_hash.Text = "HASH";
+            checkBox_hash.UseVisualStyleBackColor = true;
             // 
-            // checkBox4
+            // checkBox_name
             // 
-            checkBox4.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            checkBox4.AutoSize = true;
-            checkBox4.Cursor = Cursors.Hand;
-            checkBox4.Font = new Font("Arial Rounded MT Bold", 12F);
-            checkBox4.Location = new Point(58, 184);
-            checkBox4.Name = "checkBox4";
-            checkBox4.Size = new Size(75, 22);
-            checkBox4.TabIndex = 3;
-            checkBox4.Text = "NAME";
-            checkBox4.UseVisualStyleBackColor = true;
+            checkBox_name.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            checkBox_name.AutoSize = true;
+            checkBox_name.Cursor = Cursors.Hand;
+            checkBox_name.Font = new Font("Microsoft Sans Serif", 12F);
+            checkBox_name.Location = new Point(58, 184);
+            checkBox_name.Name = "checkBox_name";
+            checkBox_name.Size = new Size(74, 24);
+            checkBox_name.TabIndex = 3;
+            checkBox_name.Text = "NAME";
+            checkBox_name.UseVisualStyleBackColor = true;
             // 
-            // checkBox3
+            // checkBox_date
             // 
-            checkBox3.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            checkBox3.AutoSize = true;
-            checkBox3.Cursor = Cursors.Hand;
-            checkBox3.Font = new Font("Arial Rounded MT Bold", 12F);
-            checkBox3.Location = new Point(59, 132);
-            checkBox3.Name = "checkBox3";
-            checkBox3.Size = new Size(72, 22);
-            checkBox3.TabIndex = 2;
-            checkBox3.Text = "DATE";
-            checkBox3.UseVisualStyleBackColor = true;
+            checkBox_date.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            checkBox_date.AutoSize = true;
+            checkBox_date.Cursor = Cursors.Hand;
+            checkBox_date.Font = new Font("Microsoft Sans Serif", 12F);
+            checkBox_date.Location = new Point(59, 132);
+            checkBox_date.Name = "checkBox_date";
+            checkBox_date.Size = new Size(71, 24);
+            checkBox_date.TabIndex = 2;
+            checkBox_date.Text = "DATE";
+            checkBox_date.UseVisualStyleBackColor = true;
             // 
-            // checkBox2
+            // checkBox_size
             // 
-            checkBox2.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            checkBox2.AutoSize = true;
-            checkBox2.Cursor = Cursors.Hand;
-            checkBox2.Font = new Font("Arial Rounded MT Bold", 12F);
-            checkBox2.Location = new Point(63, 80);
-            checkBox2.Name = "checkBox2";
-            checkBox2.Size = new Size(64, 22);
-            checkBox2.TabIndex = 1;
-            checkBox2.Text = "SIZE";
-            checkBox2.UseVisualStyleBackColor = true;
+            checkBox_size.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            checkBox_size.AutoSize = true;
+            checkBox_size.Cursor = Cursors.Hand;
+            checkBox_size.Font = new Font("Microsoft Sans Serif", 12F);
+            checkBox_size.Location = new Point(63, 80);
+            checkBox_size.Name = "checkBox_size";
+            checkBox_size.Size = new Size(65, 24);
+            checkBox_size.TabIndex = 1;
+            checkBox_size.Text = "SIZE";
+            checkBox_size.UseVisualStyleBackColor = true;
             // 
-            // checkBox1
+            // checkBox_type
             // 
-            checkBox1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            checkBox1.AutoSize = true;
-            checkBox1.Cursor = Cursors.Hand;
-            checkBox1.Font = new Font("Arial Rounded MT Bold", 12F);
-            checkBox1.Location = new Point(61, 28);
-            checkBox1.Name = "checkBox1";
-            checkBox1.Size = new Size(69, 22);
-            checkBox1.TabIndex = 0;
-            checkBox1.Text = "TYPE";
-            checkBox1.UseVisualStyleBackColor = true;
+            checkBox_type.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            checkBox_type.AutoSize = true;
+            checkBox_type.Cursor = Cursors.Hand;
+            checkBox_type.Font = new Font("Microsoft Sans Serif", 12F);
+            checkBox_type.Location = new Point(61, 28);
+            checkBox_type.Name = "checkBox_type";
+            checkBox_type.Size = new Size(69, 24);
+            checkBox_type.TabIndex = 0;
+            checkBox_type.Text = "TYPE";
+            checkBox_type.UseVisualStyleBackColor = true;
             // 
             // panel_TopBar
             // 
@@ -221,7 +221,7 @@
             textBox_Files.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             textBox_Files.BorderStyle = BorderStyle.FixedSingle;
             textBox_Files.Cursor = Cursors.No;
-            textBox_Files.Font = new Font("Arial Rounded MT Bold", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            textBox_Files.Font = new Font("Microsoft Sans Serif", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             textBox_Files.Location = new Point(435, 10);
             textBox_Files.Name = "textBox_Files";
             textBox_Files.ReadOnly = true;
@@ -234,7 +234,7 @@
             textBox_Path.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             textBox_Path.BorderStyle = BorderStyle.FixedSingle;
             textBox_Path.Cursor = Cursors.No;
-            textBox_Path.Font = new Font("Arial Rounded MT Bold", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            textBox_Path.Font = new Font("Microsoft Sans Serif", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             textBox_Path.Location = new Point(98, 10);
             textBox_Path.Name = "textBox_Path";
             textBox_Path.ReadOnly = true;
@@ -330,16 +330,16 @@
         private Panel panel_TopBar;
         private Panel panel1;
         private ProgressBar progressBar1;
-        private CheckBox checkBox7;
-        private CheckBox checkBox6;
-        private CheckBox checkBox5;
-        private CheckBox checkBox4;
-        private CheckBox checkBox3;
-        private CheckBox checkBox2;
-        private CheckBox checkBox1;
+        private CheckBox checkBox_tags;
+        private CheckBox checkBox_extension;
+        private CheckBox checkBox_hash;
+        private CheckBox checkBox_name;
+        private CheckBox checkBox_date;
+        private CheckBox checkBox_size;
+        private CheckBox checkBox_type;
         private CheckBox checkBox10;
         private CheckBox checkBox9;
-        private CheckBox checkBox8;
+        private CheckBox checkBox_media;
         private Button button_Play;
         private Button button_Path;
         private TextBox textBox_Path;
