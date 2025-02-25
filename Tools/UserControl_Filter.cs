@@ -205,12 +205,39 @@ namespace Tools
             foreach (var state in checkboxStates)
             {
                 Debug.WriteLine($"{state.Key}: {state.Value}");
+
+                switch (state.Key)
+                {
+                    case "type":
+                        Task.Run(() => FilterType(files));
+                        break;
+                    case "size":
+                        Task.Run(() => FilterSize(files));
+                        break;
+                    case "date":
+                        Task.Run(() => FilterDate(files));
+                        break;
+                    case "name":
+                        Task.Run(() => FilterName(files));
+                        break;
+                    case "hash":
+                        Task.Run(() => FilterHash(files));
+                        break;
+                    case "extension":
+                        Task.Run(() => FilterExtension(files));
+                        break;
+                    case "tags":
+                        Task.Run(() => FilterTags(files));
+                        break;
+                    case "media":
+                        Task.Run(() => FilterTags(files));
+                        break;
+                    default:
+
+                        break;
+                }
             }
-
-            // Run the FilterType method asynchronously
-            //Task.Run(() => FilterType(files));
         }
-
 
         private Dictionary<string, bool> Get_CheckboxState()
         {
@@ -448,7 +475,7 @@ namespace Tools
                     }
 
                     // Move the file
-                    File.Move(file, targetFilePath);
+                    //File.Move(file, targetFilePath);
 
                     // Log the file processing
                     Debug.WriteLine($"File: {file}, Size: {fileSize} bytes, Category: {sizeCategory}, Size Value: {sizeValue}, Moved to: {targetFilePath}");
@@ -477,6 +504,11 @@ namespace Tools
 
         private async Task FilterDate(string[] files)
         {
+           
+        }
+
+        private async Task FilterName(string[] files)
+        {
             if (filterSettings.Caps)
             {
 
@@ -485,11 +517,6 @@ namespace Tools
             {
 
             }
-        }
-
-        private async Task FilterName(string[] files)
-        {
-
         }
 
         private async Task FilterHash(string[] files)

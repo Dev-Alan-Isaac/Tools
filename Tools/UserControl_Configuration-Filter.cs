@@ -362,5 +362,88 @@ namespace Tools
                     break;
             }
         }
+
+        public void Set_FilterJson()
+        {
+            if (File.Exists("appsettings.json"))
+            {
+                string settingPath = Path.GetFullPath("appsettings.json");
+                string jsonContent = File.ReadAllText(settingPath);
+                JObject jsonObject = JObject.Parse(jsonContent);
+                JObject filterSection = (JObject)jsonObject["Filter"];
+
+                // Update filterSection based on your checkbox and radiobutton values
+                filterSection["Types"]["Image"] = checkBox_Type_Image.Checked; 
+                filterSection["Types"]["Video"] = checkBox_Type_Video.Checked;
+                filterSection["Types"]["Document"] = checkBox_Type_Document.Checked;
+                filterSection["Types"]["Audio"] = checkBox_Type_Audio.Checked;
+                filterSection["Types"]["Archive"] = checkBox_Type_Archive.Checked;
+                filterSection["Types"]["Executable"] = checkBox_Type_Executable.Checked;
+                filterSection["Types"]["Other"] = checkBox_Type_Other.Checked;
+
+                JArray imageList = new JArray("jpg", "png", "gif", "bmp", "jpeg");
+                filterSection["Types"]["Image_List"] = imageList;
+
+                JArray videoList = new JArray("mp4", "m4v", "avi", "mkv", "3gp", "mov", "wmv", "webm", "ts", "mpg", "asf", "flv", "mpeg");
+                filterSection["Types"]["Video_List"] = videoList;
+
+                JArray documentList = new JArray("txt", "docx", "pdf", "pptx");
+                filterSection["Types"]["Document_List"] = documentList;
+
+                JArray audioList = new JArray("mp3", "wav", "aac", "flac", "ogg", "m4a", "wma", "alac", "aiff");
+                filterSection["Types"]["Audio_List"] = audioList;
+
+                JArray archiveList = new JArray("zip", "rar", "7z", "tar", "gz", "bz2", "iso", "xz");
+                filterSection["Types"]["Archive_List"] = archiveList;
+
+                JArray executableList = new JArray("exe", "bat", "sh", "msi", "bin", "cmd", "apk", "com", "jar");
+                filterSection["Types"]["Executable_List"] = executableList;
+
+                JArray otherList = new JArray("");
+                filterSection["Types"]["Other_List"] = otherList;
+
+                filterSection["Additional"]["Delete"] = true;
+                filterSection["Additional"]["Subfolder"] = true;
+
+                filterSection["Date"]["Creation"] = true;
+                filterSection["Date"]["Access"] = false;
+                filterSection["Date"]["Modify"] = false;
+
+                filterSection["Media"]["Duration"] = true;
+                filterSection["Media"]["Resolution"] = false;
+                filterSection["Media"]["FrameRate"] = false;
+                filterSection["Media"]["Codec"] = false;
+                filterSection["Media"]["AspectRatio"] = false;
+
+                JArray tagList = new JArray("Test");
+                filterSection["Tags"]["Tag_List"] = tagList;
+
+                filterSection["Size"]["Range"] = true;
+                filterSection["Size"]["Dynamic"] = false;
+
+                JObject rangeList = new JObject
+                {
+                    ["Small"] = new JArray("100", "MB"),
+                    ["Medium"] = new JArray("100", "MB", "1", "GB"),
+                    ["Large"] = new JArray("1", "GB", "10", "GB"),
+                    ["Extra_Large"] = new JArray("10", "GB")
+                };
+                filterSection["Size"]["Range_List"] = rangeList;
+
+                filterSection["Name"]["Caps"] = true;
+                filterSection["Name"]["Chars"] = true;
+
+                jsonObject["Filter"] = filterSection;
+
+                File.WriteAllText(settingPath, jsonObject.ToString());
+
+                MessageBox.Show("Configuration updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("Configuration file not found!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
     }
 }
