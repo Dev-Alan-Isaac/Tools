@@ -370,70 +370,84 @@ namespace Tools
                 string settingPath = Path.GetFullPath("appsettings.json");
                 string jsonContent = File.ReadAllText(settingPath);
                 JObject jsonObject = JObject.Parse(jsonContent);
-                JObject filterSection = (JObject)jsonObject["Filter"];
+                JArray typesArray = (JArray)jsonObject["Filter"]["Types"];
 
-                // Update filterSection based on your checkbox and radiobutton values
-                filterSection["Types"]["Image"] = checkBox_Type_Image.Checked; 
-                filterSection["Types"]["Video"] = checkBox_Type_Video.Checked;
-                filterSection["Types"]["Document"] = checkBox_Type_Document.Checked;
-                filterSection["Types"]["Audio"] = checkBox_Type_Audio.Checked;
-                filterSection["Types"]["Archive"] = checkBox_Type_Archive.Checked;
-                filterSection["Types"]["Executable"] = checkBox_Type_Executable.Checked;
-                filterSection["Types"]["Other"] = checkBox_Type_Other.Checked;
+                // Update the Types array based on checkboxes
+                typesArray[0]["Image"] = checkBox_Type_Image.Checked;
+                typesArray[1]["Video"] = checkBox_Type_Video.Checked;
+                typesArray[2]["Document"] = checkBox_Type_Document.Checked;
+                typesArray[3]["Audio"] = checkBox_Type_Audio.Checked;
+                typesArray[4]["Archive"] = checkBox_Type_Archive.Checked;
+                typesArray[5]["Executable"] = checkBox_Type_Executable.Checked;
+                typesArray[6]["Other"] = checkBox_Type_Other.Checked;
 
-                JArray imageList = new JArray("jpg", "png", "gif", "bmp", "jpeg");
-                filterSection["Types"]["Image_List"] = imageList;
+                // Clear and update the lists based on the tree view nodes
+                typesArray[7]["Image_List"] = new JArray();
+                typesArray[8]["Video_List"] = new JArray();
+                typesArray[9]["Document_List"] = new JArray();
+                typesArray[10]["Audio_List"] = new JArray();
+                typesArray[11]["Archive_List"] = new JArray();
+                typesArray[12]["Executable_List"] = new JArray();
+                typesArray[13]["Other_List"] = new JArray();
 
-                JArray videoList = new JArray("mp4", "m4v", "avi", "mkv", "3gp", "mov", "wmv", "webm", "ts", "mpg", "asf", "flv", "mpeg");
-                filterSection["Types"]["Video_List"] = videoList;
-
-                JArray documentList = new JArray("txt", "docx", "pdf", "pptx");
-                filterSection["Types"]["Document_List"] = documentList;
-
-                JArray audioList = new JArray("mp3", "wav", "aac", "flac", "ogg", "m4a", "wma", "alac", "aiff");
-                filterSection["Types"]["Audio_List"] = audioList;
-
-                JArray archiveList = new JArray("zip", "rar", "7z", "tar", "gz", "bz2", "iso", "xz");
-                filterSection["Types"]["Archive_List"] = archiveList;
-
-                JArray executableList = new JArray("exe", "bat", "sh", "msi", "bin", "cmd", "apk", "com", "jar");
-                filterSection["Types"]["Executable_List"] = executableList;
-
-                JArray otherList = new JArray("");
-                filterSection["Types"]["Other_List"] = otherList;
-
-                filterSection["Additional"]["Delete"] = true;
-                filterSection["Additional"]["Subfolder"] = true;
-
-                filterSection["Date"]["Creation"] = true;
-                filterSection["Date"]["Access"] = false;
-                filterSection["Date"]["Modify"] = false;
-
-                filterSection["Media"]["Duration"] = true;
-                filterSection["Media"]["Resolution"] = false;
-                filterSection["Media"]["FrameRate"] = false;
-                filterSection["Media"]["Codec"] = false;
-                filterSection["Media"]["AspectRatio"] = false;
-
-                JArray tagList = new JArray("Test");
-                filterSection["Tags"]["Tag_List"] = tagList;
-
-                filterSection["Size"]["Range"] = true;
-                filterSection["Size"]["Dynamic"] = false;
-
-                JObject rangeList = new JObject
+                foreach (TreeNode rootNode in treeView_Type.Nodes)
                 {
-                    ["Small"] = new JArray("100", "MB"),
-                    ["Medium"] = new JArray("100", "MB", "1", "GB"),
-                    ["Large"] = new JArray("1", "GB", "10", "GB"),
-                    ["Extra_Large"] = new JArray("10", "GB")
-                };
-                filterSection["Size"]["Range_List"] = rangeList;
+                    foreach (TreeNode childNode in rootNode.Nodes)
+                    {
+                        string extension = childNode.Text;
+                        switch (rootNode.Text)
+                        {
+                            case "Image":
+                                ((JArray)typesArray[7]["Image_List"]).Add(extension);
+                                break;
+                            case "Video":
+                                ((JArray)typesArray[8]["Video_List"]).Add(extension);
+                                break;
+                            case "Document":
+                                ((JArray)typesArray[9]["Document_List"]).Add(extension);
+                                break;
+                            case "Audio":
+                                ((JArray)typesArray[10]["Audio_List"]).Add(extension);
+                                break;
+                            case "Archive":
+                                ((JArray)typesArray[11]["Archive_List"]).Add(extension);
+                                break;
+                            case "Executable":
+                                ((JArray)typesArray[12]["Executable_List"]).Add(extension);
+                                break;
+                            case "Other":
+                                ((JArray)typesArray[13]["Other_List"]).Add(extension);
+                                break;
+                        }
+                    }
+                }
 
-                filterSection["Name"]["Caps"] = true;
-                filterSection["Name"]["Chars"] = true;
+                jsonObject["Filter"]["Types"] = typesArray;
 
-                jsonObject["Filter"] = filterSection;
+                // Update the rest of the filter section based on other controls
+                JObject filterSection = (JObject)jsonObject["Filter"];
+                filterSection["Additional"][0]["Delete"] = checkBox_Additional_Delete.Checked;
+                filterSection["Additional"][1]["Subfolder"] = checkBox_Additional_subfiles.Checked;
+                filterSection["Date"][0]["Creation"] = radioButton_Date_Creation.Checked;
+                filterSection["Date"][1]["Access"] = radioButton_Date_Access.Checked;
+                filterSection["Date"][2]["Modify"] = radioButton_Date_Modify.Checked;
+                filterSection["Media"][0]["Duration"] = radioButton_Media_Duration.Checked;
+                filterSection["Media"][1]["Resolution"] = radioButton_Media_Resolution.Checked;
+                filterSection["Media"][2]["FrameRate"] = radioButton_Media_FrameRate.Checked;
+                filterSection["Media"][3]["Codec"] = radioButton_Media_Codec.Checked;
+                filterSection["Media"][4]["AspectRatio"] = radioButton_Media_AspectRatio.Checked;
+
+                filterSection["Tags"][0]["Tag_List"] = new JArray();
+
+                foreach (TreeNode rootNode in treeView_Tags.Nodes)
+                {
+                    ((JArray)filterSection["Tags"][0]["Tag_List"]).Add(rootNode.Text);
+                }
+
+                filterSection["Size"][0]["Range"] = radioButton_Size_Range.Checked;
+                filterSection["Size"][1]["Dynamic"] = radioButton_Size_Dynamic.Checked;
+                filterSection["Name"][0]["Caps"] = checkBox_Name_Caps.Checked;
+                filterSection["Name"][1]["Chars"] = checkBox_Name_Characters.Checked;
 
                 File.WriteAllText(settingPath, jsonObject.ToString());
 
@@ -444,6 +458,7 @@ namespace Tools
                 MessageBox.Show("Configuration file not found!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
     }
 }

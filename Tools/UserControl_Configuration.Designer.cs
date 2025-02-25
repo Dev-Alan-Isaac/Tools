@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             panel1 = new Panel();
             panel_NavBarIndicator = new Panel();
             button10 = new Button();
@@ -41,9 +42,11 @@
             button2 = new Button();
             button1 = new Button();
             panel2 = new Panel();
+            button_Save = new Button();
             label_Title = new Label();
             panel3 = new Panel();
             userControl_Configuration_Filter1 = new UserControl_Configuration_Filter();
+            bunifuElipse1 = new Bunifu.Framework.UI.BunifuElipse(components);
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             panel3.SuspendLayout();
@@ -191,12 +194,30 @@
             // 
             // panel2
             // 
+            panel2.Controls.Add(button_Save);
             panel2.Controls.Add(label_Title);
             panel2.Dock = DockStyle.Top;
             panel2.Location = new Point(186, 0);
             panel2.Name = "panel2";
             panel2.Size = new Size(632, 50);
             panel2.TabIndex = 1;
+            // 
+            // button_Save
+            // 
+            button_Save.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button_Save.BackgroundImage = Properties.Resources.icons8_save_48;
+            button_Save.BackgroundImageLayout = ImageLayout.Zoom;
+            button_Save.Cursor = Cursors.Hand;
+            button_Save.FlatAppearance.BorderSize = 0;
+            button_Save.FlatStyle = FlatStyle.Flat;
+            button_Save.Location = new Point(589, 4);
+            button_Save.Name = "button_Save";
+            button_Save.Size = new Size(40, 40);
+            button_Save.TabIndex = 1;
+            button_Save.UseVisualStyleBackColor = true;
+            button_Save.Click += button_Save_Click;
+            button_Save.MouseEnter += button_Save_MouseEnter;
+            button_Save.MouseLeave += button_Save_MouseLeave;
             // 
             // label_Title
             // 
@@ -224,6 +245,11 @@
             userControl_Configuration_Filter1.Name = "userControl_Configuration_Filter1";
             userControl_Configuration_Filter1.Size = new Size(632, 562);
             userControl_Configuration_Filter1.TabIndex = 0;
+            // 
+            // bunifuElipse1
+            // 
+            bunifuElipse1.ElipseRadius = 5;
+            bunifuElipse1.TargetControl = button_Save;
             // 
             // UserControl_Configuration
             // 
@@ -259,5 +285,7 @@
         private Button button1;
         private Panel panel_NavBarIndicator;
         private UserControl_Configuration_Filter userControl_Configuration_Filter1;
+        private Button button_Save;
+        private Bunifu.Framework.UI.BunifuElipse bunifuElipse1;
     }
 }

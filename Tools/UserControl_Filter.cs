@@ -201,40 +201,27 @@ namespace Tools
             // Get the checkbox states
             Dictionary<string, bool> checkboxStates = Get_CheckboxState();
 
-            // Print the checkbox states for debugging
+            // Define the filter actions
+            Dictionary<string, Action> filterActions = new Dictionary<string, Action>
+            {
+                { "type", () => Task.Run(() => FilterType(files)) },
+                { "size", () => Task.Run(() => FilterSize(files)) },
+                { "date", () => Task.Run(() => FilterDate(files)) },
+                { "name", () => Task.Run(() => FilterName(files)) },
+                { "hash", () => Task.Run(() => FilterHash(files)) },
+                { "extension", () => Task.Run(() => FilterExtension(files)) },
+                { "tags", () => Task.Run(() => FilterTags(files)) },
+                { "media", () => Task.Run(() => FilterMedia(files)) }
+            };
+
+            // Loop through the checkbox states and execute the corresponding actions
             foreach (var state in checkboxStates)
             {
                 Debug.WriteLine($"{state.Key}: {state.Value}");
 
-                switch (state.Key)
+                if (state.Value && filterActions.ContainsKey(state.Key))
                 {
-                    case "type":
-                        Task.Run(() => FilterType(files));
-                        break;
-                    case "size":
-                        Task.Run(() => FilterSize(files));
-                        break;
-                    case "date":
-                        Task.Run(() => FilterDate(files));
-                        break;
-                    case "name":
-                        Task.Run(() => FilterName(files));
-                        break;
-                    case "hash":
-                        Task.Run(() => FilterHash(files));
-                        break;
-                    case "extension":
-                        Task.Run(() => FilterExtension(files));
-                        break;
-                    case "tags":
-                        Task.Run(() => FilterTags(files));
-                        break;
-                    case "media":
-                        Task.Run(() => FilterTags(files));
-                        break;
-                    default:
-
-                        break;
+                    filterActions[state.Key].Invoke();
                 }
             }
         }
@@ -450,10 +437,10 @@ namespace Tools
                         sizeCategory = "TB";
                         sizeValue = fileSize / tbThreshold;
                     }
-
+                          
                     // Build the directory path based on the size category and size value
-                    string parentFolder = Path.Combine("RootDirectory", sizeCategory);
-                    string targetFolder = Path.Combine(parentFolder, sizeValue.ToString());
+                    string destinationFilePath = Path.Combine(PathSort, sizeCategory);
+                    string targetFolder = Path.Combine(destinationFilePath, sizeValue.ToString());
 
                     // Create the target folder if it doesn't exist
                     if (!Directory.Exists(targetFolder))
@@ -474,8 +461,8 @@ namespace Tools
                         counter++;
                     }
 
-                    // Move the file
-                    //File.Move(file, targetFilePath);
+                    // Move the file to the created folder
+                    File.Move(file, destinationFilePath);
 
                     // Log the file processing
                     Debug.WriteLine($"File: {file}, Size: {fileSize} bytes, Category: {sizeCategory}, Size Value: {sizeValue}, Moved to: {targetFilePath}");
@@ -504,7 +491,7 @@ namespace Tools
 
         private async Task FilterDate(string[] files)
         {
-           
+
         }
 
         private async Task FilterName(string[] files)

@@ -65,43 +65,73 @@ namespace Tools
         private void button5_Click(object sender, EventArgs e)
         {
             FollowButton(sender as Button);
-            label_Title.Text = "FILTER";
+            label_Title.Text = "";
 
         }
 
         private void button6_Click(object sender, EventArgs e)
         {
             FollowButton(sender as Button);
-            label_Title.Text = "FILTER";
+            label_Title.Text = "";
 
         }
 
         private void button7_Click(object sender, EventArgs e)
         {
             FollowButton(sender as Button);
-            label_Title.Text = "FILTER";
+            label_Title.Text = "";
 
         }
 
         private void button8_Click(object sender, EventArgs e)
         {
             FollowButton(sender as Button);
-            label_Title.Text = "FILTER";
+            label_Title.Text = "";
 
         }
 
         private void button9_Click(object sender, EventArgs e)
         {
             FollowButton(sender as Button);
-            label_Title.Text = "FILTER";
+            label_Title.Text = "";
 
         }
 
         private void button10_Click(object sender, EventArgs e)
         {
             FollowButton(sender as Button);
-            label_Title.Text = "FILTER";
+            label_Title.Text = "";
 
+        }
+
+        private void button_Save_MouseEnter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button_Save_MouseLeave(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button_Save_Click(object sender, EventArgs e)
+        {
+            string optionstring = label_Title.Text;
+
+            switch (optionstring)
+            {
+                case "FILTER":
+                    userControl_Configuration_Filter1.Set_FilterJson();
+                    break;
+                case "CONVERT":
+                    break;
+                case "EXTRACT":
+                    break;
+                case "MERGE":
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
