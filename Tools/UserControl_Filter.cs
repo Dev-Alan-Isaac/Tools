@@ -198,14 +198,37 @@ namespace Tools
 
         private void button_Play_Click(object sender, EventArgs e)
         {
+            // Get the checkbox states
+            Dictionary<string, bool> checkboxStates = Get_CheckboxState();
+
+            // Print the checkbox states for debugging
+            foreach (var state in checkboxStates)
+            {
+                Debug.WriteLine($"{state.Key}: {state.Value}");
+            }
+
             // Run the FilterType method asynchronously
             //Task.Run(() => FilterType(files));
-            Task.Run(() => FilterSize(files));
         }
 
-        private void Get_CheckboxState()
-        {
 
+        private Dictionary<string, bool> Get_CheckboxState()
+        {
+            // Create a dictionary to store the checkbox names and their states
+            Dictionary<string, bool> checkboxStates = new Dictionary<string, bool>();
+
+            // Add each checkbox state to the dictionary
+            checkboxStates.Add("type", checkBox_type.Checked);
+            checkboxStates.Add("size", checkBox_size.Checked);
+            checkboxStates.Add("date", checkBox_date.Checked);
+            checkboxStates.Add("name", checkBox_name.Checked);
+            checkboxStates.Add("hash", checkBox_hash.Checked);
+            checkboxStates.Add("extension", checkBox_extension.Checked);
+            checkboxStates.Add("tags", checkBox_tags.Checked);
+            checkboxStates.Add("media", checkBox_media.Checked);
+
+            // Return the dictionary
+            return checkboxStates;
         }
 
         public async Task<string[]> ProcessFiles(string parentPath)
