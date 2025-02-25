@@ -191,9 +191,6 @@ namespace Tools
                     {
                         files = await ProcessFiles(PathSort);
                         Invoke(new Action(() => textBox_Files.Text = "Files: " + totalFiles.ToString()));
-
-                        // Call the FilterType method with the list of files
-                        await FilterType(files);
                     });
                 }
             }
@@ -203,6 +200,11 @@ namespace Tools
         {
             // Run the FilterType method asynchronously
             Task.Run(() => FilterType(files));
+        }
+
+        private void Get_CheckboxState()
+        {
+
         }
 
         public async Task<string[]> ProcessFiles(string parentPath)
@@ -221,16 +223,84 @@ namespace Tools
 
         private async Task FilterType(string[] files)
         {
+            // Define a dictionary to map file types to their corresponding settings and lists
+            var typeToSettings = new Dictionary<string, (bool IsEnabled, List<string> Extensions)>
+    {
+        { "Image", (filterSettings.Image, filterSettings.Image_List) },
+        { "Video", (filterSettings.Video, filterSettings.Video_List) },
+        { "Document", (filterSettings.Document, filterSettings.Document_List) },
+        { "Audio", (filterSettings.Audio, filterSettings.Audio_List) },
+        { "Archive", (filterSettings.Archive, filterSettings.Archive_List) },
+        { "Executable", (filterSettings.Executable, filterSettings.Executable_List) },
+        { "Other", (filterSettings.Other, filterSettings.Other_List) }
+    };
+
             foreach (string file in files)
             {
                 string fileExtension = System.IO.Path.GetExtension(file).TrimStart('.').ToLower();
-                if(filterSettings.Image||filterSettings.Video||)
-                // You can now use the fileExtension variable as needed
-                Debug.WriteLine($"File: {file}, Extension: {fileExtension}");
+
+                foreach (var type in typeToSettings)
+                {
+                    if (type.Value.IsEnabled && type.Value.Extensions.Contains(fileExtension))
+                    {
+                        // Create a folder based on the type.Key if it doesn't exist
+                        string folderPath = Path.Combine(PathSort, type.Key);
+                        if (!Directory.Exists(folderPath))
+                        {
+                            Directory.CreateDirectory(folderPath);
+                        }
+
+                        // Move the file to the created folder
+                        string destinationFilePath = Path.Combine(folderPath, Path.GetFileName(file));
+                        if (!File.Exists(destinationFilePath))
+                        {
+                            File.Move(file, destinationFilePath);
+                        }
+
+                        // Log the file processing
+                        Debug.WriteLine($"File: {file}, Extension: {fileExtension}, Type: {type.Key}, Moved to: {folderPath}");
+                        break; // Exit the loop once a match is found
+                    }
+                }
             }
         }
 
 
+
+        private async Task FilterSize(string[] files)
+        {
+            
+        }
+
+        private async Task FilterDate(string[] files)
+        {
+
+        }
+
+        private async Task FilterName(string[] files)
+        {
+
+        }
+
+        private async Task FilterHash(string[] files)
+        {
+
+        }
+
+        private async Task FilterExtension(string[] files)
+        {
+
+        }
+
+        private async Task FilterTags(string[] files)
+        {
+
+        }
+
+        private async Task FilterMedia(string[] files)
+        {
+
+        }
     }
 }
 
