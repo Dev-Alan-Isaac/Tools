@@ -199,7 +199,8 @@ namespace Tools
         private void button_Play_Click(object sender, EventArgs e)
         {
             // Run the FilterType method asynchronously
-            Task.Run(() => FilterType(files));
+            //Task.Run(() => FilterType(files));
+            Task.Run(() => FilterSize(files));
         }
 
         private void Get_CheckboxState()
@@ -225,15 +226,15 @@ namespace Tools
         {
             // Define a dictionary to map file types to their corresponding settings and lists
             var typeToSettings = new Dictionary<string, (bool IsEnabled, List<string> Extensions)>
-    {
-        { "Image", (filterSettings.Image, filterSettings.Image_List) },
-        { "Video", (filterSettings.Video, filterSettings.Video_List) },
-        { "Document", (filterSettings.Document, filterSettings.Document_List) },
-        { "Audio", (filterSettings.Audio, filterSettings.Audio_List) },
-        { "Archive", (filterSettings.Archive, filterSettings.Archive_List) },
-        { "Executable", (filterSettings.Executable, filterSettings.Executable_List) },
-        { "Other", (filterSettings.Other, filterSettings.Other_List) }
-    };
+            {
+                { "Image", (filterSettings.Image, filterSettings.Image_List) },
+                { "Video", (filterSettings.Video, filterSettings.Video_List) },
+                { "Document", (filterSettings.Document, filterSettings.Document_List) },
+                { "Audio", (filterSettings.Audio, filterSettings.Audio_List) },
+                { "Archive", (filterSettings.Archive, filterSettings.Archive_List) },
+                { "Executable", (filterSettings.Executable, filterSettings.Executable_List) },
+                { "Other", (filterSettings.Other, filterSettings.Other_List) }
+            };
 
             foreach (string file in files)
             {
@@ -250,26 +251,118 @@ namespace Tools
                             Directory.CreateDirectory(folderPath);
                         }
 
-                        // Move the file to the created folder
+                        // Determine the destination file path
                         string destinationFilePath = Path.Combine(folderPath, Path.GetFileName(file));
-                        if (!File.Exists(destinationFilePath))
+                        int counter = 1;
+
+                        // If the file already exists, append a unique identifier to the file name
+                        while (File.Exists(destinationFilePath))
                         {
-                            File.Move(file, destinationFilePath);
+                            string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file);
+                            string newFileName = $"{fileNameWithoutExtension} ({counter}){Path.GetExtension(file)}";
+                            destinationFilePath = Path.Combine(folderPath, newFileName);
+                            counter++;
                         }
 
+                        // Move the file to the created folder
+                        File.Move(file, destinationFilePath);
+
                         // Log the file processing
-                        Debug.WriteLine($"File: {file}, Extension: {fileExtension}, Type: {type.Key}, Moved to: {folderPath}");
+                        Debug.WriteLine($"File: {file}, Extension: {fileExtension}, Type: {type.Key}, Moved to: {destinationFilePath}");
                         break; // Exit the loop once a match is found
                     }
                 }
             }
         }
 
-
-
         private async Task FilterSize(string[] files)
         {
-            
+            if (filterSettings.Range)
+            {
+                List<Dictionary<string, List<string>>> keyValuePairs = filterSettings.Range_List;
+
+                // Initialize size range variables
+                long smallMax = 0, mediumMin = 0, mediumMax = 0, largeMin = 0, largeMax = 0, extraLargeMin = 0;
+
+                // Convert size values to bytes and assign to the corresponding variables
+                foreach (var kvp in keyValuePairs)
+                {
+                    foreach (var key in kvp.Keys)
+                    {
+                        var sizeList = kvp[key];
+                        long minSize = sizeList.Count > 1 ? ConvertToBytes(sizeList[0], sizeList[1]) : 0;
+                        long maxSize = sizeList.Count > 3 ? ConvertToBytes(sizeList[2], sizeList[3]) : minSize;
+
+                        switch (key)
+                        {
+                            case "Small":
+                                smallMax = maxSize;
+                                break;
+                            case "Medium":
+                                mediumMin = minSize;
+                                mediumMax = maxSize;
+                                break;
+                            case "Large":
+                                largeMin = minSize;
+                                largeMax = maxSize;
+                                break;
+                            case "Extra_Large":
+                                extraLargeMin = minSize;
+                                break;
+                        }
+                    }
+                }
+
+                // Process files based on size ranges
+                foreach (string file in files)
+                {
+                    long fileSize = new FileInfo(file).Length;
+
+                    if (fileSize <= smallMax)
+                    {
+                        Debug.WriteLine($"File: {file}, Size: {fileSize} bytes, Range: Small");
+                        // Add your code to move the file to the "Small" folder
+                    }
+                    else if (fileSize >= mediumMin && fileSize <= mediumMax)
+                    {
+                        Debug.WriteLine($"File: {file}, Size: {fileSize} bytes, Range: Medium");
+                        // Add your code to move the file to the "Medium" folder
+                    }
+                    else if (fileSize >= largeMin && fileSize <= largeMax)
+                    {
+                        Debug.WriteLine($"File: {file}, Size: {fileSize} bytes, Range: Large");
+                        // Add your code to move the file to the "Large" folder
+                    }
+                    else if (fileSize >= extraLargeMin)
+                    {
+                        Debug.WriteLine($"File: {file}, Size: {fileSize} bytes, Range: Extra Large");
+                        // Add your code to move the file to the "Extra Large" folder
+                    }
+                }
+            }
+            else if (filterSettings.Dynamic)
+            {
+                // Handle dynamic size filtering
+            }
+        }
+
+        private long ConvertToBytes(string sizeValue, string unit)
+        {
+            double size = double.Parse(sizeValue);
+
+            switch (unit.ToUpper())
+            {
+                case "KB":
+                    return (long)(size * 1024);
+                case "MB":
+                    return (long)(size * 1024 * 1024);
+                case "GB":
+                    return (long)(size * 1024 * 1024 * 1024);
+                case "TB":
+                    return (long)(size * 1024 * 1024 * 1024 * 1024);
+                default:
+                    return (long)size;
+            }
         }
 
         private async Task FilterDate(string[] files)
