@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
+using System.Security.Cryptography;
 
 namespace Tools
 {
@@ -519,8 +520,60 @@ namespace Tools
 
         private async Task FilterHash(string[] files)
         {
+            Dictionary<string, List<string>> hashDictionary = new Dictionary<string, List<string>>();
 
+            // Compute the hash for each file and group by hash
+            foreach (string file in files)
+            {
+                string hash = await ComputeFileHashAsync(file);
+
+                if (!hashDictionary.ContainsKey(hash))
+                {
+                    hashDictionary[hash] = new List<string>();
+                }
+
+                hashDictionary[hash].Add(file);
+            }
+
+            // Create directories and move files with the same hash
+            foreach (var hashGroup in hashDictionary)
+            {
+                if (hashGroup.Value.Count > 1) // Only consider groups with more than one file
+                {
+                    string directoryPath = Path.Combine(Path.GetDirectoryName(hashGroup.Value[0]), hashGroup.Key);
+
+                    if (!Directory.Exists(directoryPath))
+                    {
+                        Directory.CreateDirectory(directoryPath);
+                    }
+
+                    foreach (string file in hashGroup.Value)
+                    {
+                        string fileName = Path.GetFileName(file);
+                        string destinationPath = Path.Combine(directoryPath, fileName);
+
+                        // Move the file to the new directory
+                        if (!File.Exists(destinationPath))
+                        {
+                            File.Move(file, destinationPath);
+                        }
+                    }
+                }
+            }
         }
+
+        private async Task<string> ComputeFileHashAsync(string filePath)
+        {
+            using (var sha256 = SHA256.Create())
+            {
+                using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, useAsync: true))
+                {
+                    byte[] hashBytes = await sha256.ComputeHashAsync(fileStream);
+                    return BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
+                }
+            }
+        }
+
 
         private async Task FilterExtension(string[] files)
         {
