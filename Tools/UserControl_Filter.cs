@@ -15,7 +15,7 @@ namespace Tools
 {
     public partial class UserControl_Filter : UserControl
     {
-        private string PathSort, CountFile;
+        private string PathSort;
         private FilterSettings filterSettings;
         private int totalFiles = 0;
         private string[] files;
@@ -224,6 +224,38 @@ namespace Tools
                 {
                     filterActions[state.Key].Invoke();
                 }
+            }
+
+            if (filterSettings.Delete)
+            {
+                Delete_Folders(PathSort);
+            }
+        }
+
+        public void Delete_Folders(string path)
+        {
+            try
+            {
+                foreach (var directory in Directory.GetDirectories(path))
+                {
+                    Delete_Folders(directory);
+
+                    // Check if the directory is empty
+                    if (Directory.GetFiles(directory).Length == 0 && Directory.GetDirectories(directory).Length == 0)
+                    {
+                        Directory.Delete(directory);
+                    }
+                }
+
+                // Check if the root directory is empty (optional)
+                if (Directory.GetFiles(path).Length == 0 && Directory.GetDirectories(path).Length == 0)
+                {
+                    Directory.Delete(path);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
             }
         }
 
@@ -540,7 +572,7 @@ namespace Tools
             {
                 if (hashGroup.Value.Count > 1) // Only consider groups with more than one file
                 {
-                    string directoryPath = Path.Combine(Path.GetDirectoryName(hashGroup.Value[0]), hashGroup.Key);
+                    string directoryPath = Path.Combine(Path.GetDirectoryName(hashGroup.Value[0]), "Hash");
 
                     if (!Directory.Exists(directoryPath))
                     {
@@ -573,8 +605,6 @@ namespace Tools
                 }
             }
         }
-
-
         private async Task FilterExtension(string[] files)
         {
 
