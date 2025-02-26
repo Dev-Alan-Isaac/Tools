@@ -437,7 +437,7 @@ namespace Tools
                         sizeCategory = "TB";
                         sizeValue = fileSize / tbThreshold;
                     }
-                          
+
                     // Build the directory path based on the size category and size value
                     string destinationFilePath = Path.Combine(PathSort, sizeCategory);
                     string targetFolder = Path.Combine(destinationFilePath, sizeValue.ToString());
@@ -491,7 +491,18 @@ namespace Tools
 
         private async Task FilterDate(string[] files)
         {
+            if (filterSettings.Creation)
+            {
 
+            }
+            else if (filterSettings.Access)
+            {
+
+            }
+            else if (filterSettings.Modify)
+            {
+
+            }
         }
 
         private async Task FilterName(string[] files)
