@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using System.Security.Cryptography;
+using System.Net.NetworkInformation;
 
 namespace Tools
 {
@@ -335,7 +336,7 @@ namespace Tools
                         }
 
                         // Move the file to the created folder
-                        File.Move(file, destinationFilePath);
+                        await MoveFileAsync(file, destinationFilePath);
 
                         // Log the file processing
                         Debug.WriteLine($"File: {file}, Extension: {fileExtension}, Type: {type.Key}, Moved to: {destinationFilePath}");
@@ -426,7 +427,7 @@ namespace Tools
                         }
 
                         // Move the file to the created folder
-                        File.Move(file, destinationFilePath);
+                        await MoveFileAsync(file, destinationFilePath);
 
                         // Log the file processing
                         Debug.WriteLine($"File: {file}, Size: {fileSize} bytes, Range: {folderName}, Moved to: {destinationFilePath}");
@@ -495,7 +496,7 @@ namespace Tools
                     }
 
                     // Move the file to the created folder
-                    File.Move(file, destinationFilePath);
+                    await MoveFileAsync(file, destinationFilePath);
 
                     // Log the file processing
                     Debug.WriteLine($"File: {file}, Size: {fileSize} bytes, Category: {sizeCategory}, Size Value: {sizeValue}, Moved to: {targetFilePath}");
@@ -524,30 +525,175 @@ namespace Tools
 
         private async Task FilterDate(string[] files)
         {
+            // Base path for creation date, access date, and modify date folders
+            string basePath = Path.GetDirectoryName(files[0]);
+
             if (filterSettings.Creation)
             {
+                string creationDateParentFolder = Path.Combine(basePath, "Creation date");
 
+                foreach (var file in files)
+                {
+                    DateTime creationDate = File.GetCreationTime(file);
+                    string creationDateFolder = Path.Combine(creationDateParentFolder, creationDate.ToString("yyyy-MM-dd"));
+
+                    if (!Directory.Exists(creationDateFolder))
+                    {
+                        Directory.CreateDirectory(creationDateFolder);
+                    }
+
+                    string fileName = Path.GetFileName(file);
+                    string destinationPath = Path.Combine(creationDateFolder, fileName);
+
+                    // Handle files with the same name
+                    int fileCount = 1;
+                    string newDestinationPath = destinationPath;
+                    while (File.Exists(newDestinationPath))
+                    {
+                        string fileExtension = Path.GetExtension(fileName);
+                        string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+                        newDestinationPath = Path.Combine(creationDateFolder, $"{fileNameWithoutExtension} ({fileCount++}){fileExtension}");
+                    }
+
+                    await MoveFileAsync(file, newDestinationPath);
+                }
             }
             else if (filterSettings.Access)
             {
+                string accessDateParentFolder = Path.Combine(basePath, "Access date");
 
+                foreach (var file in files)
+                {
+                    DateTime accessDate = File.GetLastAccessTime(file);
+                    string accessDateFolder = Path.Combine(accessDateParentFolder, accessDate.ToString("yyyy-MM-dd"));
+
+                    if (!Directory.Exists(accessDateFolder))
+                    {
+                        Directory.CreateDirectory(accessDateFolder);
+                    }
+
+                    string fileName = Path.GetFileName(file);
+                    string destinationPath = Path.Combine(accessDateFolder, fileName);
+
+                    // Handle files with the same name
+                    int fileCount = 1;
+                    string newDestinationPath = destinationPath;
+                    while (File.Exists(newDestinationPath))
+                    {
+                        string fileExtension = Path.GetExtension(fileName);
+                        string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+                        newDestinationPath = Path.Combine(accessDateFolder, $"{fileNameWithoutExtension} ({fileCount++}){fileExtension}");
+                    }
+
+                    await MoveFileAsync(file, newDestinationPath);
+                }
             }
             else if (filterSettings.Modify)
             {
+                string modifyDateParentFolder = Path.Combine(basePath, "Modify date");
 
+                foreach (var file in files)
+                {
+                    DateTime modifyDate = File.GetLastWriteTime(file);
+                    string modifyDateFolder = Path.Combine(modifyDateParentFolder, modifyDate.ToString("yyyy-MM-dd"));
+
+                    if (!Directory.Exists(modifyDateFolder))
+                    {
+                        Directory.CreateDirectory(modifyDateFolder);
+                    }
+
+                    string fileName = Path.GetFileName(file);
+                    string destinationPath = Path.Combine(modifyDateFolder, fileName);
+
+                    // Handle files with the same name
+                    int fileCount = 1;
+                    string newDestinationPath = destinationPath;
+                    while (File.Exists(newDestinationPath))
+                    {
+                        string fileExtension = Path.GetExtension(fileName);
+                        string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+                        newDestinationPath = Path.Combine(modifyDateFolder, $"{fileNameWithoutExtension} ({fileCount++}){fileExtension}");
+                    }
+
+                    await MoveFileAsync(file, newDestinationPath);
+                }
             }
         }
 
         private async Task FilterName(string[] files)
         {
-            if (filterSettings.Caps)
+            if (filterSettings.Chars && filterSettings.Caps)
             {
+                // Apply both filters: non-UTF8 characters and capitalization
+                foreach (var file in files)
+                {
+                    string fileName = Path.GetFileName(file);
 
+                    if (ContainsNonUTF8Characters(fileName) && StartsWithUppercase(fileName))
+                    {
+                        string destinationPath = Path.Combine("FilteredCharsCaps", fileName);
+                        await MoveFileAsync(file, destinationPath);
+                    }
+                }
             }
             else if (filterSettings.Chars)
             {
+                // Apply filter by non-UTF8 characters only
+                foreach (var file in files)
+                {
+                    string fileName = Path.GetFileName(file);
 
+                    if (ContainsNonUTF8Characters(fileName))
+                    {
+                        string destinationPath = Path.Combine("FilteredChars", fileName);
+                        await MoveFileAsync(file, destinationPath);
+                    }
+                }
             }
+            else if (filterSettings.Caps)
+            {
+                // Apply filter by capitalization only
+                foreach (var file in files)
+                {
+                    string fileName = Path.GetFileName(file);
+
+                    if (StartsWithUppercase(fileName))
+                    {
+                        string destinationPath = Path.Combine("FilteredCaps", fileName);
+                        await MoveFileAsync(file, destinationPath);
+                    }
+                }
+            }
+        }
+
+        private bool ContainsNonUTF8Characters(string fileName)
+        {
+            Encoding utf8 = Encoding.UTF8;
+            byte[] utf8Bytes = utf8.GetBytes(fileName);
+
+            // If converting to UTF8 and back changes the string, it contains non-UTF8 characters
+            string converted = utf8.GetString(utf8Bytes);
+            return !string.Equals(fileName, converted, StringComparison.Ordinal);
+        }
+
+        private bool StartsWithUppercase(string fileName)
+        {
+            return !string.IsNullOrEmpty(fileName) && char.IsUpper(fileName[0]);
+        }
+
+        private async Task MoveFileAsync(string sourcePath, string destinationPath)
+        {
+            int fileCount = 1;
+            string newDestinationPath = destinationPath;
+
+            while (File.Exists(newDestinationPath))
+            {
+                string fileExtension = Path.GetExtension(destinationPath);
+                string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(destinationPath);
+                newDestinationPath = Path.Combine(Path.GetDirectoryName(destinationPath), $"{fileNameWithoutExtension} ({fileCount++}){fileExtension}");
+            }
+
+            await Task.Run(() => File.Move(sourcePath, newDestinationPath));
         }
 
         private async Task FilterHash(string[] files)
@@ -584,11 +730,18 @@ namespace Tools
                         string fileName = Path.GetFileName(file);
                         string destinationPath = Path.Combine(directoryPath, fileName);
 
-                        // Move the file to the new directory
-                        if (!File.Exists(destinationPath))
+                        // Handle files with the same name
+                        int fileCount = 1;
+                        string newDestinationPath = destinationPath;
+                        while (File.Exists(newDestinationPath))
                         {
-                            File.Move(file, destinationPath);
+                            string fileExtension = Path.GetExtension(fileName);
+                            string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+                            newDestinationPath = Path.Combine(directoryPath, $"{fileNameWithoutExtension} ({fileCount++}){fileExtension}");
                         }
+
+                        // Move the file to the new directory
+                        File.Move(file, newDestinationPath);
                     }
                 }
             }
@@ -605,9 +758,36 @@ namespace Tools
                 }
             }
         }
+
         private async Task FilterExtension(string[] files)
         {
+            // Base path for extension folders
+            string basePath = Path.GetDirectoryName(files[0]);
 
+            foreach (var file in files)
+            {
+                string fileExtension = Path.GetExtension(file).TrimStart('.').ToLowerInvariant();
+                string extensionFolder = Path.Combine(basePath, fileExtension);
+
+                if (!Directory.Exists(extensionFolder))
+                {
+                    Directory.CreateDirectory(extensionFolder);
+                }
+
+                string fileName = Path.GetFileName(file);
+                string destinationPath = Path.Combine(extensionFolder, fileName);
+
+                // Handle files with the same name
+                int fileCount = 1;
+                string newDestinationPath = destinationPath;
+                while (File.Exists(newDestinationPath))
+                {
+                    string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+                    newDestinationPath = Path.Combine(extensionFolder, $"{fileNameWithoutExtension} ({fileCount++}).{fileExtension}");
+                }
+
+                await Task.Run(() => File.Move(file, newDestinationPath));
+            }
         }
 
         private async Task FilterTags(string[] files)
