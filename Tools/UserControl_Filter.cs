@@ -741,7 +741,7 @@ namespace Tools
                         }
 
                         // Move the file to the new directory
-                        File.Move(file, newDestinationPath);
+                        await MoveFileAsync(file, newDestinationPath);
                     }
                 }
             }
@@ -792,7 +792,40 @@ namespace Tools
 
         private async Task FilterTags(string[] files)
         {
+            var tagList = filterSettings.Tag_List;
 
+            foreach (var file in files)
+            {
+                string fileName = Path.GetFileName(file);
+
+                foreach (var tag in tagList)
+                {
+                    if (fileName.IndexOf(tag, StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        string tagsFolder = Path.Combine(Path.GetDirectoryName(file), "Tags", tag);
+
+                        if (!Directory.Exists(tagsFolder))
+                        {
+                            Directory.CreateDirectory(tagsFolder);
+                        }
+
+                        string destinationPath = Path.Combine(tagsFolder, fileName);
+
+                        // Handle files with the same name
+                        int fileCount = 1;
+                        string newDestinationPath = destinationPath;
+                        while (File.Exists(newDestinationPath))
+                        {
+                            string fileExtension = Path.GetExtension(fileName);
+                            string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+                            newDestinationPath = Path.Combine(tagsFolder, $"{fileNameWithoutExtension} ({fileCount++}){fileExtension}");
+                        }
+
+                        await MoveFileAsync(file, newDestinationPath));
+                        break; // If a tag is found, stop checking other tags for this file
+                    }
+                }
+            }
         }
 
         private async Task FilterMedia(string[] files)
