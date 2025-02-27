@@ -815,8 +815,142 @@ namespace Tools
 
         private async Task FilterMedia(string[] files)
         {
-
+            if (filterSettings.Duration)
+            {
+                await Duration(files);
+            }
+            else if (filterSettings.Resolution)
+            {
+                await Resolution(files);
+            }
+            else if (filterSettings.FrameRate)
+            {
+                await FrameRate(files);
+            }
+            else if (filterSettings.Codec)
+            {
+                await Codec(files);
+            }
+            else if (filterSettings.AspectRatio)
+            {
+                await AspectRatio(files);
+            }
         }
+
+        private bool IsVideoFile(string filePath)
+        {
+            string extension = Path.GetExtension(filePath).ToLower();
+            return filterSettings.Video_List.Contains(extension);
+        }
+
+
+        private async Task Duration(string[] files)
+        {
+            foreach (var file in files)
+            {
+                // Check if the file is a video
+                if (!IsVideoFile(file))
+                {
+                    continue;
+                }
+
+                // Use NReco to get media info and determine the duration
+                var mediaInfo = new NReco.VideoInfo.FFProbe().GetMediaInfo(file);
+                var duration = mediaInfo.Duration;
+
+                // Format duration as HH-mm-ss
+                var folderName = $"{duration:hh\\-mm\\-ss}";
+
+                var destinationFolder = Path.Combine(PathSort, folderName);
+                var destinationPath = Path.Combine(destinationFolder, Path.GetFileName(file));
+
+                // Create the destination directory if it doesn't exist
+                if (!Directory.Exists(destinationFolder))
+                {
+                    Directory.CreateDirectory(destinationFolder);
+                }
+
+                // Move the file
+                await MoveFileAsync(file, destinationPath);
+            }
+        }
+
+
+        private async Task Resolution(string[] files)
+        {
+            foreach (var file in files)
+            {
+                // Check if the file is a video
+                if (!IsVideoFile(file))
+                {
+                    continue;
+                }
+
+                // Use NReco to get media info and determine the resolution
+                var mediaInfo = new NReco.VideoInfo.FFProbe().GetMediaInfo(file);
+                var resolution = $"{mediaInfo.Streams.First().Width}x{mediaInfo.Streams.First().Height}";
+
+                var folderName = resolution;
+                var destinationPath = Path.Combine("Resolution", folderName, Path.GetFileName(file));
+
+                // Move the file
+                //await MoveFileAsync(file, destinationPath);
+                Debug.WriteLine($"File: {file}, Moved to: {destinationPath}");
+            }
+        }
+
+
+        private async Task FrameRate(string[] files)
+        {
+            foreach (var file in files)
+            {
+                // Use NReco to get media info and determine the duration
+                var mediaInfo = new NReco.VideoInfo.FFProbe().GetMediaInfo(file);
+                var duration = mediaInfo.Duration;
+
+                // Format duration as HH:mm:ss
+                var folderName = $"{duration:hh\\:mm\\:ss}";
+                var destinationPath = Path.Combine("Duration", folderName, Path.GetFileName(file));
+
+                // Move the file
+                await MoveFileAsync(file, destinationPath);
+            }
+        }
+
+        private async Task Codec(string[] files)
+        {
+            foreach (var file in files)
+            {
+                // Use NReco to get media info and determine the duration
+                var mediaInfo = new NReco.VideoInfo.FFProbe().GetMediaInfo(file);
+                var duration = mediaInfo.Duration;
+
+                // Format duration as HH:mm:ss
+                var folderName = $"{duration:hh\\:mm\\:ss}";
+                var destinationPath = Path.Combine("Duration", folderName, Path.GetFileName(file));
+
+                // Move the file
+                await MoveFileAsync(file, destinationPath);
+            }
+        }
+
+        private async Task AspectRatio(string[] files)
+        {
+            foreach (var file in files)
+            {
+                // Use NReco to get media info and determine the duration
+                var mediaInfo = new NReco.VideoInfo.FFProbe().GetMediaInfo(file);
+                var duration = mediaInfo.Duration;
+
+                // Format duration as HH:mm:ss
+                var folderName = $"{duration:hh\\:mm\\:ss}";
+                var destinationPath = Path.Combine("Duration", folderName, Path.GetFileName(file));
+
+                // Move the file
+                await MoveFileAsync(file, destinationPath);
+            }
+        }
+
 
         private async Task MoveFileAsync(string sourcePath, string destinationPath)
         {
