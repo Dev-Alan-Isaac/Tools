@@ -843,7 +843,6 @@ namespace Tools
             return filterSettings.Video_List.Contains(extension);
         }
 
-
         private async Task Duration(string[] files)
         {
             foreach (var file in files)
@@ -875,7 +874,6 @@ namespace Tools
             }
         }
 
-
         private async Task Resolution(string[] files)
         {
             foreach (var file in files)
@@ -904,13 +902,13 @@ namespace Tools
         {
             foreach (var file in files)
             {
-                // Use NReco to get media info and determine the duration
-                var mediaInfo = new NReco.VideoInfo.FFProbe().GetMediaInfo(file);
-                var duration = mediaInfo.Duration;
+                // Check if the file is a video
+                if (!IsVideoFile(file))
+                {
+                    continue;
+                }
 
-                // Format duration as HH:mm:ss
-                var folderName = $"{duration:hh\\:mm\\:ss}";
-                var destinationPath = Path.Combine("Duration", folderName, Path.GetFileName(file));
+             
 
                 // Move the file
                 await MoveFileAsync(file, destinationPath);
@@ -921,14 +919,12 @@ namespace Tools
         {
             foreach (var file in files)
             {
-                // Use NReco to get media info and determine the duration
-                var mediaInfo = new NReco.VideoInfo.FFProbe().GetMediaInfo(file);
-                var duration = mediaInfo.Duration;
+                if (!IsVideoFile(file))
+                {
+                    continue;
+                }
 
-                // Format duration as HH:mm:ss
-                var folderName = $"{duration:hh\\:mm\\:ss}";
-                var destinationPath = Path.Combine("Duration", folderName, Path.GetFileName(file));
-
+            
                 // Move the file
                 await MoveFileAsync(file, destinationPath);
             }
@@ -938,14 +934,11 @@ namespace Tools
         {
             foreach (var file in files)
             {
-                // Use NReco to get media info and determine the duration
-                var mediaInfo = new NReco.VideoInfo.FFProbe().GetMediaInfo(file);
-                var duration = mediaInfo.Duration;
-
-                // Format duration as HH:mm:ss
-                var folderName = $"{duration:hh\\:mm\\:ss}";
-                var destinationPath = Path.Combine("Duration", folderName, Path.GetFileName(file));
-
+                if (!IsVideoFile(file))
+                {
+                    continue;
+                }
+              
                 // Move the file
                 await MoveFileAsync(file, destinationPath);
             }
