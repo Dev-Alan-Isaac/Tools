@@ -806,7 +806,7 @@ namespace Tools
                             newDestinationPath = Path.Combine(tagsFolder, $"{fileNameWithoutExtension} ({fileCount++}){fileExtension}");
                         }
 
-                        await MoveFileAsync(file, newDestinationPath));
+                        await MoveFileAsync(file, newDestinationPath);
                         break; // If a tag is found, stop checking other tags for this file
                     }
                 }
