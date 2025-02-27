@@ -681,21 +681,6 @@ namespace Tools
             return !string.IsNullOrEmpty(fileName) && char.IsUpper(fileName[0]);
         }
 
-        private async Task MoveFileAsync(string sourcePath, string destinationPath)
-        {
-            int fileCount = 1;
-            string newDestinationPath = destinationPath;
-
-            while (File.Exists(newDestinationPath))
-            {
-                string fileExtension = Path.GetExtension(destinationPath);
-                string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(destinationPath);
-                newDestinationPath = Path.Combine(Path.GetDirectoryName(destinationPath), $"{fileNameWithoutExtension} ({fileCount++}){fileExtension}");
-            }
-
-            await Task.Run(() => File.Move(sourcePath, newDestinationPath));
-        }
-
         private async Task FilterHash(string[] files)
         {
             Dictionary<string, List<string>> hashDictionary = new Dictionary<string, List<string>>();
@@ -831,6 +816,21 @@ namespace Tools
         private async Task FilterMedia(string[] files)
         {
 
+        }
+
+        private async Task MoveFileAsync(string sourcePath, string destinationPath)
+        {
+            int fileCount = 1;
+            string newDestinationPath = destinationPath;
+
+            while (File.Exists(newDestinationPath))
+            {
+                string fileExtension = Path.GetExtension(destinationPath);
+                string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(destinationPath);
+                newDestinationPath = Path.Combine(Path.GetDirectoryName(destinationPath), $"{fileNameWithoutExtension} ({fileCount++}){fileExtension}");
+            }
+
+            await Task.Run(() => File.Move(sourcePath, newDestinationPath));
         }
     }
 }
