@@ -45,28 +45,27 @@ namespace Tools
         {
             FollowButton(sender as Button);
             label_Title.Text = "CONVERT";
-
+            userControl_Configuration_Convert1.BringToFront();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             FollowButton(sender as Button);
             label_Title.Text = "EXTRACT";
-
+            userControl_Configuration_Extract1.BringToFront();
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
             FollowButton(sender as Button);
             label_Title.Text = "MERGE";
-
+            userControl_Configuration_Merge1.BringToFront();
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
             FollowButton(sender as Button);
             label_Title.Text = "";
-
         }
 
         private void button6_Click(object sender, EventArgs e)

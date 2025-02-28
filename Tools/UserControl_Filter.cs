@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Text;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using System.Security.Cryptography;
-using System.Net.NetworkInformation;
+using NReco.VideoInfo;
 
 namespace Tools
 {
@@ -889,14 +881,12 @@ namespace Tools
                 var resolution = $"{mediaInfo.Streams.First().Width}x{mediaInfo.Streams.First().Height}";
 
                 var folderName = resolution;
-                var destinationPath = Path.Combine("Resolution", folderName, Path.GetFileName(file));
+                var destinationPath = Path.Combine(PathSort, folderName, Path.GetFileName(file));
 
                 // Move the file
-                //await MoveFileAsync(file, destinationPath);
-                Debug.WriteLine($"File: {file}, Moved to: {destinationPath}");
+                await MoveFileAsync(file, destinationPath);
             }
         }
-
 
         private async Task FrameRate(string[] files)
         {
@@ -908,42 +898,95 @@ namespace Tools
                     continue;
                 }
 
-             
+                // Get the framerate of the video file
+                string framerate = GetFramerate(file);
+
+                // Create a folder with the framerate name
+                string destinationPath = Path.Combine(PathSort, framerate);
+                Directory.CreateDirectory(destinationPath);
 
                 // Move the file
                 await MoveFileAsync(file, destinationPath);
             }
+        }
+
+        private string GetFramerate(string videoFilePath)
+        {
+            var ffProbe = new FFProbe();
+            var videoInfo = ffProbe.GetMediaInfo(videoFilePath);
+            var framerate = videoInfo.Streams.FirstOrDefault(s => s.CodecType == "video")?.FrameRate;
+
+            return framerate.HasValue ? framerate.Value.ToString() : "unknown";
         }
 
         private async Task Codec(string[] files)
         {
             foreach (var file in files)
             {
+                // Check if the file is a video
                 if (!IsVideoFile(file))
                 {
                     continue;
                 }
 
-            
+                // Get the codec of the video file
+                string codec = GetCodec(file);
+
+                // Create a folder with the codec name
+                string destinationPath = Path.Combine(PathSort, codec);
+                Directory.CreateDirectory(destinationPath);
+
                 // Move the file
                 await MoveFileAsync(file, destinationPath);
             }
+        }
+
+        private string GetCodec(string videoFilePath)
+        {
+            var ffProbe = new FFProbe();
+            var videoInfo = ffProbe.GetMediaInfo(videoFilePath);
+            var codec = videoInfo.Streams.FirstOrDefault(s => s.CodecType == "video")?.CodecName;
+
+            return codec ?? "unknown";
         }
 
         private async Task AspectRatio(string[] files)
         {
             foreach (var file in files)
             {
+                // Check if the file is a video
                 if (!IsVideoFile(file))
                 {
                     continue;
                 }
-              
+
+                // Get the aspect ratio of the video file
+                string aspectRatio = GetAspectRatio(file);
+
+                // Create a folder with the aspect ratio name
+                string destinationPath = Path.Combine(PathSort, aspectRatio);
+                Directory.CreateDirectory(destinationPath);
+
                 // Move the file
                 await MoveFileAsync(file, destinationPath);
             }
         }
 
+        private string GetAspectRatio(string videoFilePath)
+        {
+            var ffProbe = new FFProbe();
+            var videoInfo = ffProbe.GetMediaInfo(videoFilePath);
+            var width = videoInfo.Streams.FirstOrDefault(s => s.CodecType == "video")?.Width;
+            var height = videoInfo.Streams.FirstOrDefault(s => s.CodecType == "video")?.Height;
+
+            if (width.HasValue && height.HasValue)
+            {
+                double aspectRatio = (double)width.Value / height.Value;
+                return $"{width.Value}:{height.Value} ({aspectRatio:F2})";
+            }
+
+            return "unknown";
+        }
 
         private async Task MoveFileAsync(string sourcePath, string destinationPath)
         {

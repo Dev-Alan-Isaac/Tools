@@ -45,6 +45,9 @@
             button_Save = new Button();
             label_Title = new Label();
             panel3 = new Panel();
+            userControl_Configuration_Extract1 = new UserControl_Configuration_Extract();
+            userControl_Configuration_Convert1 = new UserControl_Configuration_Convert();
+            userControl_Configuration_Merge1 = new UserControl_Configuration_Merge();
             userControl_Configuration_Filter1 = new UserControl_Configuration_Filter();
             bunifuElipse1 = new Bunifu.Framework.UI.BunifuElipse(components);
             panel1.SuspendLayout();
@@ -166,7 +169,7 @@
             button3.Name = "button3";
             button3.Size = new Size(142, 40);
             button3.TabIndex = 2;
-            button3.Text = "EXTRACT";
+            button3.Text = "ORGANIZE";
             button3.UseVisualStyleBackColor = true;
             button3.Click += button3_Click;
             // 
@@ -231,12 +234,39 @@
             // 
             // panel3
             // 
+            panel3.Controls.Add(userControl_Configuration_Extract1);
+            panel3.Controls.Add(userControl_Configuration_Convert1);
+            panel3.Controls.Add(userControl_Configuration_Merge1);
             panel3.Controls.Add(userControl_Configuration_Filter1);
             panel3.Dock = DockStyle.Fill;
             panel3.Location = new Point(186, 50);
             panel3.Name = "panel3";
             panel3.Size = new Size(632, 562);
             panel3.TabIndex = 2;
+            // 
+            // userControl_Configuration_Extract1
+            // 
+            userControl_Configuration_Extract1.Dock = DockStyle.Fill;
+            userControl_Configuration_Extract1.Location = new Point(0, 0);
+            userControl_Configuration_Extract1.Name = "userControl_Configuration_Extract1";
+            userControl_Configuration_Extract1.Size = new Size(632, 562);
+            userControl_Configuration_Extract1.TabIndex = 12;
+            // 
+            // userControl_Configuration_Convert1
+            // 
+            userControl_Configuration_Convert1.Dock = DockStyle.Fill;
+            userControl_Configuration_Convert1.Location = new Point(0, 0);
+            userControl_Configuration_Convert1.Name = "userControl_Configuration_Convert1";
+            userControl_Configuration_Convert1.Size = new Size(632, 562);
+            userControl_Configuration_Convert1.TabIndex = 12;
+            // 
+            // userControl_Configuration_Merge1
+            // 
+            userControl_Configuration_Merge1.Dock = DockStyle.Fill;
+            userControl_Configuration_Merge1.Location = new Point(0, 0);
+            userControl_Configuration_Merge1.Name = "userControl_Configuration_Merge1";
+            userControl_Configuration_Merge1.Size = new Size(632, 562);
+            userControl_Configuration_Merge1.TabIndex = 12;
             // 
             // userControl_Configuration_Filter1
             // 
@@ -287,5 +317,8 @@
         private UserControl_Configuration_Filter userControl_Configuration_Filter1;
         private Button button_Save;
         private Bunifu.Framework.UI.BunifuElipse bunifuElipse1;
+        private UserControl_Configuration_Convert userControl_Configuration_Convert1;
+        private UserControl_Configuration_Merge userControl_Configuration_Merge1;
+        private UserControl_Configuration_Extract userControl_Configuration_Extract1;
     }
 }
