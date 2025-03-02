@@ -198,6 +198,7 @@ namespace Tools
             // Define the filter actions
             Dictionary<string, Action> filterActions = new Dictionary<string, Action>
             {
+                { "duplicate", () => Task.Run(() => Duplicate(files)) },
                 { "type", () => Task.Run(() => FilterType(files)) },
                 { "size", () => Task.Run(() => FilterSize(files)) },
                 { "date", () => Task.Run(() => FilterDate(files)) },
@@ -211,8 +212,6 @@ namespace Tools
             // Loop through the checkbox states and execute the corresponding actions
             foreach (var state in checkboxStates)
             {
-                Debug.WriteLine($"{state.Key}: {state.Value}");
-
                 if (state.Value && filterActions.ContainsKey(state.Key))
                 {
                     filterActions[state.Key].Invoke();
@@ -258,6 +257,7 @@ namespace Tools
             Dictionary<string, bool> checkboxStates = new Dictionary<string, bool>();
 
             // Add each checkbox state to the dictionary
+            checkboxStates.Add("duplicate", checkBox_Duplicates.Checked);
             checkboxStates.Add("type", checkBox_type.Checked);
             checkboxStates.Add("size", checkBox_size.Checked);
             checkboxStates.Add("date", checkBox_date.Checked);
@@ -283,6 +283,65 @@ namespace Tools
             totalFiles = files.Count();
 
             return files; // Return the list of file paths
+        }
+
+        public async Task Duplicate(string[] files)
+        {
+            string selectedPath = string.Empty;
+            Dictionary<string, List<string>> hashDictionary = new Dictionary<string, List<string>>();
+
+            DialogResult result = MessageBox.Show("Do you want to choose another path?", "Choose Path", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (result == DialogResult.Yes)
+            {
+                Invoke(new Action(() =>
+                {
+                    using (FolderBrowserDialog folderDialog = new FolderBrowserDialog())
+                    {
+                        if (folderDialog.ShowDialog() == DialogResult.OK)
+                        {
+                            selectedPath = folderDialog.SelectedPath;
+                        }
+                    }
+                }));
+
+                if (!string.IsNullOrEmpty(selectedPath))
+                {
+                    string[] filesInDirectory = Directory.GetFiles(selectedPath, "*", SearchOption.AllDirectories);
+                    files = files.Concat(filesInDirectory).ToArray();
+                }
+
+                Invoke(new Action(() =>
+                {
+                    textBox_Path.Text = $"{PathSort} And {selectedPath}";
+                    textBox_Files.Text = "Files: " + files.Count().ToString();
+                }));
+            }
+
+            // Display a message before starting the hashing process
+            MessageBox.Show("Please wait while the files are being hashed.", "Hashing in Progress", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            // Compute the hash for each file and group by hash
+            foreach (string file in files)
+            {
+                string hash = await ComputeFileHashAsync(file);
+
+                if (!hashDictionary.ContainsKey(hash))
+                {
+                    hashDictionary[hash] = new List<string>();
+                }
+
+                hashDictionary[hash].Add(file);
+            }
+
+            // Display a message after the hashing process is completed
+            MessageBox.Show("Hashing process completed.", "Hashing Completed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+
+            foreach (var hashGroup in hashDictionary)
+            {
+                Debug.WriteLine(hashGroup.ToString());
+            }
         }
 
         private async Task FilterType(string[] files)
@@ -999,6 +1058,11 @@ namespace Tools
                 string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(destinationPath);
                 newDestinationPath = Path.Combine(Path.GetDirectoryName(destinationPath), $"{fileNameWithoutExtension} ({fileCount++}){fileExtension}");
             }
+
+            Invoke(new Action(() =>
+            {
+
+            }));
 
             await Task.Run(() => File.Move(sourcePath, newDestinationPath));
         }
