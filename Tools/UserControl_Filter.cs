@@ -209,6 +209,13 @@ namespace Tools
                 { "media", () => Task.Run(() => FilterMedia(files)) }
             };
 
+            // Check if at least one checkbox is selected
+            if (!checkboxStates.Values.Any(selected => selected))
+            {
+                MessageBox.Show("Please select at least one option.", "No Options Selected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             // Loop through the checkbox states and execute the corresponding actions
             foreach (var state in checkboxStates)
             {
@@ -287,6 +294,9 @@ namespace Tools
 
         public async Task Duplicate(string[] files)
         {
+            const int batchSize = 100; // Adjust the batch size as needed
+            const int maxDegreeOfParallelism = 4; // Adjust the degree of parallelism as needed
+
             string selectedPath = string.Empty;
             Dictionary<string, List<string>> hashDictionary = new Dictionary<string, List<string>>();
 
@@ -321,26 +331,68 @@ namespace Tools
             // Display a message before starting the hashing process
             MessageBox.Show("Please wait while the files are being hashed.", "Hashing in Progress", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            // Compute the hash for each file and group by hash
-            foreach (string file in files)
+            // Process files in batches
+            var fileBatches = files.Select((file, index) => new { file, index })
+                                    .GroupBy(x => x.index / batchSize)
+                                    .Select(g => g.Select(x => x.file).ToArray());
+
+            foreach (var batch in fileBatches)
             {
-                string hash = await ComputeFileHashAsync(file);
-
-                if (!hashDictionary.ContainsKey(hash))
+                var tasks = batch.Select(async file =>
                 {
-                    hashDictionary[hash] = new List<string>();
-                }
+                    string hash = await ComputeFileHashAsync(file);
+                    lock (hashDictionary) // Ensure thread safety
+                    {
+                        if (!hashDictionary.ContainsKey(hash))
+                        {
+                            hashDictionary[hash] = new List<string>();
+                        }
+                        hashDictionary[hash].Add(file);
+                    }
+                });
 
-                hashDictionary[hash].Add(file);
+                // Limit the number of concurrent tasks
+                var throttler = new SemaphoreSlim(maxDegreeOfParallelism);
+                var throttledTasks = tasks.Select(async task =>
+                {
+                    await throttler.WaitAsync();
+                    try
+                    {
+                        await task;
+                    }
+                    finally
+                    {
+                        throttler.Release();
+                    }
+                });
+
+                await Task.WhenAll(throttledTasks);
             }
 
             // Display a message after the hashing process is completed
             MessageBox.Show("Hashing process completed.", "Hashing Completed", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-
             foreach (var hashGroup in hashDictionary)
             {
-                Debug.WriteLine(hashGroup.ToString());
+                if (hashGroup.Value.Count > 1) // Only consider groups with more than one file
+                {
+                    string directoryPath = Path.Combine(Path.GetDirectoryName(hashGroup.Value[0]), "Hash");
+
+                    if (!Directory.Exists(directoryPath))
+                    {
+                        Directory.CreateDirectory(directoryPath);
+                    }
+
+                    foreach (string file in hashGroup.Value)
+                    {
+                        string fileName = Path.GetFileName(file);
+                        string destinationPath = Path.Combine(directoryPath, fileName);
+
+
+                        // Move the file to the new directory           
+                        await MoveFileAsync(file, destinationPath);
+                    }
+                }
             }
         }
 
@@ -766,31 +818,9 @@ namespace Tools
                         string fileName = Path.GetFileName(file);
                         string destinationPath = Path.Combine(directoryPath, fileName);
 
-                        // Handle files with the same name
-                        int fileCount = 1;
-                        string newDestinationPath = destinationPath;
-                        while (File.Exists(newDestinationPath))
-                        {
-                            string fileExtension = Path.GetExtension(fileName);
-                            string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
-                            newDestinationPath = Path.Combine(directoryPath, $"{fileNameWithoutExtension} ({fileCount++}){fileExtension}");
-                        }
-
                         // Move the file to the new directory
-                        await MoveFileAsync(file, newDestinationPath);
+                        await MoveFileAsync(file, destinationPath);
                     }
-                }
-            }
-        }
-
-        private async Task<string> ComputeFileHashAsync(string filePath)
-        {
-            using (var sha256 = SHA256.Create())
-            {
-                using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, useAsync: true))
-                {
-                    byte[] hashBytes = await sha256.ComputeHashAsync(fileStream);
-                    return BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
                 }
             }
         }
@@ -1059,12 +1089,29 @@ namespace Tools
                 newDestinationPath = Path.Combine(Path.GetDirectoryName(destinationPath), $"{fileNameWithoutExtension} ({fileCount++}){fileExtension}");
             }
 
-            Invoke(new Action(() =>
-            {
-
-            }));
-
             await Task.Run(() => File.Move(sourcePath, newDestinationPath));
+        }
+
+        private async Task<string> ComputeFileHashAsync(string filePath)
+        {
+            using (var sha256 = SHA256.Create())
+            {
+                const int bufferSize = 8 * 1024 * 1024; // 4 MB buffer size
+
+                using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize, useAsync: true))
+                {
+                    byte[] buffer = new byte[bufferSize];
+                    int bytesRead;
+                    while ((bytesRead = await fileStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                    {
+                        sha256.TransformBlock(buffer, 0, bytesRead, buffer, 0);
+                    }
+                    sha256.TransformFinalBlock(buffer, 0, 0);
+
+                    byte[] hashBytes = sha256.Hash;
+                    return BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
+                }
+            }
         }
     }
 }
