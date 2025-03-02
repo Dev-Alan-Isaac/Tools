@@ -30,7 +30,7 @@
         {
             panel_NavBar = new Panel();
             checkBox10 = new CheckBox();
-            checkBox9 = new CheckBox();
+            checkBox_Duplicates = new CheckBox();
             checkBox_media = new CheckBox();
             checkBox_tags = new CheckBox();
             checkBox_extension = new CheckBox();
@@ -58,7 +58,7 @@
             // 
             panel_NavBar.BackColor = Color.White;
             panel_NavBar.Controls.Add(checkBox10);
-            panel_NavBar.Controls.Add(checkBox9);
+            panel_NavBar.Controls.Add(checkBox_Duplicates);
             panel_NavBar.Controls.Add(checkBox_media);
             panel_NavBar.Controls.Add(checkBox_tags);
             panel_NavBar.Controls.Add(checkBox_extension);
@@ -86,18 +86,18 @@
             checkBox10.Text = "checkBox10";
             checkBox10.UseVisualStyleBackColor = true;
             // 
-            // checkBox9
+            // checkBox_Duplicates
             // 
-            checkBox9.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            checkBox9.AutoSize = true;
-            checkBox9.Cursor = Cursors.Hand;
-            checkBox9.Font = new Font("Arial Rounded MT Bold", 12F);
-            checkBox9.Location = new Point(37, 444);
-            checkBox9.Name = "checkBox9";
-            checkBox9.Size = new Size(116, 22);
-            checkBox9.TabIndex = 8;
-            checkBox9.Text = "checkBox9";
-            checkBox9.UseVisualStyleBackColor = true;
+            checkBox_Duplicates.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            checkBox_Duplicates.AutoSize = true;
+            checkBox_Duplicates.Cursor = Cursors.Hand;
+            checkBox_Duplicates.Font = new Font("Arial Rounded MT Bold", 12F);
+            checkBox_Duplicates.Location = new Point(37, 444);
+            checkBox_Duplicates.Name = "checkBox_Duplicates";
+            checkBox_Duplicates.Size = new Size(122, 22);
+            checkBox_Duplicates.TabIndex = 8;
+            checkBox_Duplicates.Text = "DUPLICATE";
+            checkBox_Duplicates.UseVisualStyleBackColor = true;
             // 
             // checkBox_media
             // 
@@ -302,6 +302,7 @@
             progressBar1.Location = new Point(3, 3);
             progressBar1.Name = "progressBar1";
             progressBar1.Size = new Size(616, 30);
+            progressBar1.Step = 1;
             progressBar1.TabIndex = 0;
             // 
             // UserControl_Filter
@@ -338,7 +339,7 @@
         private CheckBox checkBox_size;
         private CheckBox checkBox_type;
         private CheckBox checkBox10;
-        private CheckBox checkBox9;
+        private CheckBox checkBox_Duplicates;
         private CheckBox checkBox_media;
         private Button button_Play;
         private Button button_Path;
