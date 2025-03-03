@@ -319,13 +319,13 @@ namespace Tools
                 {
                     string[] filesInDirectory = Directory.GetFiles(selectedPath, "*", SearchOption.AllDirectories);
                     files = files.Concat(filesInDirectory).ToArray();
-                }
 
-                Invoke(new Action(() =>
-                {
-                    textBox_Path.Text = $"{PathSort} And {selectedPath}";
-                    textBox_Files.Text = "Files: " + files.Count().ToString();
-                }));
+                    Invoke(new Action(() =>
+                    {
+                        textBox_Path.Text = $"{PathSort} And {selectedPath}";
+                        textBox_Files.Text = "Files: " + files.Count().ToString();
+                    }));
+                }
             }
 
             // Display a message before starting the hashing process
@@ -390,7 +390,8 @@ namespace Tools
 
 
                         // Move the file to the new directory           
-                        await MoveFileAsync(file, destinationPath);
+                        //await MoveFileAsync(file, destinationPath);
+                        Debug.WriteLine($"{file} being move to {destinationPath}");
                     }
                 }
             }
