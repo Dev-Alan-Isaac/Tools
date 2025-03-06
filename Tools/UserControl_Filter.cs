@@ -389,8 +389,7 @@ namespace Tools
                         string destinationPath = Path.Combine(directoryPath, fileName);
 
                         // Move the file to the new directory
-                        //await MoveFileAsync(file, destinationPath);
-                        Debug.WriteLine($"{file} being move to {destinationPath}");
+                        await MoveFileAsync(file, destinationPath);
                     }
                 }
             }
