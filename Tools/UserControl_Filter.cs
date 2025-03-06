@@ -294,8 +294,8 @@ namespace Tools
 
         public async Task Duplicate(string[] files)
         {
-            const int batchSize = 100; // Adjust the batch size as needed
-            const int maxDegreeOfParallelism = 4; // Adjust the degree of parallelism as needed
+            const int batchSize = 1000; // Adjust the batch size as needed
+            const int maxDegreeOfParallelism = 8; // Adjust the degree of parallelism as needed
 
             string selectedPath = string.Empty;
             Dictionary<string, List<string>> hashDictionary = new Dictionary<string, List<string>>();
@@ -388,8 +388,7 @@ namespace Tools
                         string fileName = Path.GetFileName(file);
                         string destinationPath = Path.Combine(directoryPath, fileName);
 
-
-                        // Move the file to the new directory           
+                        // Move the file to the new directory
                         //await MoveFileAsync(file, destinationPath);
                         Debug.WriteLine($"{file} being move to {destinationPath}");
                     }
@@ -1097,7 +1096,7 @@ namespace Tools
         {
             using (var sha256 = SHA256.Create())
             {
-                const int bufferSize = 8 * 1024 * 1024; // 4 MB buffer size
+                const int bufferSize = 8 * 1024 * 1024; // 8 MB buffer size
 
                 using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize, useAsync: true))
                 {
@@ -1114,6 +1113,8 @@ namespace Tools
                 }
             }
         }
+
+
     }
 }
 
