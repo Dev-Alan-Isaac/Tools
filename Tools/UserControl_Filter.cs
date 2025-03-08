@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using System.Security.Cryptography;
 using NReco.VideoInfo;
+using Newtonsoft.Json;
 
 namespace Tools
 {
@@ -198,7 +199,6 @@ namespace Tools
             // Define the filter actions
             Dictionary<string, Action> filterActions = new Dictionary<string, Action>
             {
-                { "duplicate", () => Task.Run(() => Duplicate(files)) },
                 { "type", () => Task.Run(() => FilterType(files)) },
                 { "size", () => Task.Run(() => FilterSize(files)) },
                 { "date", () => Task.Run(() => FilterDate(files)) },
@@ -206,7 +206,9 @@ namespace Tools
                 { "hash", () => Task.Run(() => FilterHash(files)) },
                 { "extension", () => Task.Run(() => FilterExtension(files)) },
                 { "tags", () => Task.Run(() => FilterTags(files)) },
-                { "media", () => Task.Run(() => FilterMedia(files)) }
+                { "media", () => Task.Run(() => FilterMedia(files)) },
+                { "scan", () => Task.Run(() => Scan(files)) },
+                { "duplicate", () => Task.Run(() => Duplicate(files)) }
             };
 
             // Check if at least one checkbox is selected
@@ -231,40 +233,12 @@ namespace Tools
             }
         }
 
-        public void Delete_Folders(string path)
-        {
-            try
-            {
-                foreach (var directory in Directory.GetDirectories(path))
-                {
-                    Delete_Folders(directory);
-
-                    // Check if the directory is empty
-                    if (Directory.GetFiles(directory).Length == 0 && Directory.GetDirectories(directory).Length == 0)
-                    {
-                        Directory.Delete(directory);
-                    }
-                }
-
-                // Check if the root directory is empty (optional)
-                if (Directory.GetFiles(path).Length == 0 && Directory.GetDirectories(path).Length == 0)
-                {
-                    Directory.Delete(path);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred: {ex.Message}");
-            }
-        }
-
         private Dictionary<string, bool> Get_CheckboxState()
         {
             // Create a dictionary to store the checkbox names and their states
             Dictionary<string, bool> checkboxStates = new Dictionary<string, bool>();
 
             // Add each checkbox state to the dictionary
-            checkboxStates.Add("duplicate", checkBox_Duplicates.Checked);
             checkboxStates.Add("type", checkBox_type.Checked);
             checkboxStates.Add("size", checkBox_size.Checked);
             checkboxStates.Add("date", checkBox_date.Checked);
@@ -273,67 +247,87 @@ namespace Tools
             checkboxStates.Add("extension", checkBox_extension.Checked);
             checkboxStates.Add("tags", checkBox_tags.Checked);
             checkboxStates.Add("media", checkBox_media.Checked);
+            checkboxStates.Add("duplicate", checkBox_Duplicates.Checked);
+            checkboxStates.Add("scan", checkBox_scan.Checked);
+
 
             // Return the dictionary
             return checkboxStates;
         }
 
-        public async Task<string[]> ProcessFiles(string parentPath)
-        {
-            bool processSubfolders = filterSettings.Subfolder;
-
-            // Get files based on whether subfolder processing is allowed
-            var files = processSubfolders
-                ? Directory.GetFiles(parentPath, "*.*", SearchOption.AllDirectories)
-                : Directory.GetFiles(parentPath);
-
-            totalFiles = files.Count();
-
-            return files; // Return the list of file paths
-        }
-
         public async Task Duplicate(string[] files)
         {
-            const int batchSize = 1000; // Adjust the batch size as needed
-            const int maxDegreeOfParallelism = 8; // Adjust the degree of parallelism as needed
+            const string hashFilePath = "Hashes.json";
+            Dictionary<string, List<string>> hashDictionary;
 
-            string selectedPath = string.Empty;
-            Dictionary<string, List<string>> hashDictionary = new Dictionary<string, List<string>>();
-
-            DialogResult result = MessageBox.Show("Do you want to choose another path?", "Choose Path", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-            if (result == DialogResult.Yes)
+            // Check if the hash file exists and has content
+            if (File.Exists(hashFilePath) && new FileInfo(hashFilePath).Length > 0)
             {
-                Invoke(new Action(() =>
+                // Load the hash dictionary from the JSON file
+                hashDictionary = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(File.ReadAllText(hashFilePath));
+            }
+            else
+            {
+                // Call the Scan method to create the hash file
+                await Scan(files);
+
+                // Load the hash dictionary from the JSON file
+                hashDictionary = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(File.ReadAllText(hashFilePath));
+            }
+
+            // Reset the progress bar for the moving process
+            Invoke(new Action(() =>
+            {
+                progressBar1.Value = 0;
+                progressBar1.Maximum = hashDictionary.Values.Sum(list => list.Count) - hashDictionary.Count;
+            }));
+
+            foreach (var hashGroup in hashDictionary)
+            {
+                if (hashGroup.Value.Count > 1) // Only consider groups with more than one file
                 {
-                    using (FolderBrowserDialog folderDialog = new FolderBrowserDialog())
+                    foreach (string file in hashGroup.Value.Skip(1)) // Skip the first file to avoid moving it
                     {
-                        if (folderDialog.ShowDialog() == DialogResult.OK)
+                        string fileName = Path.GetFileName(file);
+                        string destinationPath = Path.Combine(Path.GetDirectoryName(file), fileName);
+
+                        // Move the file to the new directory using MoveFileAsync
+                        await MoveFileAsync(file, destinationPath);
+                        Debug.WriteLine($"{file} being moved to {destinationPath}");
+
+                        // Update the progress bar
+                        Invoke(new Action(() =>
                         {
-                            selectedPath = folderDialog.SelectedPath;
-                        }
+                            progressBar1.Value++;
+                        }));
                     }
-                }));
-
-                if (!string.IsNullOrEmpty(selectedPath))
-                {
-                    string[] filesInDirectory = Directory.GetFiles(selectedPath, "*", SearchOption.AllDirectories);
-                    files = files.Concat(filesInDirectory).ToArray();
-
-                    Invoke(new Action(() =>
-                    {
-                        textBox_Path.Text = $"{PathSort} And {selectedPath}";
-                        textBox_Files.Text = "Files: " + files.Count().ToString();
-                    }));
                 }
             }
 
-            // Display a message before starting the hashing process
-            MessageBox.Show("Please wait while the files are being hashed.", "Hashing in Progress", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            // Clear the hash dictionary to free up memory
+            hashDictionary.Clear();
+
+            // Force garbage collection to free up memory
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+        }
+
+        public async Task Scan(string[] files)
+        {
+            const string hashFilePath = "Hashes.json";
+            Dictionary<string, List<string>> hashDictionary = new Dictionary<string, List<string>>();
+
+            // Initialize the progress bar
+            Invoke(new Action(() =>
+            {
+                progressBar1.Minimum = 0;
+                progressBar1.Maximum = files.Length;
+                progressBar1.Value = 0;
+            }));
 
             // Process files in batches
             var fileBatches = files.Select((file, index) => new { file, index })
-                                    .GroupBy(x => x.index / batchSize)
+                                    .GroupBy(x => x.index / 1000) // Adjust the batch size as needed
                                     .Select(g => g.Select(x => x.file).ToArray());
 
             foreach (var batch in fileBatches)
@@ -349,10 +343,16 @@ namespace Tools
                         }
                         hashDictionary[hash].Add(file);
                     }
+
+                    // Update the progress bar
+                    Invoke(new Action(() =>
+                    {
+                        progressBar1.Value++;
+                    }));
                 });
 
                 // Limit the number of concurrent tasks
-                var throttler = new SemaphoreSlim(maxDegreeOfParallelism);
+                var throttler = new SemaphoreSlim(8); // Adjust the degree of parallelism as needed
                 var throttledTasks = tasks.Select(async task =>
                 {
                     await throttler.WaitAsync();
@@ -369,30 +369,11 @@ namespace Tools
                 await Task.WhenAll(throttledTasks);
             }
 
+            // Save the hash dictionary to a JSON file
+            File.WriteAllText(hashFilePath, JsonConvert.SerializeObject(hashDictionary));
+
             // Display a message after the hashing process is completed
             MessageBox.Show("Hashing process completed.", "Hashing Completed", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            foreach (var hashGroup in hashDictionary)
-            {
-                if (hashGroup.Value.Count > 1) // Only consider groups with more than one file
-                {
-                    string directoryPath = Path.Combine(Path.GetDirectoryName(hashGroup.Value[0]), "Hash");
-
-                    if (!Directory.Exists(directoryPath))
-                    {
-                        Directory.CreateDirectory(directoryPath);
-                    }
-
-                    foreach (string file in hashGroup.Value)
-                    {
-                        string fileName = Path.GetFileName(file);
-                        string destinationPath = Path.Combine(directoryPath, fileName);
-
-                        // Move the file to the new directory
-                        await MoveFileAsync(file, destinationPath);
-                    }
-                }
-            }
         }
 
         private async Task FilterType(string[] files)
@@ -1113,6 +1094,46 @@ namespace Tools
             }
         }
 
+        private void Delete_Folders(string path)
+        {
+            try
+            {
+                foreach (var directory in Directory.GetDirectories(path))
+                {
+                    Delete_Folders(directory);
+
+                    // Check if the directory is empty
+                    if (Directory.GetFiles(directory).Length == 0 && Directory.GetDirectories(directory).Length == 0)
+                    {
+                        Directory.Delete(directory);
+                    }
+                }
+
+                // Check if the root directory is empty (optional)
+                if (Directory.GetFiles(path).Length == 0 && Directory.GetDirectories(path).Length == 0)
+                {
+                    Directory.Delete(path);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+        }
+
+        private async Task<string[]> ProcessFiles(string parentPath)
+        {
+            bool processSubfolders = filterSettings.Subfolder;
+
+            // Get files based on whether subfolder processing is allowed
+            var files = processSubfolders
+                ? Directory.GetFiles(parentPath, "*.*", SearchOption.AllDirectories)
+                : Directory.GetFiles(parentPath);
+
+            totalFiles = files.Count();
+
+            return files; // Return the list of file paths
+        }
 
     }
 }
