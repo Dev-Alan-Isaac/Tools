@@ -306,10 +306,6 @@ namespace Tools
 
             // Clear the hash dictionary to free up memory
             hashDictionary.Clear();
-
-            // Force garbage collection to free up memory
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
         }
 
         public async Task Scan(string[] files)
@@ -324,64 +320,79 @@ namespace Tools
                 progressBar1.Value = 0;
             }));
 
-            // A set to store unique hashes
+            // A set to store unique hashes (load existing hashes from the JSON file)
             var uniqueHashes = new HashSet<string>();
+
+            if (File.Exists(hashFilePath))
+            {
+                using (var reader = new StreamReader(hashFilePath))
+                {
+                    var existingHashes = JsonConvert.DeserializeObject<HashSet<string>>(reader.ReadToEnd());
+                    if (existingHashes != null)
+                    {
+                        foreach (var hash in existingHashes)
+                        {
+                            uniqueHashes.Add(hash); // Add existing hashes to the set
+                        }
+                    }
+                }
+            }
 
             // Process files in batches
             var fileBatches = files.Select((file, index) => new { file, index })
-                                    .GroupBy(x => x.index / 1000) // Adjust the batch size as needed
-                                    .Select(g => g.Select(x => x.file).ToArray());
+                                     .GroupBy(x => x.index / 1000) // Adjust the batch size as needed
+                                     .Select(g => g.Select(x => x.file).ToArray());
 
             foreach (var batch in fileBatches)
             {
-                var tasks = batch.Select(async file =>
-                {
-                    string hash = await ComputeFileHashAsync(file);
-                    lock (uniqueHashes) // Ensure thread safety
-                    {
-                        uniqueHashes.Add(hash); // Add the hash to the set
-                    }
-
-                    // Update the progress bar
-                    Invoke(new Action(() =>
-                    {
-                        progressBar1.Value++;
-                    }));
-                });
-
-                // Limit the number of concurrent tasks
                 var throttler = new SemaphoreSlim(8); // Adjust the degree of parallelism as needed
-                var throttledTasks = tasks.Select(async task =>
+
+                // Process the batch with limited parallelism
+                var tasks = batch.Select(async file =>
                 {
                     await throttler.WaitAsync();
                     try
                     {
-                        await task;
+                        string hash = await ComputeFileHashAsync(file);
+
+                        // Lock to ensure thread safety when accessing shared resources
+                        lock (uniqueHashes)
+                        {
+                            uniqueHashes.Add(hash); // `HashSet` ensures no duplicates
+                        }
+
+                        // Update the progress bar safely
+                        Invoke(new Action(() =>
+                        {
+                            progressBar1.Value++;
+                        }));
                     }
                     finally
                     {
-                        throttler.Release();
+                        throttler.Release(); // Release semaphore
                     }
                 });
 
-                await Task.WhenAll(throttledTasks);
+                await Task.WhenAll(tasks);
             }
 
-            // Save the unique hashes to a JSON file
-            File.WriteAllText(hashFilePath, JsonConvert.SerializeObject(uniqueHashes, Formatting.Indented));
+            // Save the updated list of unique hashes to the JSON file
+            using (var writer = new StreamWriter(hashFilePath))
+            using (var jsonWriter = new JsonTextWriter(writer) { Formatting = Formatting.Indented })
+            {
+                var serializer = new JsonSerializer();
+                serializer.Serialize(jsonWriter, uniqueHashes.ToList());
+            }
 
-            // Display a message after the hashing process is completed
+            // Display a completion message
             MessageBox.Show("Hashing process completed.", "Hashing Completed", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+            // Reset the progress bar
             Invoke(new Action(() =>
             {
                 progressBar1.Value = 0;
             }));
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
         }
-
 
         private async Task FilterType(string[] files)
         {
