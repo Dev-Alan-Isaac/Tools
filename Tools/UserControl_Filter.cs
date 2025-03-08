@@ -315,7 +315,6 @@ namespace Tools
         public async Task Scan(string[] files)
         {
             const string hashFilePath = "Hashes.json";
-            Dictionary<string, List<string>> hashDictionary = new Dictionary<string, List<string>>();
 
             // Initialize the progress bar
             Invoke(new Action(() =>
@@ -324,6 +323,9 @@ namespace Tools
                 progressBar1.Maximum = files.Length;
                 progressBar1.Value = 0;
             }));
+
+            // A set to store unique hashes
+            var uniqueHashes = new HashSet<string>();
 
             // Process files in batches
             var fileBatches = files.Select((file, index) => new { file, index })
@@ -335,13 +337,9 @@ namespace Tools
                 var tasks = batch.Select(async file =>
                 {
                     string hash = await ComputeFileHashAsync(file);
-                    lock (hashDictionary) // Ensure thread safety
+                    lock (uniqueHashes) // Ensure thread safety
                     {
-                        if (!hashDictionary.ContainsKey(hash))
-                        {
-                            hashDictionary[hash] = new List<string>();
-                        }
-                        hashDictionary[hash].Add(file);
+                        uniqueHashes.Add(hash); // Add the hash to the set
                     }
 
                     // Update the progress bar
@@ -369,12 +367,21 @@ namespace Tools
                 await Task.WhenAll(throttledTasks);
             }
 
-            // Save the hash dictionary to a JSON file
-            File.WriteAllText(hashFilePath, JsonConvert.SerializeObject(hashDictionary));
+            // Save the unique hashes to a JSON file
+            File.WriteAllText(hashFilePath, JsonConvert.SerializeObject(uniqueHashes, Formatting.Indented));
 
             // Display a message after the hashing process is completed
             MessageBox.Show("Hashing process completed.", "Hashing Completed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            Invoke(new Action(() =>
+            {
+                progressBar1.Value = 0;
+            }));
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
         }
+
 
         private async Task FilterType(string[] files)
         {
