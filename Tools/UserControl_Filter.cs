@@ -13,24 +13,17 @@ namespace Tools
         private FilterSettings filterSettings;
         private int totalFiles = 0;
         private string[] files;
+        private HashSet<string> globalHashes;
 
         public UserControl_Filter()
         {
             InitializeComponent();
+            LoadGlobalJson();
         }
 
         private void UserControl_Filter_Load(object sender, EventArgs e)
         {
             ReloadSettings();
-        }
-
-        public void ReloadSettings()
-        {
-            if (File.Exists("appsettings.json"))
-            {
-                string settingPath = Path.GetFullPath("appsettings.json");
-                Get_FilterSection(settingPath);
-            }
         }
 
         private void Get_FilterSection(string settingPath)
@@ -203,7 +196,6 @@ namespace Tools
                 { "size", () => Task.Run(() => FilterSize(files)) },
                 { "date", () => Task.Run(() => FilterDate(files)) },
                 { "name", () => Task.Run(() => FilterName(files)) },
-                { "hash", () => Task.Run(() => FilterHash(files)) },
                 { "extension", () => Task.Run(() => FilterExtension(files)) },
                 { "tags", () => Task.Run(() => FilterTags(files)) },
                 { "media", () => Task.Run(() => FilterMedia(files)) },
@@ -233,167 +225,8 @@ namespace Tools
             }
         }
 
-        private Dictionary<string, bool> Get_CheckboxState()
-        {
-            // Create a dictionary to store the checkbox names and their states
-            Dictionary<string, bool> checkboxStates = new Dictionary<string, bool>();
 
-            // Add each checkbox state to the dictionary
-            checkboxStates.Add("type", checkBox_type.Checked);
-            checkboxStates.Add("size", checkBox_size.Checked);
-            checkboxStates.Add("date", checkBox_date.Checked);
-            checkboxStates.Add("name", checkBox_name.Checked);
-            checkboxStates.Add("hash", checkBox_hash.Checked);
-            checkboxStates.Add("extension", checkBox_extension.Checked);
-            checkboxStates.Add("tags", checkBox_tags.Checked);
-            checkboxStates.Add("media", checkBox_media.Checked);
-            checkboxStates.Add("duplicate", checkBox_Duplicates.Checked);
-            checkboxStates.Add("scan", checkBox_scan.Checked);
-
-
-            // Return the dictionary
-            return checkboxStates;
-        }
-
-        public async Task Duplicate(string[] files)
-        {
-            const string hashFilePath = "Hashes.json";
-            Dictionary<string, List<string>> hashDictionary;
-
-            // Check if the hash file exists and has content
-            if (File.Exists(hashFilePath) && new FileInfo(hashFilePath).Length > 0)
-            {
-                // Load the hash dictionary from the JSON file
-                hashDictionary = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(File.ReadAllText(hashFilePath));
-            }
-            else
-            {
-                // Call the Scan method to create the hash file
-                await Scan(files);
-
-                // Load the hash dictionary from the JSON file
-                hashDictionary = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(File.ReadAllText(hashFilePath));
-            }
-
-            // Reset the progress bar for the moving process
-            Invoke(new Action(() =>
-            {
-                progressBar1.Value = 0;
-                progressBar1.Maximum = hashDictionary.Values.Sum(list => list.Count) - hashDictionary.Count;
-            }));
-
-            foreach (var hashGroup in hashDictionary)
-            {
-                if (hashGroup.Value.Count > 1) // Only consider groups with more than one file
-                {
-                    foreach (string file in hashGroup.Value.Skip(1)) // Skip the first file to avoid moving it
-                    {
-                        string fileName = Path.GetFileName(file);
-                        string destinationPath = Path.Combine(Path.GetDirectoryName(file), fileName);
-
-                        // Move the file to the new directory using MoveFileAsync
-                        await MoveFileAsync(file, destinationPath);
-                        Debug.WriteLine($"{file} being moved to {destinationPath}");
-
-                        // Update the progress bar
-                        Invoke(new Action(() =>
-                        {
-                            progressBar1.Value++;
-                        }));
-                    }
-                }
-            }
-
-            // Clear the hash dictionary to free up memory
-            hashDictionary.Clear();
-        }
-
-        public async Task Scan(string[] files)
-        {
-            const string hashFilePath = "Hashes.json";
-
-            // Initialize the progress bar
-            Invoke(new Action(() =>
-            {
-                progressBar1.Minimum = 0;
-                progressBar1.Maximum = files.Length;
-                progressBar1.Value = 0;
-            }));
-
-            // A set to store unique hashes (load existing hashes from the JSON file)
-            var uniqueHashes = new HashSet<string>();
-
-            if (File.Exists(hashFilePath))
-            {
-                using (var reader = new StreamReader(hashFilePath))
-                {
-                    var existingHashes = JsonConvert.DeserializeObject<HashSet<string>>(reader.ReadToEnd());
-                    if (existingHashes != null)
-                    {
-                        foreach (var hash in existingHashes)
-                        {
-                            uniqueHashes.Add(hash); // Add existing hashes to the set
-                        }
-                    }
-                }
-            }
-
-            // Process files in batches
-            var fileBatches = files.Select((file, index) => new { file, index })
-                                     .GroupBy(x => x.index / 1000) // Adjust the batch size as needed
-                                     .Select(g => g.Select(x => x.file).ToArray());
-
-            foreach (var batch in fileBatches)
-            {
-                var throttler = new SemaphoreSlim(8); // Adjust the degree of parallelism as needed
-
-                // Process the batch with limited parallelism
-                var tasks = batch.Select(async file =>
-                {
-                    await throttler.WaitAsync();
-                    try
-                    {
-                        string hash = await ComputeFileHashAsync(file);
-
-                        // Lock to ensure thread safety when accessing shared resources
-                        lock (uniqueHashes)
-                        {
-                            uniqueHashes.Add(hash); // `HashSet` ensures no duplicates
-                        }
-
-                        // Update the progress bar safely
-                        Invoke(new Action(() =>
-                        {
-                            progressBar1.Value++;
-                        }));
-                    }
-                    finally
-                    {
-                        throttler.Release(); // Release semaphore
-                    }
-                });
-
-                await Task.WhenAll(tasks);
-            }
-
-            // Save the updated list of unique hashes to the JSON file
-            using (var writer = new StreamWriter(hashFilePath))
-            using (var jsonWriter = new JsonTextWriter(writer) { Formatting = Formatting.Indented })
-            {
-                var serializer = new JsonSerializer();
-                serializer.Serialize(jsonWriter, uniqueHashes.ToList());
-            }
-
-            // Display a completion message
-            MessageBox.Show("Hashing process completed.", "Hashing Completed", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            // Reset the progress bar
-            Invoke(new Action(() =>
-            {
-                progressBar1.Value = 0;
-            }));
-        }
-
+        // Filters - Functions
         private async Task FilterType(string[] files)
         {
             // Define a dictionary to map file types to their corresponding settings and lists
@@ -782,47 +615,6 @@ namespace Tools
             return !string.IsNullOrEmpty(fileName) && char.IsUpper(fileName[0]);
         }
 
-        private async Task FilterHash(string[] files)
-        {
-            Dictionary<string, List<string>> hashDictionary = new Dictionary<string, List<string>>();
-
-            // Compute the hash for each file and group by hash
-            foreach (string file in files)
-            {
-                string hash = await ComputeFileHashAsync(file);
-
-                if (!hashDictionary.ContainsKey(hash))
-                {
-                    hashDictionary[hash] = new List<string>();
-                }
-
-                hashDictionary[hash].Add(file);
-            }
-
-            // Create directories and move files with the same hash
-            foreach (var hashGroup in hashDictionary)
-            {
-                if (hashGroup.Value.Count > 1) // Only consider groups with more than one file
-                {
-                    string directoryPath = Path.Combine(Path.GetDirectoryName(hashGroup.Value[0]), "Hash");
-
-                    if (!Directory.Exists(directoryPath))
-                    {
-                        Directory.CreateDirectory(directoryPath);
-                    }
-
-                    foreach (string file in hashGroup.Value)
-                    {
-                        string fileName = Path.GetFileName(file);
-                        string destinationPath = Path.Combine(directoryPath, fileName);
-
-                        // Move the file to the new directory
-                        await MoveFileAsync(file, destinationPath);
-                    }
-                }
-            }
-        }
-
         private async Task FilterExtension(string[] files)
         {
             // Base path for extension folders
@@ -1075,41 +867,245 @@ namespace Tools
             return "unknown";
         }
 
-        private async Task MoveFileAsync(string sourcePath, string destinationPath)
+        public async Task Duplicate(string[] files)
         {
-            int fileCount = 1;
-            string newDestinationPath = destinationPath;
+            const string hashFilePath = "Hashes.json";
+            const string tempHashCountFilePath = "HashCounts.json";
 
-            while (File.Exists(newDestinationPath))
+            // Load the global hashes from the JSON file
+            if (File.Exists(hashFilePath))
             {
-                string fileExtension = Path.GetExtension(destinationPath);
-                string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(destinationPath);
-                newDestinationPath = Path.Combine(Path.GetDirectoryName(destinationPath), $"{fileNameWithoutExtension} ({fileCount++}){fileExtension}");
+                globalHashes = JsonConvert.DeserializeObject<HashSet<string>>(File.ReadAllText(hashFilePath)) ?? new HashSet<string>();
+            }
+            else
+            {
+                globalHashes = new HashSet<string>();
             }
 
-            await Task.Run(() => File.Move(sourcePath, newDestinationPath));
-        }
-
-        private async Task<string> ComputeFileHashAsync(string filePath)
-        {
-            using (var sha256 = SHA256.Create())
+            // Initialize the progress bar for the hashing process
+            Invoke(new Action(() =>
             {
-                const int bufferSize = 8 * 1024 * 1024; // 8 MB buffer size
+                progressBar1.Minimum = 0;
+                progressBar1.Maximum = files.Length;
+                progressBar1.Value = 0;
+            }));
 
-                using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize, useAsync: true))
+            // Dictionary to keep track of hash counts
+            Dictionary<string, int> hashCounts = new Dictionary<string, int>();
+
+            // Process each file
+            foreach (var file in files)
+            {
+                string hash = await ComputeFileHashAsync(file);
+
+                // Add the hash to the globalHashes set if it does not already exist
+                lock (globalHashes)
                 {
-                    byte[] buffer = new byte[bufferSize];
-                    int bytesRead;
-                    while ((bytesRead = await fileStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                    if (!globalHashes.Contains(hash))
                     {
-                        sha256.TransformBlock(buffer, 0, bytesRead, buffer, 0);
+                        globalHashes.Add(hash);
                     }
-                    sha256.TransformFinalBlock(buffer, 0, 0);
+                }
 
-                    byte[] hashBytes = sha256.Hash;
-                    return BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
+                // Update the hash count
+                lock (hashCounts)
+                {
+                    if (!hashCounts.ContainsKey(hash))
+                    {
+                        hashCounts[hash] = 0;
+                    }
+                    hashCounts[hash]++;
+                }
+
+                // Update the progress bar
+                Invoke(new Action(() =>
+                {
+                    if (progressBar1.Value < progressBar1.Maximum)
+                    {
+                        progressBar1.Value++;
+                    }
+                }));
+            }
+
+            // Save the updated global hashes and hash counts
+            File.WriteAllText(hashFilePath, JsonConvert.SerializeObject(globalHashes));
+            File.WriteAllText(tempHashCountFilePath, JsonConvert.SerializeObject(hashCounts));
+
+            // Reset the progress bar for the moving process
+            Invoke(new Action(() =>
+            {
+                progressBar1.Value = 0;
+                progressBar1.Maximum = hashCounts.Values.Where(count => count > 1).Sum(count => count - 1);
+            }));
+
+            // Move files with duplicate hashes to the "Duplicate" folder
+            foreach (var file in files)
+            {
+                string hash = await ComputeFileHashAsync(file);
+
+                // Check if the hash count is greater than 1
+                if (hashCounts[hash] > 1)
+                {
+                    string duplicateFolderPath = Path.Combine(PathSort, "Duplicate");
+
+                    if (!Directory.Exists(duplicateFolderPath))
+                    {
+                        Directory.CreateDirectory(duplicateFolderPath);
+                    }
+
+                    string fileName = Path.GetFileName(file);
+                    string destinationPath = Path.Combine(duplicateFolderPath, fileName);
+
+                    // Move the file to the "Duplicate" folder using MoveFileAsync
+                    await MoveFileAsync(file, destinationPath);
+
+                    // Update the progress bar
+                    Invoke(new Action(() =>
+                    {
+                        if (progressBar1.Value < progressBar1.Maximum)
+                        {
+                            progressBar1.Value++;
+                        }
+                    }));
                 }
             }
+
+            // Clear the hash counts and delete the temporary file
+            hashCounts.Clear();
+            if (File.Exists(tempHashCountFilePath))
+            {
+                File.Delete(tempHashCountFilePath);
+            }
+
+            Invoke(new Action(() =>
+            {
+                progressBar1.Value = 0;
+            }));
+
+            // Force garbage collection
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+            // Notify the user
+            MessageBox.Show("Hashing and duplicate file processing completed.", "Completed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+
+        public async Task Scan(string[] files)
+        {
+            const string hashFilePath = "Hashes.json";
+
+            // Initialize the progress bar
+            Invoke(new Action(() =>
+            {
+                progressBar1.Minimum = 0;
+                progressBar1.Maximum = files.Length;
+                progressBar1.Value = 0;
+            }));
+
+            // A set to store unique hashes (load existing hashes from the JSON file)
+            var uniqueHashes = new HashSet<string>();
+
+            if (File.Exists(hashFilePath))
+            {
+                using (var reader = new StreamReader(hashFilePath))
+                {
+                    var existingHashes = JsonConvert.DeserializeObject<HashSet<string>>(reader.ReadToEnd());
+                    if (existingHashes != null)
+                    {
+                        foreach (var hash in existingHashes)
+                        {
+                            uniqueHashes.Add(hash); // Add existing hashes to the set
+                        }
+                    }
+                }
+            }
+
+            // Process files in batches
+            var fileBatches = files.Select((file, index) => new { file, index })
+                                     .GroupBy(x => x.index / 1000) // Adjust the batch size as needed
+                                     .Select(g => g.Select(x => x.file).ToArray());
+
+            foreach (var batch in fileBatches)
+            {
+                var throttler = new SemaphoreSlim(8); // Adjust the degree of parallelism as needed
+
+                // Process the batch with limited parallelism
+                var tasks = batch.Select(async file =>
+                {
+                    await throttler.WaitAsync();
+                    try
+                    {
+                        string hash = await ComputeFileHashAsync(file);
+
+                        // Lock to ensure thread safety when accessing shared resources
+                        lock (uniqueHashes)
+                        {
+                            uniqueHashes.Add(hash); // `HashSet` ensures no duplicates
+                        }
+
+                        // Update the progress bar safely
+                        Invoke(new Action(() =>
+                        {
+                            progressBar1.Value++;
+                        }));
+                    }
+                    finally
+                    {
+                        throttler.Release(); // Release semaphore
+                    }
+                });
+
+                await Task.WhenAll(tasks);
+            }
+
+            // Save the updated list of unique hashes to the JSON file
+            using (var writer = new StreamWriter(hashFilePath))
+            using (var jsonWriter = new JsonTextWriter(writer) { Formatting = Formatting.Indented })
+            {
+                var serializer = new JsonSerializer();
+                serializer.Serialize(jsonWriter, uniqueHashes.ToList());
+            }
+
+            // Display a completion message
+            MessageBox.Show("Hashing process completed.", "Hashing Completed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            // Reset the progress bar
+            Invoke(new Action(() =>
+            {
+                progressBar1.Value = 0;
+            }));
+        }
+
+        // Global
+        public void ReloadSettings()
+        {
+            if (File.Exists("appsettings.json"))
+            {
+                string settingPath = Path.GetFullPath("appsettings.json");
+                Get_FilterSection(settingPath);
+            }
+        }
+
+        private Dictionary<string, bool> Get_CheckboxState()
+        {
+            // Create a dictionary to store the checkbox names and their states
+            Dictionary<string, bool> checkboxStates = new Dictionary<string, bool>();
+
+            // Add each checkbox state to the dictionary
+            checkboxStates.Add("type", checkBox_type.Checked);
+            checkboxStates.Add("size", checkBox_size.Checked);
+            checkboxStates.Add("date", checkBox_date.Checked);
+            checkboxStates.Add("name", checkBox_name.Checked);
+            checkboxStates.Add("extension", checkBox_extension.Checked);
+            checkboxStates.Add("tags", checkBox_tags.Checked);
+            checkboxStates.Add("media", checkBox_media.Checked);
+            checkboxStates.Add("duplicate", checkBox_Duplicates.Checked);
+            checkboxStates.Add("scan", checkBox_scan.Checked);
+
+
+            // Return the dictionary
+            return checkboxStates;
         }
 
         private void Delete_Folders(string path)
@@ -1153,6 +1149,122 @@ namespace Tools
             return files; // Return the list of file paths
         }
 
+        private void LoadGlobalJson()
+        {
+            const string hashFilePath = "Hashes.json";
+
+            globalHashes = new HashSet<string>();
+
+            if (File.Exists(hashFilePath))
+            {
+                try
+                {
+                    using (var reader = new StreamReader(hashFilePath))
+                    {
+                        var existingHashes = JsonConvert.DeserializeObject<HashSet<string>>(reader.ReadToEnd());
+                        if (existingHashes != null)
+                        {
+                            globalHashes = new HashSet<string>(existingHashes); // Initialize with existing hashes
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error loading JSON: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        public async Task AddFileIfMissingAsync(string filePath)
+        {
+            const string hashFilePath = "Hashes.json";
+
+            // Check if the globalHashes variable contains the hash for the file
+            if (globalHashes == null)
+            {
+                MessageBox.Show("Global variable is not initialized. Please load the JSON first.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // Compute the hash for the given file
+            string fileHash;
+            try
+            {
+                fileHash = await ComputeFileHashAsync(filePath); // Assuming ComputeFileHash is a synchronous hash function
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error computing hash for file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // Check if the hash is already in the globalHashes set
+            if (globalHashes.Contains(fileHash))
+            {
+                MessageBox.Show("The file is already present in the global JSON file.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            // Add the hash to the globalHashes set
+            lock (globalHashes)
+            {
+                globalHashes.Add(fileHash);
+            }
+
+            // Update the JSON file with the new data
+            try
+            {
+                using (var writer = new StreamWriter(hashFilePath))
+                using (var jsonWriter = new JsonTextWriter(writer) { Formatting = Formatting.Indented })
+                {
+                    var serializer = new JsonSerializer();
+                    serializer.Serialize(jsonWriter, globalHashes.ToList());
+                }
+
+                MessageBox.Show("The file was successfully added to the JSON file.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error updating JSON file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private async Task MoveFileAsync(string sourcePath, string destinationPath)
+        {
+            int fileCount = 1;
+            string newDestinationPath = destinationPath;
+
+            while (File.Exists(newDestinationPath))
+            {
+                string fileExtension = Path.GetExtension(destinationPath);
+                string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(destinationPath);
+                newDestinationPath = Path.Combine(Path.GetDirectoryName(destinationPath), $"{fileNameWithoutExtension} ({fileCount++}){fileExtension}");
+            }
+
+            await Task.Run(() => File.Move(sourcePath, newDestinationPath));
+        }
+
+        private async Task<string> ComputeFileHashAsync(string filePath)
+        {
+            using (var sha256 = SHA256.Create())
+            {
+                const int bufferSize = 8 * 1024 * 1024; // 8 MB buffer size
+
+                using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize, useAsync: true))
+                {
+                    byte[] buffer = new byte[bufferSize];
+                    int bytesRead;
+                    while ((bytesRead = await fileStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                    {
+                        sha256.TransformBlock(buffer, 0, bytesRead, buffer, 0);
+                    }
+                    sha256.TransformFinalBlock(buffer, 0, 0);
+
+                    byte[] hashBytes = sha256.Hash;
+                    return BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
+                }
+            }
+        }
     }
 }
 

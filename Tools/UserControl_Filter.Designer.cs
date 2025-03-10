@@ -34,7 +34,6 @@
             checkBox_media = new CheckBox();
             checkBox_tags = new CheckBox();
             checkBox_extension = new CheckBox();
-            checkBox_hash = new CheckBox();
             checkBox_name = new CheckBox();
             checkBox_date = new CheckBox();
             checkBox_size = new CheckBox();
@@ -62,7 +61,6 @@
             panel_NavBar.Controls.Add(checkBox_media);
             panel_NavBar.Controls.Add(checkBox_tags);
             panel_NavBar.Controls.Add(checkBox_extension);
-            panel_NavBar.Controls.Add(checkBox_hash);
             panel_NavBar.Controls.Add(checkBox_name);
             panel_NavBar.Controls.Add(checkBox_date);
             panel_NavBar.Controls.Add(checkBox_size);
@@ -79,7 +77,7 @@
             checkBox_scan.AutoSize = true;
             checkBox_scan.Cursor = Cursors.Hand;
             checkBox_scan.Font = new Font("Arial Rounded MT Bold", 12F);
-            checkBox_scan.Location = new Point(54, 496);
+            checkBox_scan.Location = new Point(54, 492);
             checkBox_scan.Name = "checkBox_scan";
             checkBox_scan.Size = new Size(74, 22);
             checkBox_scan.TabIndex = 9;
@@ -92,7 +90,7 @@
             checkBox_Duplicates.AutoSize = true;
             checkBox_Duplicates.Cursor = Cursors.Hand;
             checkBox_Duplicates.Font = new Font("Arial Rounded MT Bold", 12F);
-            checkBox_Duplicates.Location = new Point(30, 444);
+            checkBox_Duplicates.Location = new Point(30, 434);
             checkBox_Duplicates.Name = "checkBox_Duplicates";
             checkBox_Duplicates.Size = new Size(122, 22);
             checkBox_Duplicates.TabIndex = 8;
@@ -105,7 +103,7 @@
             checkBox_media.AutoSize = true;
             checkBox_media.Cursor = Cursors.Hand;
             checkBox_media.Font = new Font("Arial Rounded MT Bold", 12F);
-            checkBox_media.Location = new Point(51, 392);
+            checkBox_media.Location = new Point(51, 376);
             checkBox_media.Name = "checkBox_media";
             checkBox_media.Size = new Size(80, 22);
             checkBox_media.TabIndex = 7;
@@ -118,7 +116,7 @@
             checkBox_tags.AutoSize = true;
             checkBox_tags.Cursor = Cursors.Hand;
             checkBox_tags.Font = new Font("Arial Rounded MT Bold", 12F);
-            checkBox_tags.Location = new Point(16, 340);
+            checkBox_tags.Location = new Point(16, 318);
             checkBox_tags.Name = "checkBox_tags";
             checkBox_tags.Size = new Size(151, 22);
             checkBox_tags.TabIndex = 6;
@@ -131,25 +129,12 @@
             checkBox_extension.AutoSize = true;
             checkBox_extension.Cursor = Cursors.Hand;
             checkBox_extension.Font = new Font("Arial Rounded MT Bold", 12F);
-            checkBox_extension.Location = new Point(30, 288);
+            checkBox_extension.Location = new Point(30, 260);
             checkBox_extension.Name = "checkBox_extension";
             checkBox_extension.Size = new Size(122, 22);
             checkBox_extension.TabIndex = 5;
             checkBox_extension.Text = "EXTENSION";
             checkBox_extension.UseVisualStyleBackColor = true;
-            // 
-            // checkBox_hash
-            // 
-            checkBox_hash.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            checkBox_hash.AutoSize = true;
-            checkBox_hash.Cursor = Cursors.Hand;
-            checkBox_hash.Font = new Font("Arial Rounded MT Bold", 12F);
-            checkBox_hash.Location = new Point(54, 236);
-            checkBox_hash.Name = "checkBox_hash";
-            checkBox_hash.Size = new Size(74, 22);
-            checkBox_hash.TabIndex = 4;
-            checkBox_hash.Text = "HASH";
-            checkBox_hash.UseVisualStyleBackColor = true;
             // 
             // checkBox_name
             // 
@@ -157,7 +142,7 @@
             checkBox_name.AutoSize = true;
             checkBox_name.Cursor = Cursors.Hand;
             checkBox_name.Font = new Font("Arial Rounded MT Bold", 12F);
-            checkBox_name.Location = new Point(54, 184);
+            checkBox_name.Location = new Point(54, 202);
             checkBox_name.Name = "checkBox_name";
             checkBox_name.Size = new Size(75, 22);
             checkBox_name.TabIndex = 3;
@@ -170,7 +155,7 @@
             checkBox_date.AutoSize = true;
             checkBox_date.Cursor = Cursors.Hand;
             checkBox_date.Font = new Font("Arial Rounded MT Bold", 12F);
-            checkBox_date.Location = new Point(55, 132);
+            checkBox_date.Location = new Point(55, 144);
             checkBox_date.Name = "checkBox_date";
             checkBox_date.Size = new Size(72, 22);
             checkBox_date.TabIndex = 2;
@@ -183,7 +168,7 @@
             checkBox_size.AutoSize = true;
             checkBox_size.Cursor = Cursors.Hand;
             checkBox_size.Font = new Font("Arial Rounded MT Bold", 12F);
-            checkBox_size.Location = new Point(59, 80);
+            checkBox_size.Location = new Point(59, 86);
             checkBox_size.Name = "checkBox_size";
             checkBox_size.Size = new Size(64, 22);
             checkBox_size.TabIndex = 1;
@@ -334,7 +319,6 @@
         private ProgressBar progressBar1;
         private CheckBox checkBox_tags;
         private CheckBox checkBox_extension;
-        private CheckBox checkBox_hash;
         private CheckBox checkBox_name;
         private CheckBox checkBox_date;
         private CheckBox checkBox_size;
