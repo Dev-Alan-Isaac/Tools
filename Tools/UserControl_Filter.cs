@@ -990,7 +990,6 @@ namespace Tools
             MessageBox.Show("Hashing and duplicate file processing completed.", "Completed", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-
         public async Task Scan(string[] files)
         {
             const string hashFilePath = "Hashes.json";
