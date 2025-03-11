@@ -19,7 +19,6 @@ namespace Tools
             InitializeComponent();
             label_Title.Text = "FILTER";
             userControl_Configuration_Filter1.BringToFront();
-
         }
 
         public void ReloadConfigFilterSettings()
@@ -72,35 +71,30 @@ namespace Tools
         {
             FollowButton(sender as Button);
             label_Title.Text = "";
-
         }
 
         private void button7_Click(object sender, EventArgs e)
         {
             FollowButton(sender as Button);
             label_Title.Text = "";
-
         }
 
         private void button8_Click(object sender, EventArgs e)
         {
             FollowButton(sender as Button);
             label_Title.Text = "";
-
         }
 
         private void button9_Click(object sender, EventArgs e)
         {
             FollowButton(sender as Button);
             label_Title.Text = "";
-
         }
 
         private void button10_Click(object sender, EventArgs e)
         {
             FollowButton(sender as Button);
             label_Title.Text = "";
-
         }
 
         private void button_Save_MouseEnter(object sender, EventArgs e)

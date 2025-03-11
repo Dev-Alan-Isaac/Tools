@@ -303,157 +303,153 @@ namespace Tools
         {
             if (filterSettings.Range)
             {
-                List<Dictionary<string, List<string>>> keyValuePairs = filterSettings.Range_List;
-
-                // Initialize size range variables
-                long smallMax = 0, mediumMin = 0, mediumMax = 0, largeMin = 0, largeMax = 0, extraLargeMin = 0;
-
-                // Convert size values to bytes and assign to the corresponding variables
-                foreach (var kvp in keyValuePairs)
-                {
-                    foreach (var key in kvp.Keys)
-                    {
-                        var sizeList = kvp[key];
-                        long minSize = sizeList.Count > 1 ? ConvertToBytes(sizeList[0], sizeList[1]) : 0;
-                        long maxSize = sizeList.Count > 3 ? ConvertToBytes(sizeList[2], sizeList[3]) : minSize;
-
-                        switch (key)
-                        {
-                            case "Small":
-                                smallMax = maxSize;
-                                break;
-                            case "Medium":
-                                mediumMin = minSize;
-                                mediumMax = maxSize;
-                                break;
-                            case "Large":
-                                largeMin = minSize;
-                                largeMax = maxSize;
-                                break;
-                            case "Extra_Large":
-                                extraLargeMin = minSize;
-                                break;
-                        }
-                    }
-                }
-
-                // Process files based on size ranges
-                foreach (string file in files)
-                {
-                    long fileSize = new FileInfo(file).Length;
-                    string folderName = "";
-
-                    if (fileSize <= smallMax)
-                    {
-                        folderName = "Small";
-                    }
-                    else if (fileSize >= mediumMin && fileSize <= mediumMax)
-                    {
-                        folderName = "Medium";
-                    }
-                    else if (fileSize >= largeMin && fileSize <= largeMax)
-                    {
-                        folderName = "Large";
-                    }
-                    else if (fileSize >= extraLargeMin)
-                    {
-                        folderName = "Extra Large";
-                    }
-
-                    if (!string.IsNullOrEmpty(folderName))
-                    {
-                        string folderPath = Path.Combine(PathSort, folderName);
-                        if (!Directory.Exists(folderPath))
-                        {
-                            Directory.CreateDirectory(folderPath);
-                        }
-
-                        // Handle files with the same name
-                        string destinationFilePath = Path.Combine(folderPath, Path.GetFileName(file));
-                        int counter = 1;
-                        while (File.Exists(destinationFilePath))
-                        {
-                            string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file);
-                            string newFileName = $"{fileNameWithoutExtension} ({counter}){Path.GetExtension(file)}";
-                            destinationFilePath = Path.Combine(folderPath, newFileName);
-                            counter++;
-                        }
-
-                        // Move the file to the created folder
-                        await MoveFileAsync(file, destinationFilePath);
-
-                        // Log the file processing
-                        Debug.WriteLine($"File: {file}, Size: {fileSize} bytes, Range: {folderName}, Moved to: {destinationFilePath}");
-                    }
-                }
+                Range(files, filterSettings.Range_List);
             }
             else if (filterSettings.Dynamic)
             {
-                // Define the file size thresholds in bytes for KB, MB, GB, and TB
-                long kbThreshold = 1024; // 1 KB
-                long mbThreshold = 1024 * kbThreshold; // 1 MB
-                long gbThreshold = 1024 * mbThreshold; // 1 GB
-                long tbThreshold = 1024 * gbThreshold; // 1 TB
+                Dynamic(files);
+            }
+        }
 
-                // Process each file
-                foreach (string file in files)
+        private async void Range(string[] files, List<Dictionary<string, List<string>>> Range_List)
+        {
+            progressBar1.Invoke(new Action(() =>
+            {
+                progressBar1.Minimum = 0;
+                progressBar1.Maximum = files.Length;
+                progressBar1.Value = 0;
+            }));
+
+            foreach (var kvp in Range_List)
+            {
+                foreach (var key in kvp.Keys)
                 {
-                    long fileSize = new FileInfo(file).Length;
+                    var sizeList = kvp[key];
 
-                    // Determine the appropriate folder based on size
-                    string sizeCategory = "";
-                    long sizeValue = 0;
+                    // Convert the ranges to bytes
+                    long minSize = sizeList.Count > 1 ? ConvertToBytes(sizeList[0], sizeList[1]) : 0;
+                    long maxSize = sizeList.Count > 3 ? ConvertToBytes(sizeList[2], sizeList[3]) : long.MaxValue;
 
-                    if (fileSize < mbThreshold)
+                    // Process each file
+                    foreach (string file in files)
                     {
-                        sizeCategory = "KB";
-                        sizeValue = fileSize / kbThreshold;
-                    }
-                    else if (fileSize < gbThreshold)
-                    {
-                        sizeCategory = "MB";
-                        sizeValue = fileSize / mbThreshold;
-                    }
-                    else if (fileSize < tbThreshold)
-                    {
-                        sizeCategory = "GB";
-                        sizeValue = fileSize / gbThreshold;
-                    }
-                    else
-                    {
-                        sizeCategory = "TB";
-                        sizeValue = fileSize / tbThreshold;
-                    }
+                        long fileSize = new FileInfo(file).Length;
 
-                    // Build the directory path based on the size category and size value
-                    string destinationFilePath = Path.Combine(PathSort, sizeCategory);
-                    string targetFolder = Path.Combine(destinationFilePath, sizeValue.ToString());
+                        // Check if the file falls within the range
+                        if (fileSize >= minSize && fileSize <= maxSize)
+                        {
+                            // Determine the folder name
+                            string folderPath = Path.Combine(PathSort, key);
 
-                    // Create the target folder if it doesn't exist
-                    if (!Directory.Exists(targetFolder))
-                    {
-                        Directory.CreateDirectory(targetFolder);
+                            // Create the folder if it doesn't exist
+                            if (!Directory.Exists(folderPath))
+                            {
+                                Directory.CreateDirectory(folderPath);
+                            }
+
+                            // Move the file to the folder
+                            string destinationFilePath = Path.Combine(folderPath, Path.GetFileName(file));
+
+                            // Create the size-specific subfolder
+                            long sizeCategoryValue = ConvertToCategoryValue(fileSize);
+                            string sizeSubfolderPath = Path.Combine(folderPath, sizeCategoryValue.ToString());
+
+                            // Ensure the subfolder exists
+                            if (!Directory.Exists(sizeSubfolderPath))
+                            {
+                                Directory.CreateDirectory(sizeSubfolderPath);
+                            }
+
+                            // Update the destination path for the specific subfolder
+                            destinationFilePath = Path.Combine(sizeSubfolderPath, Path.GetFileName(file));
+                            await MoveFileAsync(file, destinationFilePath);
+                        }
                     }
-
-                    // Move the file into the appropriate folder
-                    string targetFilePath = Path.Combine(targetFolder, Path.GetFileName(file));
-                    int counter = 1;
-
-                    // Handle files with the same name
-                    while (File.Exists(targetFilePath))
-                    {
-                        string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file);
-                        string newFileName = $"{fileNameWithoutExtension} ({counter}){Path.GetExtension(file)}";
-                        targetFilePath = Path.Combine(targetFolder, newFileName);
-                        counter++;
-                    }
-
-                    // Move the file to the created folder
-                    await MoveFileAsync(file, destinationFilePath);
-
-                    // Log the file processing
-                    Debug.WriteLine($"File: {file}, Size: {fileSize} bytes, Category: {sizeCategory}, Size Value: {sizeValue}, Moved to: {targetFilePath}");
                 }
+            }
+        }
+
+        private long ConvertToCategoryValue(long fileSize)
+        {
+            long kbThreshold = 1024; // 1 KB
+            long mbThreshold = 1024 * kbThreshold; // 1 MB
+            long gbThreshold = 1024 * mbThreshold; // 1 GB
+
+            if (fileSize < mbThreshold)
+            {
+                return fileSize / kbThreshold; // KB
+            }
+            else if (fileSize < gbThreshold)
+            {
+                return fileSize / mbThreshold; // MB
+            }
+            else
+            {
+                return fileSize / gbThreshold; // GB
+            }
+        }
+
+        private async void Dynamic(string[] files)
+        {
+            // Define size thresholds in bytes
+            long kbThreshold = 1024; // 1 KB
+            long mbThreshold = 1024 * kbThreshold; // 1 MB
+            long gbThreshold = 1024 * mbThreshold; // 1 GB
+            long tbThreshold = 1024 * gbThreshold; // 1 TB
+
+            progressBar1.Invoke(new Action(() =>
+            {
+                progressBar1.Minimum = 0;
+                progressBar1.Maximum = files.Length;
+                progressBar1.Value = 0;
+            }));
+
+            foreach (string file in files)
+            {
+                // Get the file size
+                long fileSize = new FileInfo(file).Length;
+
+                // Determine the size category and size value
+                string sizeCategory = "";
+                long sizeValue = 0;
+
+                if (fileSize < mbThreshold)
+                {
+                    sizeCategory = "KB";
+                    sizeValue = fileSize / kbThreshold; // Convert to KB
+                }
+                else if (fileSize < gbThreshold)
+                {
+                    sizeCategory = "MB";
+                    sizeValue = fileSize / mbThreshold; // Convert to MB
+                }
+                else if (fileSize < tbThreshold)
+                {
+                    sizeCategory = "GB";
+                    sizeValue = fileSize / gbThreshold; // Convert to GB
+                }
+                else
+                {
+                    sizeCategory = "TB";
+                    sizeValue = fileSize / tbThreshold; // Convert to TB
+                }
+
+                // Build the directory path: ParentFolder > Size Category (e.g., GB) > Size Value (e.g., 1)
+                string sizeCategoryFolder = Path.Combine(PathSort, sizeCategory);
+                string sizeValueFolder = Path.Combine(sizeCategoryFolder, sizeValue.ToString());
+
+                // Create the folders if they don't exist
+                if (!Directory.Exists(sizeValueFolder))
+                {
+                    Directory.CreateDirectory(sizeValueFolder);
+                }
+
+                // Move the file to the appropriate folder
+                string destinationFilePath = Path.Combine(sizeValueFolder, Path.GetFileName(file));
+                await MoveFileAsync(file, destinationFilePath);
+
+                // Optional: Log the action
+                Console.WriteLine($"Moved file: {file}, Size: {fileSize}, Category: {sizeCategory}, Value: {sizeValue}, Folder: {sizeValueFolder}");
             }
         }
 
@@ -478,12 +474,16 @@ namespace Tools
 
         private async Task FilterDate(string[] files)
         {
-            // Base path for creation date, access date, and modify date folders
-            string basePath = Path.GetDirectoryName(files[0]);
+            progressBar1.Invoke(new Action(() =>
+            {
+                progressBar1.Minimum = 0;
+                progressBar1.Maximum = files.Length;
+                progressBar1.Value = 0;
+            }));
 
             if (filterSettings.Creation)
             {
-                string creationDateParentFolder = Path.Combine(basePath, "Creation date");
+                string creationDateParentFolder = Path.Combine(PathSort, "Creation date");
 
                 foreach (var file in files)
                 {
@@ -513,7 +513,7 @@ namespace Tools
             }
             else if (filterSettings.Access)
             {
-                string accessDateParentFolder = Path.Combine(basePath, "Access date");
+                string accessDateParentFolder = Path.Combine(PathSort, "Access date");
 
                 foreach (var file in files)
                 {
@@ -543,7 +543,7 @@ namespace Tools
             }
             else if (filterSettings.Modify)
             {
-                string modifyDateParentFolder = Path.Combine(basePath, "Modify date");
+                string modifyDateParentFolder = Path.Combine(PathSort, "Modify date");
 
                 foreach (var file in files)
                 {
@@ -575,6 +575,13 @@ namespace Tools
 
         private async Task FilterName(string[] files)
         {
+            progressBar1.Invoke(new Action(() =>
+            {
+                progressBar1.Minimum = 0;
+                progressBar1.Maximum = files.Length;
+                progressBar1.Value = 0;
+            }));
+
             if (filterSettings.Chars && filterSettings.Caps)
             {
                 // Apply both filters: non-UTF8 characters and capitalization
@@ -636,13 +643,17 @@ namespace Tools
 
         private async Task FilterExtension(string[] files)
         {
-            // Base path for extension folders
-            string basePath = Path.GetDirectoryName(files[0]);
+            progressBar1.Invoke(new Action(() =>
+            {
+                progressBar1.Minimum = 0;
+                progressBar1.Maximum = files.Length;
+                progressBar1.Value = 0;
+            }));
 
             foreach (var file in files)
             {
                 string fileExtension = Path.GetExtension(file).TrimStart('.').ToLowerInvariant();
-                string extensionFolder = Path.Combine(basePath, fileExtension);
+                string extensionFolder = Path.Combine(PathSort, fileExtension);
 
                 if (!Directory.Exists(extensionFolder))
                 {
@@ -668,6 +679,13 @@ namespace Tools
         private async Task FilterTags(string[] files)
         {
             var tagList = filterSettings.Tag_List;
+
+            progressBar1.Invoke(new Action(() =>
+            {
+                progressBar1.Minimum = 0;
+                progressBar1.Maximum = files.Length;
+                progressBar1.Value = 0;
+            }));
 
             foreach (var file in files)
             {
@@ -735,6 +753,13 @@ namespace Tools
 
         private async Task Duration(string[] files)
         {
+            progressBar1.Invoke(new Action(() =>
+            {
+                progressBar1.Minimum = 0;
+                progressBar1.Maximum = files.Length;
+                progressBar1.Value = 0;
+            }));
+
             foreach (var file in files)
             {
                 // Check if the file is a video
@@ -766,6 +791,13 @@ namespace Tools
 
         private async Task Resolution(string[] files)
         {
+            progressBar1.Invoke(new Action(() =>
+            {
+                progressBar1.Minimum = 0;
+                progressBar1.Maximum = files.Length;
+                progressBar1.Value = 0;
+            }));
+
             foreach (var file in files)
             {
                 // Check if the file is a video
@@ -788,6 +820,13 @@ namespace Tools
 
         private async Task FrameRate(string[] files)
         {
+            progressBar1.Invoke(new Action(() =>
+            {
+                progressBar1.Minimum = 0;
+                progressBar1.Maximum = files.Length;
+                progressBar1.Value = 0;
+            }));
+
             foreach (var file in files)
             {
                 // Check if the file is a video
@@ -819,6 +858,13 @@ namespace Tools
 
         private async Task Codec(string[] files)
         {
+            progressBar1.Invoke(new Action(() =>
+            {
+                progressBar1.Minimum = 0;
+                progressBar1.Maximum = files.Length;
+                progressBar1.Value = 0;
+            }));
+
             foreach (var file in files)
             {
                 // Check if the file is a video
@@ -850,6 +896,13 @@ namespace Tools
 
         private async Task AspectRatio(string[] files)
         {
+            progressBar1.Invoke(new Action(() =>
+            {
+                progressBar1.Minimum = 0;
+                progressBar1.Maximum = files.Length;
+                progressBar1.Value = 0;
+            }));
+
             foreach (var file in files)
             {
                 // Check if the file is a video
@@ -931,7 +984,6 @@ namespace Tools
             }));
 
             // Second pass: Process files and move duplicates
-            // Second pass: Process files and move duplicates
             for (int i = 0; i < files.Length; i++)
             {
                 string file = files[i];
@@ -961,7 +1013,6 @@ namespace Tools
             }));
             MessageBox.Show("Duplicate file processing completed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
-
 
         public async Task Scan(string[] files)
         {

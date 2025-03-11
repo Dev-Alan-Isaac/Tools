@@ -437,11 +437,20 @@ namespace Tools
                 filterSection["Media"][3]["Codec"] = radioButton_Media_Codec.Checked;
                 filterSection["Media"][4]["AspectRatio"] = radioButton_Media_AspectRatio.Checked;
 
+                // Clear and prepare the Tags array
+                // Clear and prepare the Tags array
                 filterSection["Tags"][0]["Tag_List"] = new JArray();
 
-                foreach (TreeNode rootNode in treeView_Tags.Nodes)
+                foreach (TreeNode rootNode in treeView_Tags.Nodes) // Assuming you have a TreeView for Tags
                 {
+                    // Add each root node text directly to Tag_List
                     ((JArray)filterSection["Tags"][0]["Tag_List"]).Add(rootNode.Text);
+
+                    // Add all child nodes' text as well
+                    foreach (TreeNode childNode in rootNode.Nodes)
+                    {
+                        ((JArray)filterSection["Tags"][0]["Tag_List"]).Add(childNode.Text);
+                    }
                 }
 
                 filterSection["Size"][0]["Range"] = radioButton_Size_Range.Checked;
@@ -459,6 +468,133 @@ namespace Tools
             }
         }
 
+        private void button_AddGroup_Click(object sender, EventArgs e)
+        {
+            // Prompt the user to enter the new extension
+            string newExtension = Microsoft.VisualBasic.Interaction.InputBox("Enter the new extension:", "New Extension", "", -1, -1);
+
+            // Check if the user entered a value
+            if (!string.IsNullOrWhiteSpace(newExtension))
+            {
+                // Ensure a node is selected in the TreeView
+                if (treeView_Type.SelectedNode != null)
+                {
+                    // Add the new extension as a child node under the selected parent node
+                    TreeNode newNode = new TreeNode(newExtension);
+                    treeView_Type.SelectedNode.Nodes.Add(newNode);
+
+                    // Optionally, expand the parent node to show the new child
+                    treeView_Type.SelectedNode.Expand();
+
+                    // Inform the user about the successful addition
+                    MessageBox.Show($"The extension \"{newExtension}\" was successfully added under \"{treeView_Type.SelectedNode.Text}\".",
+                        "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    // Notify the user to select a parent node
+                    MessageBox.Show("Please select a parent node in the TreeView before adding a new extension.",
+                        "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            else
+            {
+                // Notify the user if no extension was entered
+                MessageBox.Show("No extension was entered. Please try again.",
+                    "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void button_RemoveGroup_Click(object sender, EventArgs e)
+        {
+            // Ensure a node is selected in the TreeView
+            if (treeView_Type.SelectedNode != null)
+            {
+                // Confirm with the user before removal
+                DialogResult result = MessageBox.Show($"Are you sure you want to remove the node \"{treeView_Type.SelectedNode.Text}\" and all its child nodes?",
+                    "Confirm Deletion", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                if (result == DialogResult.Yes)
+                {
+                    // Remove the selected node
+                    treeView_Type.Nodes.Remove(treeView_Type.SelectedNode);
+
+                    // Notify the user about the removal
+                    MessageBox.Show("The selected node and its children have been removed successfully.",
+                        "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            else
+            {
+                // Notify the user to select a node before removing
+                MessageBox.Show("Please select a node in the TreeView to remove.",
+                    "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void button_AddTags_Click(object sender, EventArgs e)
+        {
+            // Prompt the user to enter the new tag
+            string newTag = Microsoft.VisualBasic.Interaction.InputBox("Enter the new tag:", "New Tag", "", -1, -1);
+
+            // Check if the user entered a valid tag
+            if (!string.IsNullOrWhiteSpace(newTag))
+            {
+                // Create a new root node with the tag and add it to the treeView_Tags
+                TreeNode rootNode = new TreeNode(newTag);
+                treeView_Tags.Nodes.Add(rootNode);
+
+                // Optionally, expand the treeView_Tags to show the new root node
+                treeView_Tags.ExpandAll();
+
+                // Notify the user about the successful addition
+                MessageBox.Show($"The tag \"{newTag}\" was successfully added as a root node.",
+                    "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                // Notify the user if no tag was entered
+                MessageBox.Show("No tag was entered. Please try again.",
+                    "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void button_RemoveTags_Click(object sender, EventArgs e)
+        {
+            // Ensure a node is selected in the TreeView
+            if (treeView_Tags.SelectedNode != null)
+            {
+                // Check if the selected node is a root node
+                if (treeView_Tags.SelectedNode.Parent == null)
+                {
+                    // Confirm with the user before removing the root node
+                    DialogResult result = MessageBox.Show($"Are you sure you want to remove the root node \"{treeView_Tags.SelectedNode.Text}\"?",
+                        "Confirm Deletion", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                    if (result == DialogResult.Yes)
+                    {
+                        // Remove the selected root node
+                        treeView_Tags.Nodes.Remove(treeView_Tags.SelectedNode);
+
+                        // Notify the user about the successful removal
+                        MessageBox.Show("The selected root node has been removed successfully.",
+                            "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+                else
+                {
+                    // Notify the user that only root nodes can be removed
+                    MessageBox.Show("Please select a root node to remove. Child nodes cannot be removed directly with this action.",
+                        "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            else
+            {
+                // Notify the user to select a node before removing
+                MessageBox.Show("Please select a root node in the TreeView to remove.",
+                    "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
 
     }
 }

@@ -34,8 +34,8 @@
             checkBox_Type_Executable = new CheckBox();
             groupBox5 = new GroupBox();
             treeView_Type = new TreeView();
-            button2 = new Button();
-            button1 = new Button();
+            button_RemoveGroup = new Button();
+            button_AddGroup = new Button();
             checkBox_Type_Other = new CheckBox();
             checkBox_Type_Archive = new CheckBox();
             checkBox_Type_Video = new CheckBox();
@@ -45,8 +45,8 @@
             groupBox2 = new GroupBox();
             groupBox3 = new GroupBox();
             treeView_Tags = new TreeView();
-            button4 = new Button();
-            button3 = new Button();
+            button_RemoveTags = new Button();
+            button_AddTags = new Button();
             groupBox4 = new GroupBox();
             checkBox_Additional_subfiles = new CheckBox();
             checkBox_Additional_Delete = new CheckBox();
@@ -86,8 +86,8 @@
             groupBox1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             groupBox1.Controls.Add(checkBox_Type_Executable);
             groupBox1.Controls.Add(groupBox5);
-            groupBox1.Controls.Add(button2);
-            groupBox1.Controls.Add(button1);
+            groupBox1.Controls.Add(button_RemoveGroup);
+            groupBox1.Controls.Add(button_AddGroup);
             groupBox1.Controls.Add(checkBox_Type_Other);
             groupBox1.Controls.Add(checkBox_Type_Archive);
             groupBox1.Controls.Add(checkBox_Type_Video);
@@ -133,29 +133,31 @@
             treeView_Type.Size = new Size(278, 287);
             treeView_Type.TabIndex = 0;
             // 
-            // button2
+            // button_RemoveGroup
             // 
-            button2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
-            button2.BackgroundImage = Properties.Resources.icons8_remove_50;
-            button2.BackgroundImageLayout = ImageLayout.Center;
-            button2.Cursor = Cursors.Hand;
-            button2.Location = new Point(292, 340);
-            button2.Name = "button2";
-            button2.Size = new Size(120, 54);
-            button2.TabIndex = 8;
-            button2.UseVisualStyleBackColor = true;
+            button_RemoveGroup.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+            button_RemoveGroup.BackgroundImage = Properties.Resources.icons8_remove_50;
+            button_RemoveGroup.BackgroundImageLayout = ImageLayout.Center;
+            button_RemoveGroup.Cursor = Cursors.Hand;
+            button_RemoveGroup.Location = new Point(292, 340);
+            button_RemoveGroup.Name = "button_RemoveGroup";
+            button_RemoveGroup.Size = new Size(120, 54);
+            button_RemoveGroup.TabIndex = 8;
+            button_RemoveGroup.UseVisualStyleBackColor = true;
+            button_RemoveGroup.Click += button_RemoveGroup_Click;
             // 
-            // button1
+            // button_AddGroup
             // 
-            button1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            button1.BackgroundImage = Properties.Resources.icons8_add_50;
-            button1.BackgroundImageLayout = ImageLayout.Center;
-            button1.Cursor = Cursors.Hand;
-            button1.Location = new Point(6, 340);
-            button1.Name = "button1";
-            button1.Size = new Size(120, 54);
-            button1.TabIndex = 7;
-            button1.UseVisualStyleBackColor = true;
+            button_AddGroup.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            button_AddGroup.BackgroundImage = Properties.Resources.icons8_add_50;
+            button_AddGroup.BackgroundImageLayout = ImageLayout.Center;
+            button_AddGroup.Cursor = Cursors.Hand;
+            button_AddGroup.Location = new Point(6, 340);
+            button_AddGroup.Name = "button_AddGroup";
+            button_AddGroup.Size = new Size(120, 54);
+            button_AddGroup.TabIndex = 7;
+            button_AddGroup.UseVisualStyleBackColor = true;
+            button_AddGroup.Click += button_AddGroup_Click;
             // 
             // checkBox_Type_Other
             // 
@@ -227,8 +229,8 @@
             // 
             groupBox2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             groupBox2.Controls.Add(groupBox3);
-            groupBox2.Controls.Add(button4);
-            groupBox2.Controls.Add(button3);
+            groupBox2.Controls.Add(button_RemoveTags);
+            groupBox2.Controls.Add(button_AddTags);
             groupBox2.Font = new Font("Arial Rounded MT Bold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             groupBox2.Location = new Point(427, 3);
             groupBox2.Name = "groupBox2";
@@ -255,29 +257,31 @@
             treeView_Tags.Size = new Size(370, 284);
             treeView_Tags.TabIndex = 0;
             // 
-            // button4
+            // button_RemoveTags
             // 
-            button4.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
-            button4.BackgroundImage = Properties.Resources.icons8_remove_50;
-            button4.BackgroundImageLayout = ImageLayout.Center;
-            button4.Cursor = Cursors.Hand;
-            button4.Location = new Point(262, 344);
-            button4.Name = "button4";
-            button4.Size = new Size(120, 50);
-            button4.TabIndex = 11;
-            button4.UseVisualStyleBackColor = true;
+            button_RemoveTags.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
+            button_RemoveTags.BackgroundImage = Properties.Resources.icons8_remove_50;
+            button_RemoveTags.BackgroundImageLayout = ImageLayout.Center;
+            button_RemoveTags.Cursor = Cursors.Hand;
+            button_RemoveTags.Location = new Point(262, 344);
+            button_RemoveTags.Name = "button_RemoveTags";
+            button_RemoveTags.Size = new Size(120, 50);
+            button_RemoveTags.TabIndex = 11;
+            button_RemoveTags.UseVisualStyleBackColor = true;
+            button_RemoveTags.Click += button_RemoveTags_Click;
             // 
-            // button3
+            // button_AddTags
             // 
-            button3.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            button3.BackgroundImage = Properties.Resources.icons8_add_50;
-            button3.BackgroundImageLayout = ImageLayout.Center;
-            button3.Cursor = Cursors.Hand;
-            button3.Location = new Point(6, 340);
-            button3.Name = "button3";
-            button3.Size = new Size(120, 54);
-            button3.TabIndex = 10;
-            button3.UseVisualStyleBackColor = true;
+            button_AddTags.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            button_AddTags.BackgroundImage = Properties.Resources.icons8_add_50;
+            button_AddTags.BackgroundImageLayout = ImageLayout.Center;
+            button_AddTags.Cursor = Cursors.Hand;
+            button_AddTags.Location = new Point(6, 340);
+            button_AddTags.Name = "button_AddTags";
+            button_AddTags.Size = new Size(120, 54);
+            button_AddTags.TabIndex = 10;
+            button_AddTags.UseVisualStyleBackColor = true;
+            button_AddTags.Click += button_AddTags_Click;
             // 
             // groupBox4
             // 
@@ -539,11 +543,11 @@
         private CheckBox checkBox_Type_Audio;
         private CheckBox checkBox_Type_Image;
         private CheckBox checkBox_Type_Document;
-        private Button button2;
-        private Button button1;
+        private Button button_RemoveGroup;
+        private Button button_AddGroup;
         private GroupBox groupBox5;
-        private Button button4;
-        private Button button3;
+        private Button button_RemoveTags;
+        private Button button_AddTags;
         private TreeView treeView_Type;
         private GroupBox groupBox3;
         private TreeView treeView_Tags;
