@@ -363,10 +363,21 @@ namespace Tools
                             // Update the destination path for the specific subfolder
                             destinationFilePath = Path.Combine(sizeSubfolderPath, Path.GetFileName(file));
                             await MoveFileAsync(file, destinationFilePath);
+
+                            progressBar1.Invoke(new Action(() =>
+                            {
+                                progressBar1.Value++;
+                            }));
                         }
                     }
                 }
             }
+
+            progressBar1.Invoke(new Action(() =>
+            {
+                progressBar1.Value = 0;
+            }));
+            MessageBox.Show("File filtering and organization completed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private long ConvertToCategoryValue(long fileSize)
@@ -448,9 +459,17 @@ namespace Tools
                 string destinationFilePath = Path.Combine(sizeValueFolder, Path.GetFileName(file));
                 await MoveFileAsync(file, destinationFilePath);
 
-                // Optional: Log the action
-                Console.WriteLine($"Moved file: {file}, Size: {fileSize}, Category: {sizeCategory}, Value: {sizeValue}, Folder: {sizeValueFolder}");
+                progressBar1.Invoke(new Action(() =>
+                {
+                    progressBar1.Value++;
+                }));
             }
+
+            progressBar1.Invoke(new Action(() =>
+            {
+                progressBar1.Value = 0;
+            }));
+            MessageBox.Show("File filtering and organization completed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private long ConvertToBytes(string sizeValue, string unit)
@@ -507,9 +526,16 @@ namespace Tools
                         string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
                         newDestinationPath = Path.Combine(creationDateFolder, $"{fileNameWithoutExtension} ({fileCount++}){fileExtension}");
                     }
+                    progressBar1.Invoke(new Action(() =>
+                    {
+                        progressBar1.Value++;
+                    }));
 
                     await MoveFileAsync(file, newDestinationPath);
                 }
+
+                MessageBox.Show("File filtering and organization completed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
             }
             else if (filterSettings.Access)
             {
@@ -537,6 +563,11 @@ namespace Tools
                         string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
                         newDestinationPath = Path.Combine(accessDateFolder, $"{fileNameWithoutExtension} ({fileCount++}){fileExtension}");
                     }
+
+                    progressBar1.Invoke(new Action(() =>
+                    {
+                        progressBar1.Value++;
+                    }));
 
                     await MoveFileAsync(file, newDestinationPath);
                 }
@@ -568,6 +599,11 @@ namespace Tools
                         newDestinationPath = Path.Combine(modifyDateFolder, $"{fileNameWithoutExtension} ({fileCount++}){fileExtension}");
                     }
 
+                    progressBar1.Invoke(new Action(() =>
+                    {
+                        progressBar1.Value++;
+                    }));
+
                     await MoveFileAsync(file, newDestinationPath);
                 }
             }
@@ -592,6 +628,12 @@ namespace Tools
                     if (ContainsNonUTF8Characters(fileName) && StartsWithUppercase(fileName))
                     {
                         string destinationPath = Path.Combine("FilteredCharsCaps", fileName);
+
+                        progressBar1.Invoke(new Action(() =>
+                        {
+                            progressBar1.Value++;
+                        }));
+
                         await MoveFileAsync(file, destinationPath);
                     }
                 }
@@ -606,6 +648,12 @@ namespace Tools
                     if (ContainsNonUTF8Characters(fileName))
                     {
                         string destinationPath = Path.Combine("FilteredChars", fileName);
+
+                        progressBar1.Invoke(new Action(() =>
+                        {
+                            progressBar1.Value++;
+                        }));
+
                         await MoveFileAsync(file, destinationPath);
                     }
                 }
@@ -620,6 +668,12 @@ namespace Tools
                     if (StartsWithUppercase(fileName))
                     {
                         string destinationPath = Path.Combine("FilteredCaps", fileName);
+
+                        progressBar1.Invoke(new Action(() =>
+                        {
+                            progressBar1.Value++;
+                        }));
+
                         await MoveFileAsync(file, destinationPath);
                     }
                 }
@@ -672,8 +726,15 @@ namespace Tools
                     newDestinationPath = Path.Combine(extensionFolder, $"{fileNameWithoutExtension} ({fileCount++}).{fileExtension}");
                 }
 
-                await Task.Run(() => File.Move(file, newDestinationPath));
+                progressBar1.Invoke(new Action(() =>
+                {
+                    progressBar1.Value++;
+                }));
+
+                await MoveFileAsync(file, newDestinationPath);
             }
+
+            MessageBox.Show("File filtering and organization completed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private async Task FilterTags(string[] files)
@@ -714,11 +775,18 @@ namespace Tools
                             newDestinationPath = Path.Combine(tagsFolder, $"{fileNameWithoutExtension} ({fileCount++}){fileExtension}");
                         }
 
+                        progressBar1.Invoke(new Action(() =>
+                        {
+                            progressBar1.Value++;
+                        }));
+
                         await MoveFileAsync(file, newDestinationPath);
                         break; // If a tag is found, stop checking other tags for this file
                     }
                 }
             }
+            MessageBox.Show("File filtering and organization completed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+ 
         }
 
         private async Task FilterMedia(string[] files)
@@ -784,6 +852,11 @@ namespace Tools
                     Directory.CreateDirectory(destinationFolder);
                 }
 
+                progressBar1.Invoke(new Action(() =>
+                {
+                    progressBar1.Value++;
+                }));
+
                 // Move the file
                 await MoveFileAsync(file, destinationPath);
             }
@@ -813,6 +886,10 @@ namespace Tools
                 var folderName = resolution;
                 var destinationPath = Path.Combine(PathSort, folderName, Path.GetFileName(file));
 
+                progressBar1.Invoke(new Action(() =>
+                {
+                    progressBar1.Value++;
+                }));
                 // Move the file
                 await MoveFileAsync(file, destinationPath);
             }
@@ -842,6 +919,10 @@ namespace Tools
                 string destinationPath = Path.Combine(PathSort, framerate);
                 Directory.CreateDirectory(destinationPath);
 
+                progressBar1.Invoke(new Action(() =>
+                {
+                    progressBar1.Value++;
+                }));
                 // Move the file
                 await MoveFileAsync(file, destinationPath);
             }
@@ -880,6 +961,10 @@ namespace Tools
                 string destinationPath = Path.Combine(PathSort, codec);
                 Directory.CreateDirectory(destinationPath);
 
+                progressBar1.Invoke(new Action(() =>
+                {
+                    progressBar1.Value++;
+                }));
                 // Move the file
                 await MoveFileAsync(file, destinationPath);
             }
@@ -918,6 +1003,10 @@ namespace Tools
                 string destinationPath = Path.Combine(PathSort, aspectRatio);
                 Directory.CreateDirectory(destinationPath);
 
+                progressBar1.Invoke(new Action(() =>
+                {
+                    progressBar1.Value++;
+                }));
                 // Move the file
                 await MoveFileAsync(file, destinationPath);
             }
