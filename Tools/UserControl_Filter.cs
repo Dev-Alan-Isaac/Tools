@@ -830,14 +830,18 @@ namespace Tools
 
             foreach (var file in files)
             {
-                // Check if the file is a video
-                if (!IsVideoFile(file))
-                {
-                    continue;
-                }
+                //// Skip the file if it's not a video
+                //if (!IsVideoFile(file))
+                //{
+                //    progressBar1.Invoke(new Action(() =>
+                //    {
+                //        progressBar1.Value++; // Still progress the bar for non-video files
+                //    }));
+                //    continue;
+                //}
 
                 // Use NReco to get media info and determine the duration
-                var mediaInfo = new NReco.VideoInfo.FFProbe().GetMediaInfo(file);
+                var mediaInfo = new FFProbe().GetMediaInfo(file);
                 var duration = mediaInfo.Duration;
 
                 // Format duration as HH-mm-ss
@@ -860,6 +864,11 @@ namespace Tools
                 // Move the file
                 await MoveFileAsync(file, destinationPath);
             }
+
+            progressBar1.Invoke(new Action(() =>
+            {
+                progressBar1.Value=0; // Still progress the bar for non-video files
+            }));
         }
 
         private async Task Resolution(string[] files)
