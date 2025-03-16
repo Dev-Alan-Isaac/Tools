@@ -19,6 +19,8 @@ namespace Tools
         {
             InitializeComponent();
             LoadGlobalJson();
+            //this.Icon = Properties.Resources.tool; // Replace 'YourIconName' with the actual name of the icon resource
+
         }
 
         private void UserControl_Filter_Load(object sender, EventArgs e)
@@ -186,6 +188,12 @@ namespace Tools
 
         private void button_Play_Click(object sender, EventArgs e)
         {
+            // Clear the TextBox logs before adding new lines
+            textBox_Logs.Invoke(new Action(() =>
+            {
+                textBox_Logs.Clear();
+            }));
+
             // Get the checkbox states
             Dictionary<string, bool> checkboxStates = Get_CheckboxState();
 
@@ -219,6 +227,7 @@ namespace Tools
                 }
             }
 
+            // Perform delete action if enabled in settings
             if (filterSettings.Delete)
             {
                 Delete_Folders(PathSort);
@@ -653,49 +662,148 @@ namespace Tools
                 progressBar1.Value = 0;
             }));
 
+            if (filterSettings.Chars)
+            {
+                await NonASCII(files);
+            }
+            else if (filterSettings.Caps)
+            {
+                await IgnoreCaps(files);
+            }
         }
 
         private async Task NonASCII(string[] files)
         {
-            string FolderPath = Path.Combine(PathSort, "Characters");
+            string folderPath = Path.Combine(PathSort, "Characters");
 
-            if (!Directory.Exists(FolderPath))
+            // Create the main folder if it doesn't exist
+            if (!Directory.Exists(folderPath))
             {
-                Directory.CreateDirectory(FolderPath);
+                Directory.CreateDirectory(folderPath);
             }
 
+            // Create subfolders for ASCII and Non-ASCII characters
+            string asciiFolder = Path.Combine(folderPath, "ASCII");
+            string nonAsciiFolder = Path.Combine(folderPath, "Non-ASCII");
+
+            if (!Directory.Exists(asciiFolder))
+            {
+                Directory.CreateDirectory(asciiFolder);
+            }
+
+            if (!Directory.Exists(nonAsciiFolder))
+            {
+                Directory.CreateDirectory(nonAsciiFolder);
+            }
+
+            // Initialize progress bar
+            progressBar1.Invoke(new Action(() =>
+            {
+                progressBar1.Minimum = 0;
+                progressBar1.Maximum = files.Length;
+                progressBar1.Value = 0;
+            }));
+
+            // Process each file
             foreach (var file in files)
             {
+                try
+                {
+                    // Read the file name
+                    string fileName = Path.GetFileName(file);
 
+                    // Determine whether the file name contains any non-ASCII characters
+                    bool isAscii = fileName.All(c => c <= 127);
+
+                    // Move the file to the corresponding folder
+                    string destinationFolder = isAscii ? asciiFolder : nonAsciiFolder;
+                    string destinationPath = Path.Combine(destinationFolder, fileName);
+
+                    MoveFileAsync(file, destinationPath);
+
+                    // Update the progress bar
+                    progressBar1.Invoke(new Action(() =>
+                    {
+                        progressBar1.Value++;
+                    }));
+                }
+                catch (Exception ex)
+                {
+                    // Handle errors (e.g., logging, notifying the user)
+                    MessageBox.Show($"Error processing file {file}: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
 
+            // Reset progress bar
             progressBar1.Invoke(new Action(() =>
             {
                 progressBar1.Value = 0;
             }));
 
+            // Display completion message
             MessageBox.Show("File filtering and organization completed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private async Task IgnoreCaps(string[] files)
         {
-            string FolderPath = Path.Combine(PathSort, "Characters");
+            string folderPath = Path.Combine(PathSort, "Characters");
 
-            if (!Directory.Exists(FolderPath))
+            // Create the main folder if it doesn't exist
+            if (!Directory.Exists(folderPath))
             {
-                Directory.CreateDirectory(FolderPath);
+                Directory.CreateDirectory(folderPath);
             }
 
+            // Initialize progress bar
+            progressBar1.Invoke(new Action(() =>
+            {
+                progressBar1.Minimum = 0;
+                progressBar1.Maximum = files.Length;
+                progressBar1.Value = 0;
+            }));
+
+            // Process each file
             foreach (var file in files)
             {
+                try
+                {
+                    // Get the file name
+                    string fileName = Path.GetFileName(file);
 
+                    // Determine the first letter (ignoring case)
+                    char firstLetter = char.ToUpper(fileName[0]);
+
+                    // Create a subfolder for this letter
+                    string letterFolder = Path.Combine(folderPath, firstLetter.ToString());
+                    if (!Directory.Exists(letterFolder))
+                    {
+                        Directory.CreateDirectory(letterFolder);
+                    }
+
+                    // Move the file to the corresponding folder
+                    string destinationPath = Path.Combine(letterFolder, fileName);
+                    MoveFileAsync(file, destinationPath);
+
+                    // Update the progress bar
+                    progressBar1.Invoke(new Action(() =>
+                    {
+                        progressBar1.Value++;
+                    }));
+                }
+                catch (Exception ex)
+                {
+                    // Handle errors
+                    MessageBox.Show($"Error processing file {file}: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
 
+            // Reset the progress bar
             progressBar1.Invoke(new Action(() =>
             {
                 progressBar1.Value = 0;
             }));
 
+            // Display completion message
             MessageBox.Show("File filtering and organization completed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
@@ -1287,7 +1395,7 @@ namespace Tools
                 }
             }
             catch (Exception ex)
-            {               
+            {
                 MessageBox.Show($"An error occurred: {ex.Message}", "Fail", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -1397,6 +1505,14 @@ namespace Tools
                 string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(destinationPath);
                 newDestinationPath = Path.Combine(Path.GetDirectoryName(destinationPath), $"{fileNameWithoutExtension} ({fileCount++}){fileExtension}");
             }
+
+            // Log the destination path to the TextBox
+            textBox_Logs.Invoke(new Action(() =>
+            {
+                string fileName = Path.GetFileName(sourcePath); // Get the file name
+                textBox_Logs.AppendText($"{Environment.NewLine}"); // Add a separator line
+                textBox_Logs.AppendText($"Moving file \"{fileName}\" to: {newDestinationPath}{Environment.NewLine}");
+            }));
 
             await Task.Run(() => File.Move(sourcePath, newDestinationPath));
         }
