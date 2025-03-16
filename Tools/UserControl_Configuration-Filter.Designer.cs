@@ -64,8 +64,8 @@
             radioButton_Date_Access = new RadioButton();
             radioButton_Date_Creation = new RadioButton();
             groupBox9 = new GroupBox();
-            checkBox_Name_Characters = new CheckBox();
-            checkBox_Name_Caps = new CheckBox();
+            radioButton_Caps = new RadioButton();
+            radioButton_ASCII = new RadioButton();
             groupBox1.SuspendLayout();
             groupBox5.SuspendLayout();
             groupBox2.SuspendLayout();
@@ -472,8 +472,8 @@
             // groupBox9
             // 
             groupBox9.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            groupBox9.Controls.Add(checkBox_Name_Characters);
-            groupBox9.Controls.Add(checkBox_Name_Caps);
+            groupBox9.Controls.Add(radioButton_ASCII);
+            groupBox9.Controls.Add(radioButton_Caps);
             groupBox9.Font = new Font("Arial Rounded MT Bold", 12F);
             groupBox9.Location = new Point(520, 501);
             groupBox9.Name = "groupBox9";
@@ -482,25 +482,27 @@
             groupBox9.TabStop = false;
             groupBox9.Text = "Name";
             // 
-            // checkBox_Name_Characters
+            // radioButton_Caps
             // 
-            checkBox_Name_Characters.AutoSize = true;
-            checkBox_Name_Characters.Location = new Point(6, 62);
-            checkBox_Name_Characters.Name = "checkBox_Name_Characters";
-            checkBox_Name_Characters.Size = new Size(108, 22);
-            checkBox_Name_Characters.TabIndex = 1;
-            checkBox_Name_Characters.Text = "Non ASCII";
-            checkBox_Name_Characters.UseVisualStyleBackColor = true;
+            radioButton_Caps.AutoSize = true;
+            radioButton_Caps.Location = new Point(6, 25);
+            radioButton_Caps.Name = "radioButton_Caps";
+            radioButton_Caps.Size = new Size(123, 22);
+            radioButton_Caps.TabIndex = 2;
+            radioButton_Caps.TabStop = true;
+            radioButton_Caps.Text = "Ignore Caps";
+            radioButton_Caps.UseVisualStyleBackColor = true;
             // 
-            // checkBox_Name_Caps
+            // radioButton_ASCII
             // 
-            checkBox_Name_Caps.AutoSize = true;
-            checkBox_Name_Caps.Location = new Point(6, 26);
-            checkBox_Name_Caps.Name = "checkBox_Name_Caps";
-            checkBox_Name_Caps.Size = new Size(124, 22);
-            checkBox_Name_Caps.TabIndex = 0;
-            checkBox_Name_Caps.Text = "Ignore Caps";
-            checkBox_Name_Caps.UseVisualStyleBackColor = true;
+            radioButton_ASCII.AutoSize = true;
+            radioButton_ASCII.Location = new Point(6, 60);
+            radioButton_ASCII.Name = "radioButton_ASCII";
+            radioButton_ASCII.Size = new Size(107, 22);
+            radioButton_ASCII.TabIndex = 3;
+            radioButton_ASCII.TabStop = true;
+            radioButton_ASCII.Text = "Non ASCII";
+            radioButton_ASCII.UseVisualStyleBackColor = true;
             // 
             // UserControl_Configuration_Filter
             // 
@@ -568,8 +570,8 @@
         private RadioButton radioButton_Media_FrameRate;
         private RadioButton radioButton_Media_Resolution;
         private RadioButton radioButton_Media_Duration;
-        private CheckBox checkBox_Name_Characters;
-        private CheckBox checkBox_Name_Caps;
         private CheckBox checkBox_Type_Executable;
+        private RadioButton radioButton_ASCII;
+        private RadioButton radioButton_Caps;
     }
 }
