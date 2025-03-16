@@ -303,15 +303,15 @@ namespace Tools
         {
             if (filterSettings.Range)
             {
-                Range(files, filterSettings.Range_List);
+                await Range(files, filterSettings.Range_List); // Assuming Range is synchronous
             }
             else if (filterSettings.Dynamic)
             {
-                Dynamic(files);
+                await Dynamic(files); // Add 'await' to call the async method correctly
             }
         }
 
-        private async void Range(string[] files, List<Dictionary<string, List<string>>> Range_List)
+        private async Task Range(string[] files, List<Dictionary<string, List<string>>> Range_List)
         {
             progressBar1.Invoke(new Action(() =>
             {
@@ -377,6 +377,7 @@ namespace Tools
             {
                 progressBar1.Value = 0;
             }));
+
             MessageBox.Show("File filtering and organization completed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
@@ -400,7 +401,7 @@ namespace Tools
             }
         }
 
-        private async void Dynamic(string[] files)
+        private async Task Dynamic(string[] files)
         {
             // Define size thresholds in bytes
             long kbThreshold = 1024; // 1 KB
@@ -469,6 +470,7 @@ namespace Tools
             {
                 progressBar1.Value = 0;
             }));
+
             MessageBox.Show("File filtering and organization completed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
@@ -502,111 +504,144 @@ namespace Tools
 
             if (filterSettings.Creation)
             {
-                string creationDateParentFolder = Path.Combine(PathSort, "Creation date");
-
-                foreach (var file in files)
-                {
-                    DateTime creationDate = File.GetCreationTime(file);
-                    string creationDateFolder = Path.Combine(creationDateParentFolder, creationDate.ToString("yyyy-MM-dd"));
-
-                    if (!Directory.Exists(creationDateFolder))
-                    {
-                        Directory.CreateDirectory(creationDateFolder);
-                    }
-
-                    string fileName = Path.GetFileName(file);
-                    string destinationPath = Path.Combine(creationDateFolder, fileName);
-
-                    // Handle files with the same name
-                    int fileCount = 1;
-                    string newDestinationPath = destinationPath;
-                    while (File.Exists(newDestinationPath))
-                    {
-                        string fileExtension = Path.GetExtension(fileName);
-                        string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
-                        newDestinationPath = Path.Combine(creationDateFolder, $"{fileNameWithoutExtension} ({fileCount++}){fileExtension}");
-                    }
-                    progressBar1.Invoke(new Action(() =>
-                    {
-                        progressBar1.Value++;
-                    }));
-
-                    await MoveFileAsync(file, newDestinationPath);
-                }
-
-                MessageBox.Show("File filtering and organization completed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+                await Creation(files);
             }
             else if (filterSettings.Access)
             {
-                string accessDateParentFolder = Path.Combine(PathSort, "Access date");
-
-                foreach (var file in files)
-                {
-                    DateTime accessDate = File.GetLastAccessTime(file);
-                    string accessDateFolder = Path.Combine(accessDateParentFolder, accessDate.ToString("yyyy-MM-dd"));
-
-                    if (!Directory.Exists(accessDateFolder))
-                    {
-                        Directory.CreateDirectory(accessDateFolder);
-                    }
-
-                    string fileName = Path.GetFileName(file);
-                    string destinationPath = Path.Combine(accessDateFolder, fileName);
-
-                    // Handle files with the same name
-                    int fileCount = 1;
-                    string newDestinationPath = destinationPath;
-                    while (File.Exists(newDestinationPath))
-                    {
-                        string fileExtension = Path.GetExtension(fileName);
-                        string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
-                        newDestinationPath = Path.Combine(accessDateFolder, $"{fileNameWithoutExtension} ({fileCount++}){fileExtension}");
-                    }
-
-                    progressBar1.Invoke(new Action(() =>
-                    {
-                        progressBar1.Value++;
-                    }));
-
-                    await MoveFileAsync(file, newDestinationPath);
-                }
+                await Access(files);
             }
             else if (filterSettings.Modify)
             {
-                string modifyDateParentFolder = Path.Combine(PathSort, "Modify date");
-
-                foreach (var file in files)
-                {
-                    DateTime modifyDate = File.GetLastWriteTime(file);
-                    string modifyDateFolder = Path.Combine(modifyDateParentFolder, modifyDate.ToString("yyyy-MM-dd"));
-
-                    if (!Directory.Exists(modifyDateFolder))
-                    {
-                        Directory.CreateDirectory(modifyDateFolder);
-                    }
-
-                    string fileName = Path.GetFileName(file);
-                    string destinationPath = Path.Combine(modifyDateFolder, fileName);
-
-                    // Handle files with the same name
-                    int fileCount = 1;
-                    string newDestinationPath = destinationPath;
-                    while (File.Exists(newDestinationPath))
-                    {
-                        string fileExtension = Path.GetExtension(fileName);
-                        string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
-                        newDestinationPath = Path.Combine(modifyDateFolder, $"{fileNameWithoutExtension} ({fileCount++}){fileExtension}");
-                    }
-
-                    progressBar1.Invoke(new Action(() =>
-                    {
-                        progressBar1.Value++;
-                    }));
-
-                    await MoveFileAsync(file, newDestinationPath);
-                }
+                await Modify(files);
             }
+        }
+
+        private async Task Creation(string[] files)
+        {
+            string creationDateParentFolder = Path.Combine(PathSort, "Creation date");
+
+            foreach (var file in files)
+            {
+                DateTime creationDate = File.GetCreationTime(file);
+                string creationDateFolder = Path.Combine(creationDateParentFolder, creationDate.ToString("yyyy-MM-dd"));
+
+                if (!Directory.Exists(creationDateFolder))
+                {
+                    Directory.CreateDirectory(creationDateFolder);
+                }
+
+                string fileName = Path.GetFileName(file);
+                string destinationPath = Path.Combine(creationDateFolder, fileName);
+
+                // Handle files with the same name
+                int fileCount = 1;
+                string newDestinationPath = destinationPath;
+                while (File.Exists(newDestinationPath))
+                {
+                    string fileExtension = Path.GetExtension(fileName);
+                    string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+                    newDestinationPath = Path.Combine(creationDateFolder, $"{fileNameWithoutExtension} ({fileCount++}){fileExtension}");
+                }
+                progressBar1.Invoke(new Action(() =>
+                {
+                    progressBar1.Value++;
+                }));
+
+                await MoveFileAsync(file, newDestinationPath);
+            }
+
+            progressBar1.Invoke(new Action(() =>
+            {
+                progressBar1.Value = 0;
+            }));
+
+            MessageBox.Show("File filtering and organization completed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private async Task Access(string[] files)
+        {
+            string accessDateParentFolder = Path.Combine(PathSort, "Access date");
+
+            foreach (var file in files)
+            {
+                DateTime accessDate = File.GetLastAccessTime(file);
+                string accessDateFolder = Path.Combine(accessDateParentFolder, accessDate.ToString("yyyy-MM-dd"));
+
+                if (!Directory.Exists(accessDateFolder))
+                {
+                    Directory.CreateDirectory(accessDateFolder);
+                }
+
+                string fileName = Path.GetFileName(file);
+                string destinationPath = Path.Combine(accessDateFolder, fileName);
+
+                // Handle files with the same name
+                int fileCount = 1;
+                string newDestinationPath = destinationPath;
+                while (File.Exists(newDestinationPath))
+                {
+                    string fileExtension = Path.GetExtension(fileName);
+                    string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+                    newDestinationPath = Path.Combine(accessDateFolder, $"{fileNameWithoutExtension} ({fileCount++}){fileExtension}");
+                }
+
+                progressBar1.Invoke(new Action(() =>
+                {
+                    progressBar1.Value++;
+                }));
+
+                await MoveFileAsync(file, newDestinationPath);
+            }
+
+            progressBar1.Invoke(new Action(() =>
+            {
+                progressBar1.Value = 0;
+            }));
+
+            MessageBox.Show("File filtering and organization completed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private async Task Modify(string[] files)
+        {
+            string modifyDateParentFolder = Path.Combine(PathSort, "Modify date");
+
+            foreach (var file in files)
+            {
+                DateTime modifyDate = File.GetLastWriteTime(file);
+                string modifyDateFolder = Path.Combine(modifyDateParentFolder, modifyDate.ToString("yyyy-MM-dd"));
+
+                if (!Directory.Exists(modifyDateFolder))
+                {
+                    Directory.CreateDirectory(modifyDateFolder);
+                }
+
+                string fileName = Path.GetFileName(file);
+                string destinationPath = Path.Combine(modifyDateFolder, fileName);
+
+                // Handle files with the same name
+                int fileCount = 1;
+                string newDestinationPath = destinationPath;
+                while (File.Exists(newDestinationPath))
+                {
+                    string fileExtension = Path.GetExtension(fileName);
+                    string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+                    newDestinationPath = Path.Combine(modifyDateFolder, $"{fileNameWithoutExtension} ({fileCount++}){fileExtension}");
+                }
+
+                progressBar1.Invoke(new Action(() =>
+                {
+                    progressBar1.Value++;
+                }));
+
+                await MoveFileAsync(file, newDestinationPath);
+            }
+
+            progressBar1.Invoke(new Action(() =>
+            {
+                progressBar1.Value = 0;
+            }));
+
+            MessageBox.Show("File filtering and organization completed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private async Task FilterName(string[] files)
@@ -618,81 +653,50 @@ namespace Tools
                 progressBar1.Value = 0;
             }));
 
-            if (filterSettings.Chars && filterSettings.Caps)
-            {
-                // Apply both filters: non-UTF8 characters and capitalization
-                foreach (var file in files)
-                {
-                    string fileName = Path.GetFileName(file);
-
-                    if (ContainsNonUTF8Characters(fileName) && StartsWithUppercase(fileName))
-                    {
-                        string destinationPath = Path.Combine("FilteredCharsCaps", fileName);
-
-                        progressBar1.Invoke(new Action(() =>
-                        {
-                            progressBar1.Value++;
-                        }));
-
-                        await MoveFileAsync(file, destinationPath);
-                    }
-                }
-            }
-            else if (filterSettings.Chars)
-            {
-                // Apply filter by non-UTF8 characters only
-                foreach (var file in files)
-                {
-                    string fileName = Path.GetFileName(file);
-
-                    if (ContainsNonUTF8Characters(fileName))
-                    {
-                        string destinationPath = Path.Combine("FilteredChars", fileName);
-
-                        progressBar1.Invoke(new Action(() =>
-                        {
-                            progressBar1.Value++;
-                        }));
-
-                        await MoveFileAsync(file, destinationPath);
-                    }
-                }
-            }
-            else if (filterSettings.Caps)
-            {
-                // Apply filter by capitalization only
-                foreach (var file in files)
-                {
-                    string fileName = Path.GetFileName(file);
-
-                    if (StartsWithUppercase(fileName))
-                    {
-                        string destinationPath = Path.Combine("FilteredCaps", fileName);
-
-                        progressBar1.Invoke(new Action(() =>
-                        {
-                            progressBar1.Value++;
-                        }));
-
-                        await MoveFileAsync(file, destinationPath);
-                    }
-                }
-            }
         }
 
-        private bool ContainsNonUTF8Characters(string fileName)
+        private async Task NonASCII(string[] files)
         {
-            Encoding utf8 = Encoding.UTF8;
-            byte[] utf8Bytes = utf8.GetBytes(fileName);
+            string FolderPath = Path.Combine(PathSort, "Characters");
 
-            // If converting to UTF8 and back changes the string, it contains non-UTF8 characters
-            string converted = utf8.GetString(utf8Bytes);
-            return !string.Equals(fileName, converted, StringComparison.Ordinal);
+            if (!Directory.Exists(FolderPath))
+            {
+                Directory.CreateDirectory(FolderPath);
+            }
+
+            foreach (var file in files)
+            {
+
+            }
+
+            progressBar1.Invoke(new Action(() =>
+            {
+                progressBar1.Value = 0;
+            }));
+
+            MessageBox.Show("File filtering and organization completed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private bool StartsWithUppercase(string fileName)
+        private async Task IgnoreCaps(string[] files)
         {
-            return !string.IsNullOrEmpty(fileName) && char.IsUpper(fileName[0]);
+            string FolderPath = Path.Combine(PathSort, "Characters");
+
+            if (!Directory.Exists(FolderPath))
+            {
+                Directory.CreateDirectory(FolderPath);
+            }
+
+            foreach (var file in files)
+            {
+
+            }
+
+            progressBar1.Invoke(new Action(() =>
+            {
+                progressBar1.Value = 0;
+            }));
+
+            MessageBox.Show("File filtering and organization completed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private async Task FilterExtension(string[] files)
@@ -733,6 +737,11 @@ namespace Tools
 
                 await MoveFileAsync(file, newDestinationPath);
             }
+
+            progressBar1.Invoke(new Action(() =>
+            {
+                progressBar1.Value = 0;
+            }));
 
             MessageBox.Show("File filtering and organization completed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -785,8 +794,13 @@ namespace Tools
                     }
                 }
             }
+
+            progressBar1.Invoke(new Action(() =>
+            {
+                progressBar1.Value = 0;
+            }));
+
             MessageBox.Show("File filtering and organization completed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
- 
         }
 
         private async Task FilterMedia(string[] files)
@@ -815,7 +829,7 @@ namespace Tools
 
         private bool IsVideoFile(string filePath)
         {
-            string extension = Path.GetExtension(filePath).ToLower();
+            string extension = Path.GetExtension(filePath).ToLower().TrimStart('.'); // Remove the leading period
             return filterSettings.Video_List.Contains(extension);
         }
 
@@ -830,15 +844,10 @@ namespace Tools
 
             foreach (var file in files)
             {
-                //// Skip the file if it's not a video
-                //if (!IsVideoFile(file))
-                //{
-                //    progressBar1.Invoke(new Action(() =>
-                //    {
-                //        progressBar1.Value++; // Still progress the bar for non-video files
-                //    }));
-                //    continue;
-                //}
+                if (!IsVideoFile(file))
+                {
+                    continue;
+                }
 
                 // Use NReco to get media info and determine the duration
                 var mediaInfo = new FFProbe().GetMediaInfo(file);
@@ -867,8 +876,10 @@ namespace Tools
 
             progressBar1.Invoke(new Action(() =>
             {
-                progressBar1.Value=0; // Still progress the bar for non-video files
+                progressBar1.Value = 0;
             }));
+
+            MessageBox.Show("File filtering and organization completed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private async Task Resolution(string[] files)
@@ -902,6 +913,13 @@ namespace Tools
                 // Move the file
                 await MoveFileAsync(file, destinationPath);
             }
+
+            progressBar1.Invoke(new Action(() =>
+            {
+                progressBar1.Value = 0;
+            }));
+
+            MessageBox.Show("File filtering and organization completed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private async Task FrameRate(string[] files)
@@ -935,6 +953,13 @@ namespace Tools
                 // Move the file
                 await MoveFileAsync(file, destinationPath);
             }
+
+            progressBar1.Invoke(new Action(() =>
+            {
+                progressBar1.Value = 0;
+            }));
+
+            MessageBox.Show("File filtering and organization completed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private string GetFramerate(string videoFilePath)
@@ -977,6 +1002,13 @@ namespace Tools
                 // Move the file
                 await MoveFileAsync(file, destinationPath);
             }
+
+            progressBar1.Invoke(new Action(() =>
+            {
+                progressBar1.Value = 0;
+            }));
+
+            MessageBox.Show("File filtering and organization completed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private string GetCodec(string videoFilePath)
@@ -1019,6 +1051,13 @@ namespace Tools
                 // Move the file
                 await MoveFileAsync(file, destinationPath);
             }
+
+            progressBar1.Invoke(new Action(() =>
+            {
+                progressBar1.Value = 0;
+            }));
+
+            MessageBox.Show("File filtering and organization completed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private string GetAspectRatio(string videoFilePath)
@@ -1104,11 +1143,11 @@ namespace Tools
                 }));
             }
 
-            // Reset the ProgressBar and show a completion message
             progressBar1.Invoke(new Action(() =>
             {
                 progressBar1.Value = 0;
             }));
+
             MessageBox.Show("Duplicate file processing completed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
@@ -1188,14 +1227,12 @@ namespace Tools
                 serializer.Serialize(jsonWriter, uniqueHashes.ToList());
             }
 
-            // Display a completion message
-            MessageBox.Show("Hashing process completed.", "Hashing Completed", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            // Reset the progress bar
-            Invoke(new Action(() =>
+            progressBar1.Invoke(new Action(() =>
             {
                 progressBar1.Value = 0;
             }));
+
+            MessageBox.Show("Hashing process completed.", "Hashing Completed", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         // Global
@@ -1224,7 +1261,6 @@ namespace Tools
             checkboxStates.Add("duplicate", checkBox_Duplicates.Checked);
             checkboxStates.Add("scan", checkBox_scan.Checked);
 
-
             // Return the dictionary
             return checkboxStates;
         }
@@ -1251,8 +1287,8 @@ namespace Tools
                 }
             }
             catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred: {ex.Message}");
+            {               
+                MessageBox.Show($"An error occurred: {ex.Message}", "Fail", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
