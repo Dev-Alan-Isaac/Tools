@@ -485,11 +485,11 @@
             // checkBox_Name_Characters
             // 
             checkBox_Name_Characters.AutoSize = true;
-            checkBox_Name_Characters.Location = new Point(6, 54);
+            checkBox_Name_Characters.Location = new Point(6, 62);
             checkBox_Name_Characters.Name = "checkBox_Name_Characters";
-            checkBox_Name_Characters.Size = new Size(233, 22);
+            checkBox_Name_Characters.Size = new Size(108, 22);
             checkBox_Name_Characters.TabIndex = 1;
-            checkBox_Name_Characters.Text = "Ignore special characters";
+            checkBox_Name_Characters.Text = "Non ASCII";
             checkBox_Name_Characters.UseVisualStyleBackColor = true;
             // 
             // checkBox_Name_Caps
@@ -497,9 +497,9 @@
             checkBox_Name_Caps.AutoSize = true;
             checkBox_Name_Caps.Location = new Point(6, 26);
             checkBox_Name_Caps.Name = "checkBox_Name_Caps";
-            checkBox_Name_Caps.Size = new Size(122, 22);
+            checkBox_Name_Caps.Size = new Size(124, 22);
             checkBox_Name_Caps.TabIndex = 0;
-            checkBox_Name_Caps.Text = "Ignore caps";
+            checkBox_Name_Caps.Text = "Ignore Caps";
             checkBox_Name_Caps.UseVisualStyleBackColor = true;
             // 
             // UserControl_Configuration_Filter
