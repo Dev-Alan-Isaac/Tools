@@ -44,12 +44,15 @@
             button_Play = new Button();
             button_Path = new Button();
             panel_Body = new Panel();
+            textBox_Logs = new TextBox();
             panel2 = new Panel();
+            treeView1 = new TreeView();
             panel1 = new Panel();
             progressBar1 = new ProgressBar();
             panel_NavBar.SuspendLayout();
             panel_TopBar.SuspendLayout();
             panel_Body.SuspendLayout();
+            panel2.SuspendLayout();
             panel1.SuspendLayout();
             SuspendLayout();
             // 
@@ -256,6 +259,7 @@
             // panel_Body
             // 
             panel_Body.BackColor = SystemColors.Control;
+            panel_Body.Controls.Add(textBox_Logs);
             panel_Body.Controls.Add(panel2);
             panel_Body.Controls.Add(panel1);
             panel_Body.Dock = DockStyle.Fill;
@@ -264,13 +268,35 @@
             panel_Body.Size = new Size(622, 562);
             panel_Body.TabIndex = 2;
             // 
+            // textBox_Logs
+            // 
+            textBox_Logs.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            textBox_Logs.BorderStyle = BorderStyle.FixedSingle;
+            textBox_Logs.Location = new Point(6, 6);
+            textBox_Logs.Multiline = true;
+            textBox_Logs.Name = "textBox_Logs";
+            textBox_Logs.ReadOnly = true;
+            textBox_Logs.ScrollBars = ScrollBars.Both;
+            textBox_Logs.Size = new Size(397, 514);
+            textBox_Logs.TabIndex = 2;
+            textBox_Logs.WordWrap = false;
+            // 
             // panel2
             // 
+            panel2.Controls.Add(treeView1);
             panel2.Dock = DockStyle.Right;
             panel2.Location = new Point(409, 0);
             panel2.Name = "panel2";
             panel2.Size = new Size(213, 526);
             panel2.TabIndex = 1;
+            // 
+            // treeView1
+            // 
+            treeView1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            treeView1.Location = new Point(3, 3);
+            treeView1.Name = "treeView1";
+            treeView1.Size = new Size(207, 520);
+            treeView1.TabIndex = 0;
             // 
             // panel1
             // 
@@ -306,6 +332,8 @@
             panel_TopBar.ResumeLayout(false);
             panel_TopBar.PerformLayout();
             panel_Body.ResumeLayout(false);
+            panel_Body.PerformLayout();
+            panel2.ResumeLayout(false);
             panel1.ResumeLayout(false);
             ResumeLayout(false);
         }
@@ -331,5 +359,7 @@
         private TextBox textBox_Path;
         private TextBox textBox_Files;
         private Panel panel2;
+        private TextBox textBox_Logs;
+        private TreeView treeView1;
     }
 }
