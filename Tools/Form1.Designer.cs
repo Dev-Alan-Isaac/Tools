@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form));
             panel_NavBar = new Panel();
             panel_NavBarIndicator = new Panel();
             button10 = new Button();
@@ -472,6 +473,7 @@
             Controls.Add(panel_TopBar);
             Controls.Add(panel_NavBar);
             FormBorderStyle = FormBorderStyle.None;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Form";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Form1";
