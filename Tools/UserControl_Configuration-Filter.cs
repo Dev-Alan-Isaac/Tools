@@ -352,10 +352,10 @@ namespace Tools
             switch (propertyName)
             {
                 case "Caps":
-                    checkBox_Name_Caps.Checked = state;
+                    radioButton_Caps.Checked = state;
                     break;
                 case "Chars":
-                    checkBox_Name_Characters.Checked = state;
+                    radioButton_ASCII.Checked = state;
                     break;
                 default:
                     Debug.WriteLine($"Unknown property: {propertyName}");
@@ -455,8 +455,8 @@ namespace Tools
 
                 filterSection["Size"][0]["Range"] = radioButton_Size_Range.Checked;
                 filterSection["Size"][1]["Dynamic"] = radioButton_Size_Dynamic.Checked;
-                filterSection["Name"][0]["Caps"] = checkBox_Name_Caps.Checked;
-                filterSection["Name"][1]["Chars"] = checkBox_Name_Characters.Checked;
+                filterSection["Name"][0]["Caps"] = radioButton_Caps.Checked;
+                filterSection["Name"][1]["Chars"] = radioButton_ASCII.Checked;
 
                 File.WriteAllText(settingPath, jsonObject.ToString());
 
