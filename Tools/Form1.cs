@@ -190,7 +190,7 @@ namespace Tools
                     )),
                     new JProperty("Name", new JArray(
                         new JObject(new JProperty("Caps", true)),
-                        new JObject(new JProperty("Chars", true))
+                        new JObject(new JProperty("Chars", false))
                     ))
                 )),
                 new JProperty("Convert", new JObject(
