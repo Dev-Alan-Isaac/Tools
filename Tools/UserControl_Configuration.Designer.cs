@@ -50,6 +50,16 @@
             userControl_Configuration_Merge1 = new UserControl_Configuration_Merge();
             userControl_Configuration_Filter1 = new UserControl_Configuration_Filter();
             bunifuElipse1 = new Bunifu.Framework.UI.BunifuElipse(components);
+            bunifuElipse2 = new Bunifu.Framework.UI.BunifuElipse(components);
+            bunifuElipse3 = new Bunifu.Framework.UI.BunifuElipse(components);
+            bunifuElipse4 = new Bunifu.Framework.UI.BunifuElipse(components);
+            bunifuElipse5 = new Bunifu.Framework.UI.BunifuElipse(components);
+            bunifuElipse6 = new Bunifu.Framework.UI.BunifuElipse(components);
+            bunifuElipse7 = new Bunifu.Framework.UI.BunifuElipse(components);
+            bunifuElipse8 = new Bunifu.Framework.UI.BunifuElipse(components);
+            bunifuElipse9 = new Bunifu.Framework.UI.BunifuElipse(components);
+            bunifuElipse10 = new Bunifu.Framework.UI.BunifuElipse(components);
+            bunifuElipse11 = new Bunifu.Framework.UI.BunifuElipse(components);
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             panel3.SuspendLayout();
@@ -87,6 +97,9 @@
             // 
             // button10
             // 
+            button10.Cursor = Cursors.Hand;
+            button10.FlatAppearance.BorderSize = 0;
+            button10.FlatStyle = FlatStyle.Flat;
             button10.Font = new Font("Arial Rounded MT Bold", 10F);
             button10.Location = new Point(38, 536);
             button10.Name = "button10";
@@ -98,6 +111,9 @@
             // 
             // button9
             // 
+            button9.Cursor = Cursors.Hand;
+            button9.FlatAppearance.BorderSize = 0;
+            button9.FlatStyle = FlatStyle.Flat;
             button9.Font = new Font("Arial Rounded MT Bold", 10F);
             button9.Location = new Point(38, 482);
             button9.Name = "button9";
@@ -109,6 +125,9 @@
             // 
             // button8
             // 
+            button8.Cursor = Cursors.Hand;
+            button8.FlatAppearance.BorderSize = 0;
+            button8.FlatStyle = FlatStyle.Flat;
             button8.Font = new Font("Arial Rounded MT Bold", 10F);
             button8.Location = new Point(38, 428);
             button8.Name = "button8";
@@ -120,6 +139,9 @@
             // 
             // button7
             // 
+            button7.Cursor = Cursors.Hand;
+            button7.FlatAppearance.BorderSize = 0;
+            button7.FlatStyle = FlatStyle.Flat;
             button7.Font = new Font("Arial Rounded MT Bold", 10F);
             button7.Location = new Point(38, 374);
             button7.Name = "button7";
@@ -131,6 +153,9 @@
             // 
             // button6
             // 
+            button6.Cursor = Cursors.Hand;
+            button6.FlatAppearance.BorderSize = 0;
+            button6.FlatStyle = FlatStyle.Flat;
             button6.Font = new Font("Arial Rounded MT Bold", 10F);
             button6.Location = new Point(38, 320);
             button6.Name = "button6";
@@ -142,6 +167,9 @@
             // 
             // button5
             // 
+            button5.Cursor = Cursors.Hand;
+            button5.FlatAppearance.BorderSize = 0;
+            button5.FlatStyle = FlatStyle.Flat;
             button5.Font = new Font("Arial Rounded MT Bold", 10F);
             button5.Location = new Point(41, 266);
             button5.Name = "button5";
@@ -153,6 +181,9 @@
             // 
             // button4
             // 
+            button4.Cursor = Cursors.Hand;
+            button4.FlatAppearance.BorderSize = 0;
+            button4.FlatStyle = FlatStyle.Flat;
             button4.Font = new Font("Arial Rounded MT Bold", 10F);
             button4.Location = new Point(38, 212);
             button4.Name = "button4";
@@ -164,6 +195,9 @@
             // 
             // button3
             // 
+            button3.Cursor = Cursors.Hand;
+            button3.FlatAppearance.BorderSize = 0;
+            button3.FlatStyle = FlatStyle.Flat;
             button3.Font = new Font("Arial Rounded MT Bold", 10F);
             button3.Location = new Point(38, 158);
             button3.Name = "button3";
@@ -175,6 +209,9 @@
             // 
             // button2
             // 
+            button2.Cursor = Cursors.Hand;
+            button2.FlatAppearance.BorderSize = 0;
+            button2.FlatStyle = FlatStyle.Flat;
             button2.Font = new Font("Arial Rounded MT Bold", 10F);
             button2.Location = new Point(38, 104);
             button2.Name = "button2";
@@ -186,6 +223,9 @@
             // 
             // button1
             // 
+            button1.Cursor = Cursors.Hand;
+            button1.FlatAppearance.BorderSize = 0;
+            button1.FlatStyle = FlatStyle.Flat;
             button1.Font = new Font("Arial Rounded MT Bold", 10F);
             button1.Location = new Point(38, 50);
             button1.Name = "button1";
@@ -281,6 +321,56 @@
             bunifuElipse1.ElipseRadius = 5;
             bunifuElipse1.TargetControl = button_Save;
             // 
+            // bunifuElipse2
+            // 
+            bunifuElipse2.ElipseRadius = 5;
+            bunifuElipse2.TargetControl = button1;
+            // 
+            // bunifuElipse3
+            // 
+            bunifuElipse3.ElipseRadius = 5;
+            bunifuElipse3.TargetControl = button2;
+            // 
+            // bunifuElipse4
+            // 
+            bunifuElipse4.ElipseRadius = 5;
+            bunifuElipse4.TargetControl = button3;
+            // 
+            // bunifuElipse5
+            // 
+            bunifuElipse5.ElipseRadius = 5;
+            bunifuElipse5.TargetControl = button4;
+            // 
+            // bunifuElipse6
+            // 
+            bunifuElipse6.ElipseRadius = 5;
+            bunifuElipse6.TargetControl = button5;
+            // 
+            // bunifuElipse7
+            // 
+            bunifuElipse7.ElipseRadius = 5;
+            bunifuElipse7.TargetControl = button6;
+            // 
+            // bunifuElipse8
+            // 
+            bunifuElipse8.ElipseRadius = 5;
+            bunifuElipse8.TargetControl = button7;
+            // 
+            // bunifuElipse9
+            // 
+            bunifuElipse9.ElipseRadius = 5;
+            bunifuElipse9.TargetControl = button8;
+            // 
+            // bunifuElipse10
+            // 
+            bunifuElipse10.ElipseRadius = 5;
+            bunifuElipse10.TargetControl = button9;
+            // 
+            // bunifuElipse11
+            // 
+            bunifuElipse11.ElipseRadius = 5;
+            bunifuElipse11.TargetControl = button10;
+            // 
             // UserControl_Configuration
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -320,5 +410,15 @@
         private UserControl_Configuration_Convert userControl_Configuration_Convert1;
         private UserControl_Configuration_Merge userControl_Configuration_Merge1;
         private UserControl_Configuration_Extract userControl_Configuration_Extract1;
+        private Bunifu.Framework.UI.BunifuElipse bunifuElipse2;
+        private Bunifu.Framework.UI.BunifuElipse bunifuElipse3;
+        private Bunifu.Framework.UI.BunifuElipse bunifuElipse4;
+        private Bunifu.Framework.UI.BunifuElipse bunifuElipse5;
+        private Bunifu.Framework.UI.BunifuElipse bunifuElipse6;
+        private Bunifu.Framework.UI.BunifuElipse bunifuElipse7;
+        private Bunifu.Framework.UI.BunifuElipse bunifuElipse8;
+        private Bunifu.Framework.UI.BunifuElipse bunifuElipse9;
+        private Bunifu.Framework.UI.BunifuElipse bunifuElipse10;
+        private Bunifu.Framework.UI.BunifuElipse bunifuElipse11;
     }
 }
