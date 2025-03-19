@@ -6,9 +6,12 @@ namespace Tools
 {
     public partial class UserControl_Configuration_Filter : UserControl
     {
+        private Color defaultColor;
+
         public UserControl_Configuration_Filter()
         {
             InitializeComponent();
+            defaultColor = button_RemoveTags.BackColor;
         }
 
         public void ReloadSettings()
@@ -596,5 +599,44 @@ namespace Tools
             }
         }
 
+        private void button_AddGroup_MouseEnter(object sender, EventArgs e)
+        {
+            button_AddGroup.BackColor = Color.LightGreen; // Change to desired hover color
+        }
+
+        private void button_AddGroup_MouseLeave(object sender, EventArgs e)
+        {
+            button_AddGroup.BackColor = defaultColor; // Change to desired hover color
+        }
+
+        private void button_AddTags_MouseEnter(object sender, EventArgs e)
+        {
+            button_AddTags.BackColor = Color.LightGreen; // Change to desired hover color
+        }
+
+        private void button_AddTags_MouseLeave(object sender, EventArgs e)
+        {
+            button_AddTags.BackColor = defaultColor; // Change to desired hover color
+        }
+
+        private void button_RemoveGroup_MouseEnter(object sender, EventArgs e)
+        {
+            button_RemoveGroup.BackColor = Color.Red; // Change to desired hover color
+        }
+
+        private void button_RemoveGroup_MouseLeave(object sender, EventArgs e)
+        {
+            button_RemoveGroup.BackColor = defaultColor; // Change to desired hover color
+        }
+
+        private void button_RemoveTags_MouseEnter(object sender, EventArgs e)
+        {
+            button_RemoveTags.BackColor = Color.Red; // Change to desired hover color
+        }
+
+        private void button_RemoveTags_MouseLeave(object sender, EventArgs e)
+        {
+            button_RemoveTags.BackColor = defaultColor; // Change to desired hover color
+        }
     }
 }
