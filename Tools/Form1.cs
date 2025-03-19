@@ -67,56 +67,86 @@ namespace Tools
 
         private void button1_Click(object sender, EventArgs e)
         {
-            FollowButton(sender as Button);
-            userControl_Filter1.BringToFront();
+            if (sender is Button button)
+            {
+                FollowButton(button);
+                userControl_Filter1.BringToFront();
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            FollowButton(sender as Button);
-            userControl_Convert1.BringToFront();
+            if (sender is Button button)
+            {
+                FollowButton(button);
+                userControl_Convert1.BringToFront();
+            }
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            FollowButton(sender as Button);
-            userControl_Extract1.BringToFront();
+            if (sender is Button button)
+            {
+                FollowButton(button);
+                userControl_Extract1.BringToFront();
+            }
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            FollowButton(sender as Button);
-            userControl_Merge1.BringToFront();
+            if (sender is Button button)
+            {
+                FollowButton(button);
+                userControl_Merge1.BringToFront();
+            }
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
-            FollowButton(sender as Button);
+            if (sender is Button button)
+            {
+                FollowButton(button);
+            }
         }
 
         private void button6_Click(object sender, EventArgs e)
         {
-            FollowButton(sender as Button);
+            if (sender is Button button)
+            {
+                FollowButton(button);
+            }
         }
 
         private void button7_Click(object sender, EventArgs e)
         {
-            FollowButton(sender as Button);
+            if (sender is Button button)
+            {
+                FollowButton(button);
+            }
         }
 
         private void button8_Click(object sender, EventArgs e)
         {
-            FollowButton(sender as Button);
+            if (sender is Button button)
+            {
+                FollowButton(button);
+            }
         }
 
         private void button9_Click(object sender, EventArgs e)
         {
-            FollowButton(sender as Button);
+            if (sender is Button button)
+            {
+                FollowButton(button);
+            }
         }
 
         private void button10_Click(object sender, EventArgs e)
         {
-            FollowButton(sender as Button);
+            if (sender is Button button)
+            {
+                FollowButton(button);
+            }
         }
 
         private void button_Close_Click(object sender, EventArgs e)
