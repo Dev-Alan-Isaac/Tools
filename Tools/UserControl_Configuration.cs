@@ -1,22 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Reflection.Emit;
-using static System.Net.Mime.MediaTypeNames;
-
-namespace Tools
+﻿namespace Tools
 {
     public partial class UserControl_Configuration : UserControl
     {
+        private Color defaultColor;
+
         public UserControl_Configuration()
         {
             InitializeComponent();
+            defaultColor = button1.BackColor;
             label_Title.Text = "FILTER";
             userControl_Configuration_Filter1.BringToFront();
         }
@@ -127,16 +118,6 @@ namespace Tools
             }
         }
 
-        private void button_Save_MouseEnter(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button_Save_MouseLeave(object sender, EventArgs e)
-        {
-
-        }
-
         private void button_Save_Click(object sender, EventArgs e)
         {
             string optionstring = label_Title.Text;
@@ -155,6 +136,16 @@ namespace Tools
                 default:
                     break;
             }
+        }
+
+        private void button_Save_MouseEnter(object sender, EventArgs e)
+        {
+            button_Save.BackColor = Color.LightBlue; // Change to desired hover color
+        }
+
+        private void button_Save_MouseLeave(object sender, EventArgs e)
+        {
+            button_Save.BackColor = defaultColor; // Change to desired hover color
         }
     }
 }
