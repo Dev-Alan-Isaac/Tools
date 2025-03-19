@@ -64,8 +64,8 @@
             radioButton_Date_Access = new RadioButton();
             radioButton_Date_Creation = new RadioButton();
             groupBox9 = new GroupBox();
-            radioButton_Caps = new RadioButton();
             radioButton_ASCII = new RadioButton();
+            radioButton_Caps = new RadioButton();
             groupBox1.SuspendLayout();
             groupBox5.SuspendLayout();
             groupBox2.SuspendLayout();
@@ -139,12 +139,16 @@
             button_RemoveGroup.BackgroundImage = Properties.Resources.icons8_remove_50;
             button_RemoveGroup.BackgroundImageLayout = ImageLayout.Center;
             button_RemoveGroup.Cursor = Cursors.Hand;
+            button_RemoveGroup.FlatAppearance.BorderSize = 0;
+            button_RemoveGroup.FlatStyle = FlatStyle.Flat;
             button_RemoveGroup.Location = new Point(292, 340);
             button_RemoveGroup.Name = "button_RemoveGroup";
             button_RemoveGroup.Size = new Size(120, 54);
             button_RemoveGroup.TabIndex = 8;
             button_RemoveGroup.UseVisualStyleBackColor = true;
             button_RemoveGroup.Click += button_RemoveGroup_Click;
+            button_RemoveGroup.MouseEnter += button_RemoveGroup_MouseEnter;
+            button_RemoveGroup.MouseLeave += button_RemoveGroup_MouseLeave;
             // 
             // button_AddGroup
             // 
@@ -152,12 +156,16 @@
             button_AddGroup.BackgroundImage = Properties.Resources.icons8_add_50;
             button_AddGroup.BackgroundImageLayout = ImageLayout.Center;
             button_AddGroup.Cursor = Cursors.Hand;
+            button_AddGroup.FlatAppearance.BorderSize = 0;
+            button_AddGroup.FlatStyle = FlatStyle.Flat;
             button_AddGroup.Location = new Point(6, 340);
             button_AddGroup.Name = "button_AddGroup";
             button_AddGroup.Size = new Size(120, 54);
             button_AddGroup.TabIndex = 7;
             button_AddGroup.UseVisualStyleBackColor = true;
             button_AddGroup.Click += button_AddGroup_Click;
+            button_AddGroup.MouseEnter += button_AddGroup_MouseEnter;
+            button_AddGroup.MouseLeave += button_AddGroup_MouseLeave;
             // 
             // checkBox_Type_Other
             // 
@@ -263,12 +271,16 @@
             button_RemoveTags.BackgroundImage = Properties.Resources.icons8_remove_50;
             button_RemoveTags.BackgroundImageLayout = ImageLayout.Center;
             button_RemoveTags.Cursor = Cursors.Hand;
+            button_RemoveTags.FlatAppearance.BorderSize = 0;
+            button_RemoveTags.FlatStyle = FlatStyle.Flat;
             button_RemoveTags.Location = new Point(262, 344);
             button_RemoveTags.Name = "button_RemoveTags";
             button_RemoveTags.Size = new Size(120, 50);
             button_RemoveTags.TabIndex = 11;
             button_RemoveTags.UseVisualStyleBackColor = true;
             button_RemoveTags.Click += button_RemoveTags_Click;
+            button_RemoveTags.MouseEnter += button_RemoveTags_MouseEnter;
+            button_RemoveTags.MouseLeave += button_RemoveTags_MouseLeave;
             // 
             // button_AddTags
             // 
@@ -276,12 +288,16 @@
             button_AddTags.BackgroundImage = Properties.Resources.icons8_add_50;
             button_AddTags.BackgroundImageLayout = ImageLayout.Center;
             button_AddTags.Cursor = Cursors.Hand;
+            button_AddTags.FlatAppearance.BorderSize = 0;
+            button_AddTags.FlatStyle = FlatStyle.Flat;
             button_AddTags.Location = new Point(6, 340);
             button_AddTags.Name = "button_AddTags";
             button_AddTags.Size = new Size(120, 54);
             button_AddTags.TabIndex = 10;
             button_AddTags.UseVisualStyleBackColor = true;
             button_AddTags.Click += button_AddTags_Click;
+            button_AddTags.MouseEnter += button_AddTags_MouseEnter;
+            button_AddTags.MouseLeave += button_AddTags_MouseLeave;
             // 
             // groupBox4
             // 
@@ -482,17 +498,6 @@
             groupBox9.TabStop = false;
             groupBox9.Text = "Name";
             // 
-            // radioButton_Caps
-            // 
-            radioButton_Caps.AutoSize = true;
-            radioButton_Caps.Location = new Point(6, 25);
-            radioButton_Caps.Name = "radioButton_Caps";
-            radioButton_Caps.Size = new Size(123, 22);
-            radioButton_Caps.TabIndex = 2;
-            radioButton_Caps.TabStop = true;
-            radioButton_Caps.Text = "Ignore Caps";
-            radioButton_Caps.UseVisualStyleBackColor = true;
-            // 
             // radioButton_ASCII
             // 
             radioButton_ASCII.AutoSize = true;
@@ -503,6 +508,17 @@
             radioButton_ASCII.TabStop = true;
             radioButton_ASCII.Text = "Non ASCII";
             radioButton_ASCII.UseVisualStyleBackColor = true;
+            // 
+            // radioButton_Caps
+            // 
+            radioButton_Caps.AutoSize = true;
+            radioButton_Caps.Location = new Point(6, 25);
+            radioButton_Caps.Name = "radioButton_Caps";
+            radioButton_Caps.Size = new Size(123, 22);
+            radioButton_Caps.TabIndex = 2;
+            radioButton_Caps.TabStop = true;
+            radioButton_Caps.Text = "Ignore Caps";
+            radioButton_Caps.UseVisualStyleBackColor = true;
             // 
             // UserControl_Configuration_Filter
             // 
