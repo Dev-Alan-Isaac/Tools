@@ -19,8 +19,10 @@ namespace Tools
         {
             InitializeComponent();
             LoadGlobalJson();
-            //this.Icon = Properties.Resources.tool; // Replace 'YourIconName' with the actual name of the icon resource
-
+            PathSort = string.Empty; // Initialize PathSort
+            filterSettings = new FilterSettings(); // Initialize filterSettings
+            files = Array.Empty<string>(); // Initialize files
+            globalHashes = new HashSet<string>(); // Initialize globalHashes
         }
 
         private void UserControl_Filter_Load(object sender, EventArgs e)
@@ -719,7 +721,7 @@ namespace Tools
                     string destinationFolder = isAscii ? asciiFolder : nonAsciiFolder;
                     string destinationPath = Path.Combine(destinationFolder, fileName);
 
-                    MoveFileAsync(file, destinationPath);
+                    await MoveFileAsync(file, destinationPath);
 
                     // Update the progress bar
                     progressBar1.Invoke(new Action(() =>
@@ -782,7 +784,7 @@ namespace Tools
 
                     // Move the file to the corresponding folder
                     string destinationPath = Path.Combine(letterFolder, fileName);
-                    MoveFileAsync(file, destinationPath);
+                    await MoveFileAsync(file, destinationPath);
 
                     // Update the progress bar
                     progressBar1.Invoke(new Action(() =>
@@ -1411,6 +1413,8 @@ namespace Tools
 
             totalFiles = files.Count();
 
+            await Task.CompletedTask; // Ensure the method is awaited
+
             return files; // Return the list of file paths
         }
 
@@ -1570,9 +1574,7 @@ public class FilterSettings
     public List<string> Tag_List { get; set; }
     public bool Range { get; set; }
     public bool Dynamic { get; set; }
-
     public List<Dictionary<string, List<string>>> Range_List { get; set; }
-
     public bool Caps { get; set; }
     public bool Chars { get; set; }
 }
