@@ -41,6 +41,7 @@
             panel_NavBar = new Panel();
             radioButton2 = new RadioButton();
             radioButton1 = new RadioButton();
+            textBox3 = new TextBox();
             panel2.SuspendLayout();
             panel_Body.SuspendLayout();
             panel1.SuspendLayout();
@@ -59,23 +60,24 @@
             // treeView1
             // 
             treeView1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            treeView1.Location = new Point(0, 0);
+            treeView1.Location = new Point(3, 0);
             treeView1.Name = "treeView1";
-            treeView1.Size = new Size(280, 526);
+            treeView1.Size = new Size(203, 526);
             treeView1.TabIndex = 0;
             // 
             // panel2
             // 
             panel2.Controls.Add(treeView1);
             panel2.Dock = DockStyle.Right;
-            panel2.Location = new Point(349, 0);
+            panel2.Location = new Point(423, 0);
             panel2.Name = "panel2";
-            panel2.Size = new Size(283, 526);
+            panel2.Size = new Size(209, 526);
             panel2.TabIndex = 1;
             // 
             // panel_Body
             // 
             panel_Body.BackColor = SystemColors.Control;
+            panel_Body.Controls.Add(textBox3);
             panel_Body.Controls.Add(panel2);
             panel_Body.Controls.Add(panel1);
             panel_Body.Dock = DockStyle.Fill;
@@ -191,6 +193,17 @@
             radioButton1.Text = "Organizing";
             radioButton1.UseVisualStyleBackColor = true;
             // 
+            // textBox3
+            // 
+            textBox3.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            textBox3.Location = new Point(6, 6);
+            textBox3.Multiline = true;
+            textBox3.Name = "textBox3";
+            textBox3.ReadOnly = true;
+            textBox3.ScrollBars = ScrollBars.Both;
+            textBox3.Size = new Size(411, 514);
+            textBox3.TabIndex = 2;
+            // 
             // UserControl_Extract
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -202,6 +215,7 @@
             Size = new Size(818, 612);
             panel2.ResumeLayout(false);
             panel_Body.ResumeLayout(false);
+            panel_Body.PerformLayout();
             panel1.ResumeLayout(false);
             panel_TopBar.ResumeLayout(false);
             panel_TopBar.PerformLayout();
@@ -225,5 +239,6 @@
         private Panel panel_NavBar;
         private RadioButton radioButton2;
         private RadioButton radioButton1;
+        private TextBox textBox3;
     }
 }
