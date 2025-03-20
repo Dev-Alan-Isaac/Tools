@@ -15,6 +15,7 @@
         public void ReloadConfigFilterSettings()
         {
             userControl_Configuration_Filter1.ReloadSettings();
+            userControl_Configuration_Extract1.ReloadSettings();
         }
 
         private void FollowButton(Button button)
