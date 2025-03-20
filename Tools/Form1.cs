@@ -241,6 +241,10 @@ namespace Tools
                         new JObject(new JProperty("Delete", true)),
                         new JObject(new JProperty("Subfolder", true)), 
                         new JObject(new JProperty("Folder", true))
+                    )),
+                    new JProperty("Metadata", new JArray(
+                        new JObject(new JProperty("Window", true)),
+                        new JObject(new JProperty("Text", false))
                     ))
                 )),
                 new JProperty("Merge", new JObject(
