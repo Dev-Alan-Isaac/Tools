@@ -1542,6 +1542,60 @@ namespace Tools
                 }
             }
         }
+
+
+        private async Task PopulateTreeView()
+        {
+            treeView1.Invoke(new Action(() => treeView1.Nodes.Clear())); // Clear the TreeView
+
+            string rootPath = PathSort;
+            string rootNodeName = new DirectoryInfo(rootPath).Name;
+
+            TreeNode rootNode = new TreeNode(rootNodeName);
+            treeView1.Invoke(new Action(() => treeView1.Nodes.Add(rootNode)));
+
+            // Recursively populate nodes based on the current state of the directory structure
+            await Task.Run(() => PopulateNodes(rootNode, rootPath));
+        }
+
+        private void PopulateNodes(TreeNode parentNode, string parentPath)
+        {
+            try
+            {
+                string[] directories = Directory.GetDirectories(parentPath);
+
+                foreach (string directory in directories)
+                {
+                    string dirName = new DirectoryInfo(directory).Name;
+                    TreeNode childNode = new TreeNode(dirName);
+
+                    // Add child node using Invoke
+                    treeView1.Invoke(new Action(() => parentNode.Nodes.Add(childNode)));
+
+                    // Recursively populate child directories
+                    PopulateNodes(childNode, directory);
+                }
+
+                string[] files = Directory.GetFiles(parentPath);
+
+                // Add the count of files as a leaf node
+                if (files.Length > 0)
+                {
+                    TreeNode fileCountNode = new TreeNode($"Files: {files.Length}");
+
+                    // Add file count node using Invoke
+                    treeView1.Invoke(new Action(() => parentNode.Nodes.Add(fileCountNode)));
+                }
+            }
+            catch (Exception ex)
+            {
+                // Show error message using Invoke
+                treeView1.Invoke(new Action(() =>
+                {
+                    MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }));
+            }
+        }
     }
 }
 
