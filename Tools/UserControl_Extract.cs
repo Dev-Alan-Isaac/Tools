@@ -89,27 +89,25 @@ namespace Tools
                 return;
             }
 
+            string destinationPath;
+
             if (extractSettings.Folder)
             {
-                foreach (var file in files)
+                destinationPath = Path.Combine(PathSort, "Extracted");
+
+                if (!Directory.Exists(destinationPath))
                 {
-                    string folderPath = Path.Combine(PathSort, "Extracted");
-
-                    if (!Directory.Exists(folderPath))
-                    {
-                        Directory.CreateDirectory(folderPath);
-                    }
-
-                    await MoveFileAsync(file, folderPath);
+                    Directory.CreateDirectory(destinationPath); // Create the "Extracted" folder once
                 }
             }
             else
             {
-                foreach (var file in files)
-                {
-                    await MoveFileAsync(file, PathSort);
+                destinationPath = PathSort; // Use PathSort directly as the destination
+            }
 
-                }
+            foreach (var file in files)
+            {
+                await MoveFileAsync(file, destinationPath); // Move all files to the determined destination
             }
         }
 
@@ -209,26 +207,45 @@ namespace Tools
             return files; // Return the list of file paths
         }
 
-        private async Task MoveFileAsync(string sourcePath, string destinationPath)
+        private async Task MoveFileAsync(string sourcePath, string destinationDirectory)
         {
-            int fileCount = 1;
-            string newDestinationPath = destinationPath;
+            // Ensure the source file exists
+            if (!File.Exists(sourcePath))
+            {
+                textBox_Logs.Invoke(new Action(() =>
+                {
+                    textBox_Logs.AppendText($"Source file \"{sourcePath}\" does not exist.{Environment.NewLine}");
+                }));
+                return;
+            }
 
+            // Ensure the destination directory exists
+            if (!Directory.Exists(destinationDirectory))
+            {
+                Directory.CreateDirectory(destinationDirectory);
+            }
+
+            // Construct the destination file path (using the same file name)
+            string fileName = Path.GetFileName(sourcePath);
+            string newDestinationPath = Path.Combine(destinationDirectory, fileName);
+
+            // Handle duplicate file names by appending a counter
+            int fileCount = 1;
             while (File.Exists(newDestinationPath))
             {
-                string fileExtension = Path.GetExtension(destinationPath);
-                string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(destinationPath);
-                newDestinationPath = Path.Combine(Path.GetDirectoryName(destinationPath), $"{fileNameWithoutExtension} ({fileCount++}){fileExtension}");
+                string fileExtension = Path.GetExtension(fileName);
+                string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
+                newDestinationPath = Path.Combine(destinationDirectory, $"{fileNameWithoutExtension} ({fileCount++}){fileExtension}");
             }
 
             // Log the destination path to the TextBox
             textBox_Logs.Invoke(new Action(() =>
             {
-                string fileName = Path.GetFileName(sourcePath); // Get the file name
                 textBox_Logs.AppendText($"{Environment.NewLine}"); // Add a separator line
                 textBox_Logs.AppendText($"Moving file \"{fileName}\" to: {newDestinationPath}{Environment.NewLine}");
             }));
 
+            // Move the file
             await Task.Run(() => File.Move(sourcePath, newDestinationPath));
         }
 
