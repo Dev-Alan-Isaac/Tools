@@ -1379,6 +1379,13 @@ namespace Tools
         {
             try
             {
+                // Check if the directory exists
+                if (!Directory.Exists(path))
+                {
+                    MessageBox.Show($"The path \"{path}\" does not exist or has already been deleted.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+
                 foreach (var directory in Directory.GetDirectories(path))
                 {
                     Delete_Folders(directory);
