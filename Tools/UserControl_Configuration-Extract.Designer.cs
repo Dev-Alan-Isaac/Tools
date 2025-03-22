@@ -33,8 +33,8 @@
             checkBox_Extract_Subfolder = new CheckBox();
             checkBox_Extract_Delete = new CheckBox();
             groupBox2 = new GroupBox();
-            radioButton_Window = new RadioButton();
             radioButton_Text = new RadioButton();
+            radioButton_Window = new RadioButton();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             SuspendLayout();
@@ -47,7 +47,7 @@
             groupBox1.Font = new Font("Arial Rounded MT Bold", 12F);
             groupBox1.Location = new Point(3, 3);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(305, 124);
+            groupBox1.Size = new Size(491, 124);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Additional";
@@ -87,23 +87,12 @@
             groupBox2.Controls.Add(radioButton_Text);
             groupBox2.Controls.Add(radioButton_Window);
             groupBox2.Font = new Font("Arial Rounded MT Bold", 12F);
-            groupBox2.Location = new Point(3, 133);
+            groupBox2.Location = new Point(500, 3);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(305, 124);
+            groupBox2.Size = new Size(315, 124);
             groupBox2.TabIndex = 3;
             groupBox2.TabStop = false;
             groupBox2.Text = "Metadata";
-            // 
-            // radioButton_Window
-            // 
-            radioButton_Window.AutoSize = true;
-            radioButton_Window.Location = new Point(6, 25);
-            radioButton_Window.Name = "radioButton_Window";
-            radioButton_Window.Size = new Size(88, 22);
-            radioButton_Window.TabIndex = 0;
-            radioButton_Window.TabStop = true;
-            radioButton_Window.Text = "Window";
-            radioButton_Window.UseVisualStyleBackColor = true;
             // 
             // radioButton_Text
             // 
@@ -115,6 +104,17 @@
             radioButton_Text.TabStop = true;
             radioButton_Text.Text = "Text File";
             radioButton_Text.UseVisualStyleBackColor = true;
+            // 
+            // radioButton_Window
+            // 
+            radioButton_Window.AutoSize = true;
+            radioButton_Window.Location = new Point(6, 25);
+            radioButton_Window.Name = "radioButton_Window";
+            radioButton_Window.Size = new Size(88, 22);
+            radioButton_Window.TabIndex = 0;
+            radioButton_Window.TabStop = true;
+            radioButton_Window.Text = "Window";
+            radioButton_Window.UseVisualStyleBackColor = true;
             // 
             // UserControl_Configuration_Extract
             // 
