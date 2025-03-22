@@ -71,6 +71,7 @@ namespace Tools
             {
                 FollowButton(button);
                 userControl_Filter1.BringToFront();
+                userControl_Filter1.ReloadSettings();
             }
         }
 
@@ -89,6 +90,7 @@ namespace Tools
             {
                 FollowButton(button);
                 userControl_Extract1.BringToFront();
+                userControl_Extract1.ReloadSettings();
             }
         }
 
