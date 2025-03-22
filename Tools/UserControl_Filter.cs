@@ -1543,7 +1543,6 @@ namespace Tools
             }
         }
 
-
         private async Task PopulateTreeView()
         {
             treeView1.Invoke(new Action(() => treeView1.Nodes.Clear())); // Clear the TreeView
