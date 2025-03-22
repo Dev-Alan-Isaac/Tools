@@ -100,46 +100,64 @@ namespace Tools
                         Directory.CreateDirectory(folderPath);
                     }
 
-                    string absoluteFilePath = Path.GetFullPath(file);
-                    Debug.WriteLine($"Processing file: {absoluteFilePath} to folder: {folderPath}");
-                    // Uncomment this after verifying:
-                    // await MoveFileAsync(file, folderPath);
+                    await MoveFileAsync(file, folderPath);
                 }
             }
             else
             {
                 foreach (var file in files)
                 {
-                    string absoluteFilePath = Path.GetFullPath(file);
-                    Debug.WriteLine($"Processing file: {absoluteFilePath} to path: {PathSort}");
+                    await MoveFileAsync(file, PathSort);
+
                 }
             }
         }
 
         private async Task Metadata(string[] files)
         {
-            if (extractSettings.Window)
-            {
-                string folderPath = Path.Combine(PathSort, "Metadata");
-
-                if (!Directory.Exists(folderPath))
-                {
-                    Directory.CreateDirectory(folderPath);
-                }
-
-                foreach (var file in files)
-                {
-                    Debug.WriteLine(file, folderPath);
-                }
-            }
             if (extractSettings.Text)
             {
                 foreach (var file in files)
                 {
-                    Debug.WriteLine(file);
+                    try
+                    {
+                        string metadataFilePath = Path.Combine(PathSort, $"{Path.GetFileNameWithoutExtension(file)}_metadata.txt");
+
+                        using (StreamWriter writer = new StreamWriter(metadataFilePath, false))
+                        {
+                            if (file.EndsWith(".doc") || file.EndsWith(".docx"))
+                            {
+                                // Example for reading metadata from Word documents
+                                writer.WriteLine($"File: {file}");
+                                writer.WriteLine("Metadata: Word document example");
+                                // You can use libraries like OpenXML or Aspose for detailed metadata extraction
+                            }
+                            else if (file.EndsWith(".png") || file.EndsWith(".jpg"))
+                            {
+                                // Example for reading metadata from images
+                                writer.WriteLine($"File: {file}");
+                                writer.WriteLine("Metadata: Image example");
+                                // You can use libraries like ImageProcessor or MetadataExtractor here
+                            }
+                            else
+                            {
+                                writer.WriteLine($"File: {file}");
+                                writer.WriteLine("Metadata extraction not supported for this file type.");
+                            }
+                        }
+
+                        Debug.WriteLine($"Metadata saved to: {metadataFilePath}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"Error processing file {file}: {ex.Message}");
+                    }
                 }
             }
+            if (extractSettings.Window)
+            {
 
+            }
         }
 
         // Global Functions
