@@ -131,6 +131,7 @@
                 case "CONVERT":
                     break;
                 case "EXTRACT":
+                    userControl_Configuration_Extract1.Set_ExtractJson();
                     break;
                 case "MERGE":
                     break;
