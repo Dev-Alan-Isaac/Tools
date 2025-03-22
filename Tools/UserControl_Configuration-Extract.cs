@@ -1,18 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 
 namespace Tools
 {
-    public partial class UserControl_Configuration_Extract: UserControl
+    public partial class UserControl_Configuration_Extract : UserControl
     {
         public UserControl_Configuration_Extract()
         {
@@ -39,8 +30,11 @@ namespace Tools
         private void Split_ExtractSection(JObject filterSection)
         {
             var additional = filterSection["Additional"] as JArray;
+            var metadata = filterSection["Metadata"] as JArray;
 
             ProcessAdditional(additional);
+            ProcessMetadata(metadata);
+
         }
 
         private void ProcessAdditional(JArray additional)
@@ -69,12 +63,91 @@ namespace Tools
                     checkBox_Extract_Subfolder.Checked = state;
                     break;
                 case "Folder":
-                    checkBox_Extract_Subfolder.Checked = state;
+                    checkBox_Extract_Folder.Checked = state;
                     break;
                 default:
                     Debug.WriteLine($"Unknown property: {propertyName}");
                     break;
             }
         }
+
+        private void ProcessMetadata(JArray media)
+        {
+            bool isAnyTrue = false;
+
+            foreach (var item in media)
+            {
+                foreach (var property in (item as JObject).Properties())
+                {
+                    if (property.Value.Type == JTokenType.Boolean && (bool)property.Value)
+                    {
+                        if (isAnyTrue)
+                        {
+                            // Handle the error for multiple true values
+                            Debug.WriteLine("Error: More than one radio button is set to true.");
+                            return;
+                        }
+                        isAnyTrue = true;
+                        Set_RadioButtonStateMetadata(property.Name, true);
+                    }
+                    else if (property.Value.Type == JTokenType.Boolean)
+                    {
+                        Set_RadioButtonStateMetadata(property.Name, false);
+                    }
+                }
+            }
+        }
+
+        private void Set_RadioButtonStateMetadata(string propertyName, bool state)
+        {
+            switch (propertyName)
+            {
+                case "Window":
+                    radioButton_Window.Checked = state;
+                    break;
+                case "Text":
+                    radioButton_Text.Checked = state;
+                    break;
+                default:
+                    Debug.WriteLine($"Unknown property: {propertyName}");
+                    break;
+            }
+        }
+
+
+        public void Set_ExtractJson()
+        {
+            if (File.Exists("appsettings.json"))
+            {
+                string settingPath = Path.GetFullPath("appsettings.json");
+                string jsonContent = File.ReadAllText(settingPath);
+                JObject jsonObject = JObject.Parse(jsonContent);
+
+                // Modify the "Extract" section
+                var extractSection = jsonObject["Extract"];
+                if (extractSection != null)
+                {
+                    // Update "Delete" in "Additional"
+                    extractSection["Additional"][0]["Delete"] = checkBox_Extract_Delete.Checked; // Example modification
+                    extractSection["Additional"][1]["Subfolder"] = checkBox_Extract_Subfolder.Checked;
+                    extractSection["Additional"][2]["Folder"] = checkBox_Extract_Folder.Checked;
+
+
+                    // Update "Window" in "Metadata"
+                    extractSection["Metadata"][0]["Window"] = radioButton_Window.Checked; // Example modification
+                    extractSection["Metadata"][1]["Text"] = radioButton_Text.Checked; // Example modification
+                }
+
+                // Save the modified JSON back to the file
+                File.WriteAllText(settingPath, jsonObject.ToString());
+
+                MessageBox.Show("Configuration updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("Configuration file not found!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
     }
 }
