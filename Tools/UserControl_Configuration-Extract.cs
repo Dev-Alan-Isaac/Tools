@@ -33,8 +33,6 @@ namespace Tools
             var metadata = filterSection["Metadata"] as JArray;
 
             ProcessAdditional(additional);
-            ProcessMetadata(metadata);
-
         }
 
         private void ProcessAdditional(JArray additional)
@@ -71,50 +69,6 @@ namespace Tools
             }
         }
 
-        private void ProcessMetadata(JArray media)
-        {
-            bool isAnyTrue = false;
-
-            foreach (var item in media)
-            {
-                foreach (var property in (item as JObject).Properties())
-                {
-                    if (property.Value.Type == JTokenType.Boolean && (bool)property.Value)
-                    {
-                        if (isAnyTrue)
-                        {
-                            // Handle the error for multiple true values
-                            Debug.WriteLine("Error: More than one radio button is set to true.");
-                            return;
-                        }
-                        isAnyTrue = true;
-                        Set_RadioButtonStateMetadata(property.Name, true);
-                    }
-                    else if (property.Value.Type == JTokenType.Boolean)
-                    {
-                        Set_RadioButtonStateMetadata(property.Name, false);
-                    }
-                }
-            }
-        }
-
-        private void Set_RadioButtonStateMetadata(string propertyName, bool state)
-        {
-            switch (propertyName)
-            {
-                case "Window":
-                    radioButton_Window.Checked = state;
-                    break;
-                case "Text":
-                    radioButton_Text.Checked = state;
-                    break;
-                default:
-                    Debug.WriteLine($"Unknown property: {propertyName}");
-                    break;
-            }
-        }
-
-
         public void Set_ExtractJson()
         {
             if (File.Exists("appsettings.json"))
@@ -131,11 +85,6 @@ namespace Tools
                     extractSection["Additional"][0]["Delete"] = checkBox_Extract_Delete.Checked; // Example modification
                     extractSection["Additional"][1]["Subfolder"] = checkBox_Extract_Subfolder.Checked;
                     extractSection["Additional"][2]["Folder"] = checkBox_Extract_Folder.Checked;
-
-
-                    // Update "Window" in "Metadata"
-                    extractSection["Metadata"][0]["Window"] = radioButton_Window.Checked; // Example modification
-                    extractSection["Metadata"][1]["Text"] = radioButton_Text.Checked; // Example modification
                 }
 
                 // Save the modified JSON back to the file
