@@ -105,56 +105,69 @@ namespace Tools
                 destinationPath = PathSort; // Use PathSort directly as the destination
             }
 
+            // Check if the folder was deleted by the Delete_Folders function
+            if (!Directory.Exists(destinationPath))
+            {
+                textBox_Logs.Invoke(new Action(() =>
+                {
+                    textBox_Logs.AppendText($"Destination path \"{destinationPath}\" has been deleted.");
+                }));
+                return;
+            }
+
             foreach (var file in files)
             {
-                await MoveFileAsync(file, destinationPath); // Move all files to the determined destination
+                if (File.Exists(file)) // Check if the file exists before moving it
+                {
+                    await MoveFileAsync(file, destinationPath); // Move all files to the determined destination
+                }
+                else
+                {
+                    textBox_Logs.Invoke(new Action(() =>
+                    {
+                        textBox_Logs.AppendText($"Source file \"{file}\" does not exist or has already been moved.");
+                    }));
+                }
             }
         }
 
         private async Task Metadata(string[] files)
         {
-            if (extractSettings.Text)
+            foreach (var file in files)
             {
-                foreach (var file in files)
+                try
                 {
-                    try
-                    {
-                        string metadataFilePath = Path.Combine(PathSort, $"{Path.GetFileNameWithoutExtension(file)}_metadata.txt");
+                    string metadataFilePath = Path.Combine(PathSort, $"{Path.GetFileNameWithoutExtension(file)}_metadata.txt");
 
-                        using (StreamWriter writer = new StreamWriter(metadataFilePath, false))
+                    using (StreamWriter writer = new StreamWriter(metadataFilePath, false))
+                    {
+                        if (file.EndsWith(".doc") || file.EndsWith(".docx"))
                         {
-                            if (file.EndsWith(".doc") || file.EndsWith(".docx"))
-                            {
-                                // Example for reading metadata from Word documents
-                                writer.WriteLine($"File: {file}");
-                                writer.WriteLine("Metadata: Word document example");
-                                // You can use libraries like OpenXML or Aspose for detailed metadata extraction
-                            }
-                            else if (file.EndsWith(".png") || file.EndsWith(".jpg"))
-                            {
-                                // Example for reading metadata from images
-                                writer.WriteLine($"File: {file}");
-                                writer.WriteLine("Metadata: Image example");
-                                // You can use libraries like ImageProcessor or MetadataExtractor here
-                            }
-                            else
-                            {
-                                writer.WriteLine($"File: {file}");
-                                writer.WriteLine("Metadata extraction not supported for this file type.");
-                            }
+                            // Example for reading metadata from Word documents
+                            writer.WriteLine($"File: {file}");
+                            writer.WriteLine("Metadata: Word document example");
+                            // You can use libraries like OpenXML or Aspose for detailed metadata extraction
                         }
+                        else if (file.EndsWith(".png") || file.EndsWith(".jpg"))
+                        {
+                            // Example for reading metadata from images
+                            writer.WriteLine($"File: {file}");
+                            writer.WriteLine("Metadata: Image example");
+                            // You can use libraries like ImageProcessor or MetadataExtractor here
+                        }
+                        else
+                        {
+                            writer.WriteLine($"File: {file}");
+                            writer.WriteLine("Metadata extraction not supported for this file type.");
+                        }
+                    }
 
-                        Debug.WriteLine($"Metadata saved to: {metadataFilePath}");
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine($"Error processing file {file}: {ex.Message}");
-                    }
+                    Debug.WriteLine($"Metadata saved to: {metadataFilePath}");
                 }
-            }
-            if (extractSettings.Window)
-            {
-
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Error processing file {file}: {ex.Message}");
+                }
             }
         }
 
@@ -184,10 +197,6 @@ namespace Tools
                 Delete = extractSection["Additional"]?[0]?["Delete"]?.ToObject<bool>() ?? false,
                 Subfolder = extractSection["Additional"]?[1]?["Subfolder"]?.ToObject<bool>() ?? false,
                 Folder = extractSection["Additional"]?[2]?["Folder"]?.ToObject<bool>() ?? false,
-
-                // Extracting values from "Metadata"
-                Window = extractSection["Metadata"]?[0]?["Window"]?.ToObject<bool>() ?? false,
-                Text = extractSection["Metadata"]?[1]?["Text"]?.ToObject<bool>() ?? false
             };
         }
 
@@ -222,10 +231,9 @@ namespace Tools
             // Ensure the destination directory exists
             if (!Directory.Exists(destinationDirectory))
             {
-                Directory.CreateDirectory(destinationDirectory);
+                Directory.CreateDirectory(destinationDirectory); // Re-create the destination directory if needed
             }
 
-            // Construct the destination file path (using the same file name)
             string fileName = Path.GetFileName(sourcePath);
             string newDestinationPath = Path.Combine(destinationDirectory, fileName);
 
@@ -246,7 +254,17 @@ namespace Tools
             }));
 
             // Move the file
-            await Task.Run(() => File.Move(sourcePath, newDestinationPath));
+            try
+            {
+                await Task.Run(() => File.Move(sourcePath, newDestinationPath));
+            }
+            catch (Exception ex)
+            {
+                textBox_Logs.Invoke(new Action(() =>
+                {
+                    textBox_Logs.AppendText($"Error moving file \"{fileName}\": {ex.Message}{Environment.NewLine}");
+                }));
+            }
         }
 
         private void Delete_Folders(string path)
@@ -282,7 +300,6 @@ namespace Tools
                 MessageBox.Show($"An error occurred: {ex.Message}", "Fail", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
     }
 }
 
@@ -291,6 +308,4 @@ public class ExtractSettings
     public bool Delete { get; set; }
     public bool Subfolder { get; set; }
     public bool Folder { get; set; }
-    public bool Window { get; set; }
-    public bool Text { get; set; }
 }
