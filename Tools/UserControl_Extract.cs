@@ -51,7 +51,7 @@ namespace Tools
             }
         }
 
-        private void button_Play_Click(object sender, EventArgs e)
+        private async void button_Play_Click(object sender, EventArgs e)
         {
             // Clear the TextBox logs before adding new lines
             textBox_Logs.Invoke(new Action(() =>
@@ -59,13 +59,15 @@ namespace Tools
                 textBox_Logs.Clear();
             }));
 
+            Task processingTask = null;
+
             if (radioButton_Extract.Checked)
             {
-                Task.Run(() => Extract(files));
+                processingTask = Task.Run(() => Extract(files));
             }
             else if (radioButton_Metadata.Checked)
             {
-                Task.Run(() => Metadata(files));
+                processingTask = Task.Run(() => Metadata(files));
             }
             else
             {
@@ -73,10 +75,22 @@ namespace Tools
                 return;
             }
 
-            // Perform delete action if enabled in settings
-            if (extractSettings.Delete)
+            try
             {
-                Delete_Folders(PathSort);
+                if (processingTask != null)
+                {
+                    await processingTask; // Wait for the task to finish
+                }
+
+                // Perform delete action if enabled in settings
+                if (extractSettings.Delete)
+                {
+                    Delete_Folders(PathSort);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -267,37 +281,17 @@ namespace Tools
             }
         }
 
-        private void Delete_Folders(string path)
+        public void Delete_Folders(string folderPath)
         {
-            try
+            foreach (var directory in Directory.GetDirectories(folderPath))
             {
-                // Check if the directory exists
-                if (!Directory.Exists(path))
-                {
-                    MessageBox.Show($"The path \"{path}\" does not exist or has already been deleted.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
-                }
+                Delete_Folders(directory); // Recursively delete empty subfolders
 
-                foreach (var directory in Directory.GetDirectories(path))
+                // If the directory is empty after processing subfolders, delete it
+                if (Directory.GetFiles(directory).Length == 0 && Directory.GetDirectories(directory).Length == 0)
                 {
-                    Delete_Folders(directory);
-
-                    // Check if the directory is empty
-                    if (Directory.GetFiles(directory).Length == 0 && Directory.GetDirectories(directory).Length == 0)
-                    {
-                        Directory.Delete(directory);
-                    }
+                    Directory.Delete(directory);
                 }
-
-                // Check if the root directory is empty (optional)
-                if (Directory.GetFiles(path).Length == 0 && Directory.GetDirectories(path).Length == 0)
-                {
-                    Directory.Delete(path);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"An error occurred: {ex.Message}", "Fail", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
