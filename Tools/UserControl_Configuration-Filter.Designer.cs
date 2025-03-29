@@ -95,9 +95,9 @@
             groupBox1.Controls.Add(checkBox_Type_Image);
             groupBox1.Controls.Add(checkBox_Type_Document);
             groupBox1.Font = new Font("Arial Rounded MT Bold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            groupBox1.Location = new Point(3, 3);
+            groupBox1.Location = new Point(9, 3);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(418, 400);
+            groupBox1.Size = new Size(412, 400);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Type";
@@ -118,9 +118,9 @@
             groupBox5.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             groupBox5.Controls.Add(treeView_Type);
             groupBox5.FlatStyle = FlatStyle.Flat;
-            groupBox5.Location = new Point(128, 25);
+            groupBox5.Location = new Point(147, 25);
             groupBox5.Name = "groupBox5";
-            groupBox5.Size = new Size(284, 312);
+            groupBox5.Size = new Size(259, 312);
             groupBox5.TabIndex = 9;
             groupBox5.TabStop = false;
             groupBox5.Text = "Groups / Extensions";
@@ -130,7 +130,7 @@
             treeView_Type.Dock = DockStyle.Fill;
             treeView_Type.Location = new Point(3, 22);
             treeView_Type.Name = "treeView_Type";
-            treeView_Type.Size = new Size(278, 287);
+            treeView_Type.Size = new Size(253, 287);
             treeView_Type.TabIndex = 0;
             // 
             // button_RemoveGroup
@@ -141,7 +141,7 @@
             button_RemoveGroup.Cursor = Cursors.Hand;
             button_RemoveGroup.FlatAppearance.BorderSize = 0;
             button_RemoveGroup.FlatStyle = FlatStyle.Flat;
-            button_RemoveGroup.Location = new Point(292, 340);
+            button_RemoveGroup.Location = new Point(286, 340);
             button_RemoveGroup.Name = "button_RemoveGroup";
             button_RemoveGroup.Size = new Size(120, 54);
             button_RemoveGroup.TabIndex = 8;
@@ -242,7 +242,7 @@
             groupBox2.Font = new Font("Arial Rounded MT Bold", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
             groupBox2.Location = new Point(427, 3);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(388, 400);
+            groupBox2.Size = new Size(378, 400);
             groupBox2.TabIndex = 1;
             groupBox2.TabStop = false;
             groupBox2.Text = "Tags / Lales";
@@ -252,7 +252,7 @@
             groupBox3.Controls.Add(treeView_Tags);
             groupBox3.Location = new Point(6, 25);
             groupBox3.Name = "groupBox3";
-            groupBox3.Size = new Size(376, 309);
+            groupBox3.Size = new Size(366, 309);
             groupBox3.TabIndex = 12;
             groupBox3.TabStop = false;
             groupBox3.Text = "Tags List";
@@ -262,7 +262,7 @@
             treeView_Tags.Dock = DockStyle.Fill;
             treeView_Tags.Location = new Point(3, 22);
             treeView_Tags.Name = "treeView_Tags";
-            treeView_Tags.Size = new Size(370, 284);
+            treeView_Tags.Size = new Size(360, 284);
             treeView_Tags.TabIndex = 0;
             // 
             // button_RemoveTags
@@ -273,7 +273,7 @@
             button_RemoveTags.Cursor = Cursors.Hand;
             button_RemoveTags.FlatAppearance.BorderSize = 0;
             button_RemoveTags.FlatStyle = FlatStyle.Flat;
-            button_RemoveTags.Location = new Point(262, 344);
+            button_RemoveTags.Location = new Point(252, 344);
             button_RemoveTags.Name = "button_RemoveTags";
             button_RemoveTags.Size = new Size(120, 50);
             button_RemoveTags.TabIndex = 11;
@@ -305,9 +305,9 @@
             groupBox4.Controls.Add(checkBox_Additional_subfiles);
             groupBox4.Controls.Add(checkBox_Additional_Delete);
             groupBox4.Font = new Font("Arial Rounded MT Bold", 12F);
-            groupBox4.Location = new Point(3, 409);
+            groupBox4.Location = new Point(9, 409);
             groupBox4.Name = "groupBox4";
-            groupBox4.Size = new Size(275, 86);
+            groupBox4.Size = new Size(269, 83);
             groupBox4.TabIndex = 2;
             groupBox4.TabStop = false;
             groupBox4.Text = "Additional";
@@ -340,7 +340,7 @@
             groupBox6.Font = new Font("Arial Rounded MT Bold", 12F);
             groupBox6.Location = new Point(520, 409);
             groupBox6.Name = "groupBox6";
-            groupBox6.Size = new Size(295, 86);
+            groupBox6.Size = new Size(285, 86);
             groupBox6.TabIndex = 3;
             groupBox6.TabStop = false;
             groupBox6.Text = "Size";
@@ -445,9 +445,9 @@
             groupBox8.Controls.Add(radioButton_Date_Access);
             groupBox8.Controls.Add(radioButton_Date_Creation);
             groupBox8.Font = new Font("Arial Rounded MT Bold", 12F);
-            groupBox8.Location = new Point(3, 501);
+            groupBox8.Location = new Point(9, 498);
             groupBox8.Name = "groupBox8";
-            groupBox8.Size = new Size(275, 108);
+            groupBox8.Size = new Size(269, 111);
             groupBox8.TabIndex = 3;
             groupBox8.TabStop = false;
             groupBox8.Text = "Date";
@@ -493,7 +493,7 @@
             groupBox9.Font = new Font("Arial Rounded MT Bold", 12F);
             groupBox9.Location = new Point(520, 501);
             groupBox9.Name = "groupBox9";
-            groupBox9.Size = new Size(295, 108);
+            groupBox9.Size = new Size(285, 108);
             groupBox9.TabIndex = 4;
             groupBox9.TabStop = false;
             groupBox9.Text = "Name";
