@@ -16,6 +16,7 @@
         {
             userControl_Configuration_Filter1.ReloadSettings();
             userControl_Configuration_Extract1.ReloadSettings();
+            userControl_Configuration_Convert1.ReloadSettings();
         }
 
         private void FollowButton(Button button)
@@ -129,6 +130,7 @@
                     userControl_Configuration_Filter1.Set_FilterJson();
                     break;
                 case "CONVERT":
+                    userControl_Configuration_Convert1.Set_ConvertJson();
                     break;
                 case "EXTRACT":
                     userControl_Configuration_Extract1.Set_ExtractJson();
