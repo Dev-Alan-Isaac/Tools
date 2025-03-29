@@ -29,13 +29,11 @@
         private void InitializeComponent()
         {
             progressBar1 = new ProgressBar();
-            treeView1 = new TreeView();
-            panel2 = new Panel();
             panel_Body = new Panel();
             panel1 = new Panel();
             button_Path = new Button();
-            textBox2 = new TextBox();
-            textBox1 = new TextBox();
+            textBox_Files = new TextBox();
+            textBox_Path = new TextBox();
             panel_TopBar = new Panel();
             button_Play = new Button();
             panel_NavBar = new Panel();
@@ -43,7 +41,7 @@
             radioButton_Vid = new RadioButton();
             radioButton_Aud = new RadioButton();
             radioButton_Img = new RadioButton();
-            panel2.SuspendLayout();
+            textBox_Logs = new TextBox();
             panel_Body.SuspendLayout();
             panel1.SuspendLayout();
             panel_TopBar.SuspendLayout();
@@ -58,27 +56,10 @@
             progressBar1.Size = new Size(626, 30);
             progressBar1.TabIndex = 0;
             // 
-            // treeView1
-            // 
-            treeView1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            treeView1.Location = new Point(0, 0);
-            treeView1.Name = "treeView1";
-            treeView1.Size = new Size(280, 526);
-            treeView1.TabIndex = 0;
-            // 
-            // panel2
-            // 
-            panel2.Controls.Add(treeView1);
-            panel2.Dock = DockStyle.Right;
-            panel2.Location = new Point(349, 0);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(283, 526);
-            panel2.TabIndex = 1;
-            // 
             // panel_Body
             // 
             panel_Body.BackColor = SystemColors.Control;
-            panel_Body.Controls.Add(panel2);
+            panel_Body.Controls.Add(textBox_Logs);
             panel_Body.Controls.Add(panel1);
             panel_Body.Dock = DockStyle.Fill;
             panel_Body.Location = new Point(186, 50);
@@ -106,38 +87,39 @@
             button_Path.Size = new Size(40, 40);
             button_Path.TabIndex = 0;
             button_Path.UseVisualStyleBackColor = true;
+            button_Path.Click += button_Path_Click;
             // 
-            // textBox2
+            // textBox_Files
             // 
-            textBox2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            textBox2.BorderStyle = BorderStyle.FixedSingle;
-            textBox2.Cursor = Cursors.No;
-            textBox2.Font = new Font("Arial Rounded MT Bold", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            textBox2.Location = new Point(445, 10);
-            textBox2.Name = "textBox2";
-            textBox2.ReadOnly = true;
-            textBox2.ScrollBars = ScrollBars.Horizontal;
-            textBox2.Size = new Size(176, 29);
-            textBox2.TabIndex = 3;
+            textBox_Files.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            textBox_Files.BorderStyle = BorderStyle.FixedSingle;
+            textBox_Files.Cursor = Cursors.No;
+            textBox_Files.Font = new Font("Arial Rounded MT Bold", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            textBox_Files.Location = new Point(445, 10);
+            textBox_Files.Name = "textBox_Files";
+            textBox_Files.ReadOnly = true;
+            textBox_Files.ScrollBars = ScrollBars.Horizontal;
+            textBox_Files.Size = new Size(176, 29);
+            textBox_Files.TabIndex = 3;
             // 
-            // textBox1
+            // textBox_Path
             // 
-            textBox1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            textBox1.BorderStyle = BorderStyle.FixedSingle;
-            textBox1.Cursor = Cursors.No;
-            textBox1.Font = new Font("Arial Rounded MT Bold", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            textBox1.Location = new Point(98, 10);
-            textBox1.Name = "textBox1";
-            textBox1.ReadOnly = true;
-            textBox1.ScrollBars = ScrollBars.Horizontal;
-            textBox1.Size = new Size(341, 29);
-            textBox1.TabIndex = 2;
+            textBox_Path.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            textBox_Path.BorderStyle = BorderStyle.FixedSingle;
+            textBox_Path.Cursor = Cursors.No;
+            textBox_Path.Font = new Font("Arial Rounded MT Bold", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            textBox_Path.Location = new Point(98, 10);
+            textBox_Path.Name = "textBox_Path";
+            textBox_Path.ReadOnly = true;
+            textBox_Path.ScrollBars = ScrollBars.Horizontal;
+            textBox_Path.Size = new Size(341, 29);
+            textBox_Path.TabIndex = 2;
             // 
             // panel_TopBar
             // 
             panel_TopBar.BackColor = SystemColors.Control;
-            panel_TopBar.Controls.Add(textBox2);
-            panel_TopBar.Controls.Add(textBox1);
+            panel_TopBar.Controls.Add(textBox_Files);
+            panel_TopBar.Controls.Add(textBox_Path);
             panel_TopBar.Controls.Add(button_Play);
             panel_TopBar.Controls.Add(button_Path);
             panel_TopBar.Dock = DockStyle.Top;
@@ -157,6 +139,7 @@
             button_Play.Size = new Size(40, 40);
             button_Play.TabIndex = 1;
             button_Play.UseVisualStyleBackColor = true;
+            button_Play.Click += button_Play_Click;
             // 
             // panel_NavBar
             // 
@@ -219,6 +202,16 @@
             radioButton_Img.Text = "Imagen";
             radioButton_Img.UseVisualStyleBackColor = true;
             // 
+            // textBox_Logs
+            // 
+            textBox_Logs.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            textBox_Logs.Location = new Point(3, 6);
+            textBox_Logs.Multiline = true;
+            textBox_Logs.Name = "textBox_Logs";
+            textBox_Logs.ScrollBars = ScrollBars.Both;
+            textBox_Logs.Size = new Size(626, 514);
+            textBox_Logs.TabIndex = 1;
+            // 
             // UserControl_Convert
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -228,8 +221,9 @@
             Controls.Add(panel_NavBar);
             Name = "UserControl_Convert";
             Size = new Size(818, 612);
-            panel2.ResumeLayout(false);
+            Load += UserControl_Convert_Load;
             panel_Body.ResumeLayout(false);
+            panel_Body.PerformLayout();
             panel1.ResumeLayout(false);
             panel_TopBar.ResumeLayout(false);
             panel_TopBar.PerformLayout();
@@ -241,13 +235,11 @@
         #endregion
 
         private ProgressBar progressBar1;
-        private TreeView treeView1;
-        private Panel panel2;
         private Panel panel_Body;
         private Panel panel1;
         private Button button_Path;
-        private TextBox textBox2;
-        private TextBox textBox1;
+        private TextBox textBox_Files;
+        private TextBox textBox_Path;
         private Panel panel_TopBar;
         private Button button_Play;
         private Panel panel_NavBar;
@@ -255,5 +247,6 @@
         private RadioButton radioButton_Vid;
         private RadioButton radioButton_Aud;
         private RadioButton radioButton_Img;
+        private TextBox textBox_Logs;
     }
 }
