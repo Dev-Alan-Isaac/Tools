@@ -37,13 +37,14 @@
             // 
             // groupBox1
             // 
+            groupBox1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             groupBox1.Controls.Add(checkBox_Extract_Folder);
             groupBox1.Controls.Add(checkBox_Extract_Subfolder);
             groupBox1.Controls.Add(checkBox_Extract_Delete);
             groupBox1.Font = new Font("Arial Rounded MT Bold", 12F);
-            groupBox1.Location = new Point(3, 3);
+            groupBox1.Location = new Point(9, 3);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(236, 124);
+            groupBox1.Size = new Size(800, 124);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Additional";
