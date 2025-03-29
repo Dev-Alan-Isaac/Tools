@@ -232,10 +232,10 @@ namespace Tools
                         new JObject(new JProperty("Keep", true))
                     )),
                     new JProperty("Selection", new JArray(
-                        new JObject(new JProperty("Image", "")),
-                        new JObject(new JProperty("Audio", "")),
-                        new JObject(new JProperty("Video", "")),
-                        new JObject(new JProperty("Document", ""))
+                        new JObject(new JProperty("Image", "BMP")),
+                        new JObject(new JProperty("Audio", "MP3")),
+                        new JObject(new JProperty("Video", "MP4")),
+                        new JObject(new JProperty("Document", "DOC"))
                     ))
                 )),
                 new JProperty("Extract", new JObject(
