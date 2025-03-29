@@ -81,6 +81,7 @@ namespace Tools
             {
                 FollowButton(button);
                 userControl_Convert1.BringToFront();
+                userControl_Convert1.ReloadSettings();
             }
         }
 
