@@ -1375,37 +1375,17 @@ namespace Tools
             return checkboxStates;
         }
 
-        private void Delete_Folders(string path)
+        public void Delete_Folders(string folderPath)
         {
-            try
+            foreach (var directory in Directory.GetDirectories(folderPath))
             {
-                // Check if the directory exists
-                if (!Directory.Exists(path))
-                {
-                    MessageBox.Show($"The path \"{path}\" does not exist or has already been deleted.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
-                }
+                Delete_Folders(directory); // Recursively delete empty subfolders
 
-                foreach (var directory in Directory.GetDirectories(path))
+                // If the directory is empty after processing subfolders, delete it
+                if (Directory.GetFiles(directory).Length == 0 && Directory.GetDirectories(directory).Length == 0)
                 {
-                    Delete_Folders(directory);
-
-                    // Check if the directory is empty
-                    if (Directory.GetFiles(directory).Length == 0 && Directory.GetDirectories(directory).Length == 0)
-                    {
-                        Directory.Delete(directory);
-                    }
+                    Directory.Delete(directory);
                 }
-
-                // Check if the root directory is empty (optional)
-                if (Directory.GetFiles(path).Length == 0 && Directory.GetDirectories(path).Length == 0)
-                {
-                    Directory.Delete(path);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"An error occurred: {ex.Message}", "Fail", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
