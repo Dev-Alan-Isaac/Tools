@@ -39,10 +39,10 @@
             panel_TopBar = new Panel();
             button_Play = new Button();
             panel_NavBar = new Panel();
-            radioButton4 = new RadioButton();
-            radioButton3 = new RadioButton();
-            radioButton2 = new RadioButton();
-            radioButton1 = new RadioButton();
+            radioButton_Doc = new RadioButton();
+            radioButton_Vid = new RadioButton();
+            radioButton_Aud = new RadioButton();
+            radioButton_Img = new RadioButton();
             panel2.SuspendLayout();
             panel_Body.SuspendLayout();
             panel1.SuspendLayout();
@@ -161,63 +161,63 @@
             // panel_NavBar
             // 
             panel_NavBar.BackColor = Color.White;
-            panel_NavBar.Controls.Add(radioButton4);
-            panel_NavBar.Controls.Add(radioButton3);
-            panel_NavBar.Controls.Add(radioButton2);
-            panel_NavBar.Controls.Add(radioButton1);
+            panel_NavBar.Controls.Add(radioButton_Doc);
+            panel_NavBar.Controls.Add(radioButton_Vid);
+            panel_NavBar.Controls.Add(radioButton_Aud);
+            panel_NavBar.Controls.Add(radioButton_Img);
             panel_NavBar.Dock = DockStyle.Left;
             panel_NavBar.Location = new Point(0, 0);
             panel_NavBar.Name = "panel_NavBar";
             panel_NavBar.Size = new Size(186, 612);
             panel_NavBar.TabIndex = 3;
             // 
-            // radioButton4
+            // radioButton_Doc
             // 
-            radioButton4.AutoSize = true;
-            radioButton4.Font = new Font("Arial Rounded MT Bold", 12F);
-            radioButton4.Location = new Point(28, 184);
-            radioButton4.Name = "radioButton4";
-            radioButton4.Size = new Size(131, 22);
-            radioButton4.TabIndex = 3;
-            radioButton4.TabStop = true;
-            radioButton4.Text = "radioButton4";
-            radioButton4.UseVisualStyleBackColor = true;
+            radioButton_Doc.AutoSize = true;
+            radioButton_Doc.Font = new Font("Arial Rounded MT Bold", 12F);
+            radioButton_Doc.Location = new Point(28, 184);
+            radioButton_Doc.Name = "radioButton_Doc";
+            radioButton_Doc.Size = new Size(108, 22);
+            radioButton_Doc.TabIndex = 3;
+            radioButton_Doc.TabStop = true;
+            radioButton_Doc.Text = "Document";
+            radioButton_Doc.UseVisualStyleBackColor = true;
             // 
-            // radioButton3
+            // radioButton_Vid
             // 
-            radioButton3.AutoSize = true;
-            radioButton3.Font = new Font("Arial Rounded MT Bold", 12F);
-            radioButton3.Location = new Point(28, 132);
-            radioButton3.Name = "radioButton3";
-            radioButton3.Size = new Size(131, 22);
-            radioButton3.TabIndex = 2;
-            radioButton3.TabStop = true;
-            radioButton3.Text = "radioButton3";
-            radioButton3.UseVisualStyleBackColor = true;
+            radioButton_Vid.AutoSize = true;
+            radioButton_Vid.Font = new Font("Arial Rounded MT Bold", 12F);
+            radioButton_Vid.Location = new Point(28, 132);
+            radioButton_Vid.Name = "radioButton_Vid";
+            radioButton_Vid.Size = new Size(71, 22);
+            radioButton_Vid.TabIndex = 2;
+            radioButton_Vid.TabStop = true;
+            radioButton_Vid.Text = "Video";
+            radioButton_Vid.UseVisualStyleBackColor = true;
             // 
-            // radioButton2
+            // radioButton_Aud
             // 
-            radioButton2.AutoSize = true;
-            radioButton2.Font = new Font("Arial Rounded MT Bold", 12F);
-            radioButton2.Location = new Point(28, 80);
-            radioButton2.Name = "radioButton2";
-            radioButton2.Size = new Size(131, 22);
-            radioButton2.TabIndex = 1;
-            radioButton2.TabStop = true;
-            radioButton2.Text = "radioButton2";
-            radioButton2.UseVisualStyleBackColor = true;
+            radioButton_Aud.AutoSize = true;
+            radioButton_Aud.Font = new Font("Arial Rounded MT Bold", 12F);
+            radioButton_Aud.Location = new Point(28, 80);
+            radioButton_Aud.Name = "radioButton_Aud";
+            radioButton_Aud.Size = new Size(72, 22);
+            radioButton_Aud.TabIndex = 1;
+            radioButton_Aud.TabStop = true;
+            radioButton_Aud.Text = "Audio";
+            radioButton_Aud.UseVisualStyleBackColor = true;
             // 
-            // radioButton1
+            // radioButton_Img
             // 
-            radioButton1.AutoSize = true;
-            radioButton1.Font = new Font("Arial Rounded MT Bold", 12F);
-            radioButton1.Location = new Point(28, 28);
-            radioButton1.Name = "radioButton1";
-            radioButton1.Size = new Size(131, 22);
-            radioButton1.TabIndex = 0;
-            radioButton1.TabStop = true;
-            radioButton1.Text = "radioButton1";
-            radioButton1.UseVisualStyleBackColor = true;
+            radioButton_Img.AutoSize = true;
+            radioButton_Img.Font = new Font("Arial Rounded MT Bold", 12F);
+            radioButton_Img.Location = new Point(28, 28);
+            radioButton_Img.Name = "radioButton_Img";
+            radioButton_Img.Size = new Size(85, 22);
+            radioButton_Img.TabIndex = 0;
+            radioButton_Img.TabStop = true;
+            radioButton_Img.Text = "Imagen";
+            radioButton_Img.UseVisualStyleBackColor = true;
             // 
             // UserControl_Convert
             // 
@@ -251,9 +251,9 @@
         private Panel panel_TopBar;
         private Button button_Play;
         private Panel panel_NavBar;
-        private RadioButton radioButton4;
-        private RadioButton radioButton3;
-        private RadioButton radioButton2;
-        private RadioButton radioButton1;
+        private RadioButton radioButton_Doc;
+        private RadioButton radioButton_Vid;
+        private RadioButton radioButton_Aud;
+        private RadioButton radioButton_Img;
     }
 }
