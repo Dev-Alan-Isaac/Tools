@@ -30,7 +30,6 @@ namespace Tools
         private void Split_ExtractSection(JObject filterSection)
         {
             var additional = filterSection["Additional"] as JArray;
-            var metadata = filterSection["Metadata"] as JArray;
 
             ProcessAdditional(additional);
         }
