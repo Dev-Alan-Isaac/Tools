@@ -271,7 +271,7 @@
             // textBox_Logs
             // 
             textBox_Logs.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            textBox_Logs.BorderStyle = BorderStyle.FixedSingle;
+            textBox_Logs.BackColor = SystemColors.Window;
             textBox_Logs.Location = new Point(6, 6);
             textBox_Logs.Multiline = true;
             textBox_Logs.Name = "textBox_Logs";

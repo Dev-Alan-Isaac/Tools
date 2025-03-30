@@ -30,6 +30,7 @@
         {
             progressBar1 = new ProgressBar();
             panel_Body = new Panel();
+            textBox_Logs = new TextBox();
             panel1 = new Panel();
             button_Path = new Button();
             textBox_Files = new TextBox();
@@ -41,7 +42,6 @@
             radioButton_Vid = new RadioButton();
             radioButton_Aud = new RadioButton();
             radioButton_Img = new RadioButton();
-            textBox_Logs = new TextBox();
             panel_Body.SuspendLayout();
             panel1.SuspendLayout();
             panel_TopBar.SuspendLayout();
@@ -66,6 +66,18 @@
             panel_Body.Name = "panel_Body";
             panel_Body.Size = new Size(632, 562);
             panel_Body.TabIndex = 5;
+            // 
+            // textBox_Logs
+            // 
+            textBox_Logs.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            textBox_Logs.BackColor = SystemColors.Window;
+            textBox_Logs.Location = new Point(3, 6);
+            textBox_Logs.Multiline = true;
+            textBox_Logs.Name = "textBox_Logs";
+            textBox_Logs.ReadOnly = true;
+            textBox_Logs.ScrollBars = ScrollBars.Both;
+            textBox_Logs.Size = new Size(626, 514);
+            textBox_Logs.TabIndex = 1;
             // 
             // panel1
             // 
@@ -201,16 +213,6 @@
             radioButton_Img.TabStop = true;
             radioButton_Img.Text = "Imagen";
             radioButton_Img.UseVisualStyleBackColor = true;
-            // 
-            // textBox_Logs
-            // 
-            textBox_Logs.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            textBox_Logs.Location = new Point(3, 6);
-            textBox_Logs.Multiline = true;
-            textBox_Logs.Name = "textBox_Logs";
-            textBox_Logs.ScrollBars = ScrollBars.Both;
-            textBox_Logs.Size = new Size(626, 514);
-            textBox_Logs.TabIndex = 1;
             // 
             // UserControl_Convert
             // 
