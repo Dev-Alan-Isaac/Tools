@@ -97,6 +97,13 @@ namespace Tools
         // Private Functions
         private async Task Extract(string[] files)
         {
+            progressBar1.Invoke(new Action(() =>
+            {
+                progressBar1.Minimum = 0;
+                progressBar1.Maximum = files.Length;
+                progressBar1.Value = 0;
+            }));
+
             if (string.IsNullOrWhiteSpace(PathSort) || !Directory.Exists(PathSort))
             {
                 Debug.WriteLine("PathSort is invalid or does not exist.");
@@ -133,6 +140,13 @@ namespace Tools
             {
                 if (File.Exists(file)) // Check if the file exists before moving it
                 {
+
+                    // Increment the progress bar
+                    progressBar1.Invoke(new Action(() =>
+                    {
+                        progressBar1.Value++;
+                    }));
+
                     await MoveFileAsync(file, destinationPath); // Move all files to the determined destination
                 }
                 else
@@ -143,6 +157,13 @@ namespace Tools
                     }));
                 }
             }
+
+            progressBar1.Invoke(new Action(() =>
+            {
+                progressBar1.Value = 0;
+            }));
+
+            MessageBox.Show("Files organization completed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private async Task Metadata(string[] files)

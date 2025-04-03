@@ -314,11 +314,11 @@ namespace Tools
         {
             if (filterSettings.Range)
             {
-                await Range(files, filterSettings.Range_List); // Assuming Range is synchronous
+                await Range(files, filterSettings.Range_List); 
             }
             else if (filterSettings.Dynamic)
             {
-                await Dynamic(files); // Add 'await' to call the async method correctly
+                await Dynamic(files); 
             }
         }
 
