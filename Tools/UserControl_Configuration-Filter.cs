@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Diagnostics;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Tools
 {
