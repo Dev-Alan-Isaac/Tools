@@ -1,5 +1,4 @@
-﻿using System.Text;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using System.Security.Cryptography;
 using NReco.VideoInfo;
