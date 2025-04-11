@@ -176,6 +176,13 @@ namespace Tools
 
         private void button_Path_Click(object sender, EventArgs e)
         {
+            // Clear the TextBox logs before adding new lines
+            textBox_Logs.Invoke(new Action(() =>
+            {
+                textBox_Logs.Clear();
+            }));
+
+            // Open a folder browser dialog to select the path
             using (var fbd = new FolderBrowserDialog())
             {
                 DialogResult result = fbd.ShowDialog();
@@ -197,12 +204,6 @@ namespace Tools
 
         private void button_Play_Click(object sender, EventArgs e)
         {
-            // Clear the TextBox logs before adding new lines
-            textBox_Logs.Invoke(new Action(() =>
-            {
-                textBox_Logs.Clear();
-            }));
-
             // Get the checkbox states
             Dictionary<string, bool> checkboxStates = Get_CheckboxState();
 
@@ -243,7 +244,6 @@ namespace Tools
             }
         }
 
-
         // Filters - Functions
         private async Task FilterType(string[] files)
         {
@@ -268,13 +268,13 @@ namespace Tools
 
             foreach (string file in files)
             {
-                string fileExtension = System.IO.Path.GetExtension(file).TrimStart('.').ToLower();
+                string fileExtension = Path.GetExtension(file).TrimStart('.').ToLower();
 
                 foreach (var type in typeToSettings)
                 {
                     if (type.Value.IsEnabled && type.Value.Extensions.Contains(fileExtension))
                     {
-                        // Create a folder based on the type.Key if it doesn't exist
+                        // Create a folder based on the file type if it doesn't exist
                         string folderPath = Path.Combine(PathSort, type.Key);
                         if (!Directory.Exists(folderPath))
                         {
@@ -285,7 +285,7 @@ namespace Tools
                         string destinationFilePath = Path.Combine(folderPath, Path.GetFileName(file));
                         int counter = 1;
 
-                        // If the file already exists, append a unique identifier to the file name
+                        // If the file already exists, append a unique identifier to avoid conflicts
                         while (File.Exists(destinationFilePath))
                         {
                             string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file);
@@ -294,10 +294,25 @@ namespace Tools
                             counter++;
                         }
 
-                        // Move the file to the created folder
+                        // Move the file to the appropriate folder
                         await MoveFileAsync(file, destinationFilePath);
 
-                        // Increment the progress bar
+                        // Log the moved file's details in textBox_Logs
+                        textBox_Logs.Invoke(new Action(() =>
+                        {
+                            textBox_Logs.SelectionStart = textBox_Logs.TextLength;
+                            textBox_Logs.SelectionLength = 0;
+                            textBox_Logs.SelectionColor = Color.Blue; // Set log color
+                            textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Bold);
+                            textBox_Logs.AppendText($"{Environment.NewLine}File Moved Successfully!{Environment.NewLine}");
+                            textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Regular);
+                            textBox_Logs.SelectionColor = textBox_Logs.ForeColor;
+                            textBox_Logs.AppendText($"File Name: {Path.GetFileName(file)}{Environment.NewLine}");
+                            textBox_Logs.AppendText($"Type: {type.Key}{Environment.NewLine}");
+                            textBox_Logs.AppendText($"New Path: {destinationFilePath}{Environment.NewLine}");
+                        }));
+
+                        // Update progress bar
                         progressBar1.Invoke(new Action(() =>
                         {
                             progressBar1.Value++;
@@ -308,13 +323,23 @@ namespace Tools
                 }
             }
 
-            // Reset the progress bar and show a completion message
-            progressBar1.Invoke(new Action(() =>
-            {
-                progressBar1.Value = 0;
-            }));
+            // Reset progress bar
+            progressBar1.Invoke(new Action(() => { progressBar1.Value = 0; }));
 
-            MessageBox.Show("File filtering and organization completed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            // Play a sound notification on completion
+            System.Media.SystemSounds.Asterisk.Play(); // System sound (Windows default)
+
+            // Log completion in `textBox_Logs`
+            textBox_Logs.Invoke(new Action(() =>
+            {
+                textBox_Logs.SelectionStart = textBox_Logs.TextLength;
+                textBox_Logs.SelectionLength = 0;
+                textBox_Logs.SelectionColor = Color.Green; // Green for success
+                textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Bold);
+                textBox_Logs.AppendText($"{Environment.NewLine}File filtering and organization completed!");
+                textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Regular);
+                textBox_Logs.SelectionColor = textBox_Logs.ForeColor;
+            }));
         }
 
         private async Task FilterSize(string[] files)
@@ -344,7 +369,7 @@ namespace Tools
                 {
                     var sizeList = kvp[key];
 
-                    // Convert the ranges to bytes
+                    // Convert the range limits to bytes
                     long minSize = sizeList.Count > 1 ? ConvertToBytes(sizeList[0], sizeList[1]) : 0;
                     long maxSize = sizeList.Count > 3 ? ConvertToBytes(sizeList[2], sizeList[3]) : long.MaxValue;
 
@@ -353,10 +378,10 @@ namespace Tools
                     {
                         long fileSize = new FileInfo(file).Length;
 
-                        // Check if the file falls within the range
+                        // Check if the file falls within the size range
                         if (fileSize >= minSize && fileSize <= maxSize)
                         {
-                            // Determine the folder name
+                            // Determine the folder name based on the range category
                             string folderPath = Path.Combine(PathSort, key);
 
                             // Create the folder if it doesn't exist
@@ -368,7 +393,7 @@ namespace Tools
                             // Move the file to the folder
                             string destinationFilePath = Path.Combine(folderPath, Path.GetFileName(file));
 
-                            // Create the size-specific subfolder
+                            // Create a size-specific subfolder
                             long sizeCategoryValue = ConvertToCategoryValue(fileSize);
                             string sizeSubfolderPath = Path.Combine(folderPath, sizeCategoryValue.ToString());
 
@@ -382,6 +407,22 @@ namespace Tools
                             destinationFilePath = Path.Combine(sizeSubfolderPath, Path.GetFileName(file));
                             await MoveFileAsync(file, destinationFilePath);
 
+                            // Log the moved file's details in `textBox_Logs`
+                            textBox_Logs.Invoke(new Action(() =>
+                            {
+                                textBox_Logs.SelectionStart = textBox_Logs.TextLength;
+                                textBox_Logs.SelectionLength = 0;
+                                textBox_Logs.SelectionColor = Color.Blue; // Set log color
+                                textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Bold);
+                                textBox_Logs.AppendText($"{Environment.NewLine}File Moved Successfully!{Environment.NewLine}");
+                                textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Regular);
+                                textBox_Logs.SelectionColor = textBox_Logs.ForeColor;
+                                textBox_Logs.AppendText($"File Name: {Path.GetFileName(file)}{Environment.NewLine}");
+                                textBox_Logs.AppendText($"Size Category: {key}{Environment.NewLine}");
+                                textBox_Logs.AppendText($"New Path: {destinationFilePath}{Environment.NewLine}");
+                            }));
+
+                            // Update progress bar
                             progressBar1.Invoke(new Action(() =>
                             {
                                 progressBar1.Value++;
@@ -391,12 +432,23 @@ namespace Tools
                 }
             }
 
-            progressBar1.Invoke(new Action(() =>
-            {
-                progressBar1.Value = 0;
-            }));
+            // Reset progress bar
+            progressBar1.Invoke(new Action(() => { progressBar1.Value = 0; }));
 
-            MessageBox.Show("File filtering and organization completed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            // Play a sound notification on completion
+            System.Media.SystemSounds.Asterisk.Play(); // Windows default system sound
+
+            // Log completion in `textBox_Logs`
+            textBox_Logs.Invoke(new Action(() =>
+            {
+                textBox_Logs.SelectionStart = textBox_Logs.TextLength;
+                textBox_Logs.SelectionLength = 0;
+                textBox_Logs.SelectionColor = Color.Green; // Green for success
+                textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Bold);
+                textBox_Logs.AppendText($"{Environment.NewLine}File filtering and organization completed!");
+                textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Regular);
+                textBox_Logs.SelectionColor = textBox_Logs.ForeColor;
+            }));
         }
 
         private long ConvertToCategoryValue(long fileSize)
@@ -440,8 +492,8 @@ namespace Tools
                 long fileSize = new FileInfo(file).Length;
 
                 // Determine the size category and size value
-                string sizeCategory = "";
-                long sizeValue = 0;
+                string sizeCategory;
+                long sizeValue;
 
                 if (fileSize < mbThreshold)
                 {
@@ -478,18 +530,40 @@ namespace Tools
                 string destinationFilePath = Path.Combine(sizeValueFolder, Path.GetFileName(file));
                 await MoveFileAsync(file, destinationFilePath);
 
-                progressBar1.Invoke(new Action(() =>
+                // Log the moved file's details in `textBox_Logs`
+                textBox_Logs.Invoke(new Action(() =>
                 {
-                    progressBar1.Value++;
+                    textBox_Logs.SelectionStart = textBox_Logs.TextLength;
+                    textBox_Logs.SelectionLength = 0;
+                    textBox_Logs.SelectionColor = Color.Blue; // Set log color
+                    textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Bold);
+                    textBox_Logs.AppendText($"{Environment.NewLine}File Moved Successfully!{Environment.NewLine}");
+                    textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Regular);
+                    textBox_Logs.SelectionColor = textBox_Logs.ForeColor;
+                    textBox_Logs.AppendText($"File Name: {Path.GetFileName(file)}{Environment.NewLine}");
+                    textBox_Logs.AppendText($"Size Category: {sizeCategory}{Environment.NewLine}");
+                    textBox_Logs.AppendText($"New Path: {destinationFilePath}{Environment.NewLine}");
                 }));
+
+                progressBar1.Invoke(new Action(() => { progressBar1.Value++; }));
             }
 
-            progressBar1.Invoke(new Action(() =>
-            {
-                progressBar1.Value = 0;
-            }));
+            progressBar1.Invoke(new Action(() => { progressBar1.Value = 0; }));
 
-            MessageBox.Show("File filtering and organization completed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            // Play a sound notification on completion
+            System.Media.SystemSounds.Asterisk.Play(); // Windows default system sound
+
+            // Log completion in `textBox_Logs`
+            textBox_Logs.Invoke(new Action(() =>
+            {
+                textBox_Logs.SelectionStart = textBox_Logs.TextLength;
+                textBox_Logs.SelectionLength = 0;
+                textBox_Logs.SelectionColor = Color.Green; // Green for success
+                textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Bold);
+                textBox_Logs.AppendText($"{Environment.NewLine}File filtering and organization completed!");
+                textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Regular);
+                textBox_Logs.SelectionColor = textBox_Logs.ForeColor;
+            }));
         }
 
         private long ConvertToBytes(string sizeValue, string unit)
@@ -538,6 +612,13 @@ namespace Tools
         {
             string creationDateParentFolder = Path.Combine(PathSort, "Creation date");
 
+            progressBar1.Invoke(new Action(() =>
+            {
+                progressBar1.Minimum = 0;
+                progressBar1.Maximum = files.Length;
+                progressBar1.Value = 0;
+            }));
+
             foreach (var file in files)
             {
                 DateTime creationDate = File.GetCreationTime(file);
@@ -560,20 +641,43 @@ namespace Tools
                     string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
                     newDestinationPath = Path.Combine(creationDateFolder, $"{fileNameWithoutExtension} ({fileCount++}){fileExtension}");
                 }
-                progressBar1.Invoke(new Action(() =>
-                {
-                    progressBar1.Value++;
-                }));
+
+                progressBar1.Invoke(new Action(() => { progressBar1.Value++; }));
 
                 await MoveFileAsync(file, newDestinationPath);
+
+                // Log the moved file's details in `textBox_Logs`
+                textBox_Logs.Invoke(new Action(() =>
+                {
+                    textBox_Logs.SelectionStart = textBox_Logs.TextLength;
+                    textBox_Logs.SelectionLength = 0;
+                    textBox_Logs.SelectionColor = Color.Blue; // Set log color
+                    textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Bold);
+                    textBox_Logs.AppendText($"{Environment.NewLine}File Moved Successfully!{Environment.NewLine}");
+                    textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Regular);
+                    textBox_Logs.SelectionColor = textBox_Logs.ForeColor;
+                    textBox_Logs.AppendText($"File Name: {fileName}{Environment.NewLine}");
+                    textBox_Logs.AppendText($"Creation Date: {creationDate:yyyy-MM-dd}{Environment.NewLine}");
+                    textBox_Logs.AppendText($"New Path: {newDestinationPath}{Environment.NewLine}");
+                }));
             }
 
-            progressBar1.Invoke(new Action(() =>
-            {
-                progressBar1.Value = 0;
-            }));
+            progressBar1.Invoke(new Action(() => { progressBar1.Value = 0; }));
 
-            MessageBox.Show("File filtering and organization completed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            // Play a sound notification on completion
+            System.Media.SystemSounds.Asterisk.Play(); // Windows default system sound
+
+            // Log completion in `textBox_Logs`
+            textBox_Logs.Invoke(new Action(() =>
+            {
+                textBox_Logs.SelectionStart = textBox_Logs.TextLength;
+                textBox_Logs.SelectionLength = 0;
+                textBox_Logs.SelectionColor = Color.Green; // Green for success
+                textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Bold);
+                textBox_Logs.AppendText($"{Environment.NewLine}File filtering and organization completed!");
+                textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Regular);
+                textBox_Logs.SelectionColor = textBox_Logs.ForeColor;
+            }));
         }
 
         private async Task Access(string[] files)
@@ -1270,7 +1374,7 @@ namespace Tools
 
         private async Task WithJsonHash(string[] files, Dictionary<string, List<string>> fileHashes)
         {
-            const string hashFilePath = "Hashes.json";
+            const string hashFilePath = " .json";
 
             if (globalHashes == null)
             {
@@ -1350,84 +1454,95 @@ namespace Tools
         {
             const string hashFilePath = "Hashes.json";
 
-            // Initialize the progress bar
-            Invoke(new Action(() =>
+            // Ensure globalHashes is initialized
+            if (globalHashes == null)
+            {
+                globalHashes = new HashSet<string>();
+            }
+
+            // Load existing hashes from JSON file
+            HashSet<string> storedHashes = new HashSet<string>();
+
+
+            progressBar1.Invoke(new Action(() =>
             {
                 progressBar1.Minimum = 0;
                 progressBar1.Maximum = files.Length;
                 progressBar1.Value = 0;
             }));
 
-            // A set to store unique hashes (load existing hashes from the JSON file)
-            var uniqueHashes = new HashSet<string>();
-
             if (File.Exists(hashFilePath))
             {
-                using (var reader = new StreamReader(hashFilePath))
+                try
                 {
-                    var existingHashes = JsonConvert.DeserializeObject<HashSet<string>>(reader.ReadToEnd());
-                    if (existingHashes != null)
+                    string jsonContent = await File.ReadAllTextAsync(hashFilePath);
+                    storedHashes = JsonConvert.DeserializeObject<HashSet<string>>(jsonContent) ?? new HashSet<string>();
+
+                    lock (globalHashes)
                     {
-                        foreach (var hash in existingHashes)
-                        {
-                            uniqueHashes.Add(hash); // Add existing hashes to the set
-                        }
+                        globalHashes.UnionWith(storedHashes);
                     }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error loading JSON file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
             }
 
-            // Process files in batches
-            var fileBatches = files.Select((file, index) => new { file, index })
-                                     .GroupBy(x => x.index / 1000) // Adjust the batch size as needed
-                                     .Select(g => g.Select(x => x.file).ToArray());
+            // Scan and check new hashes
+            List<string> newEntries = new List<string>();
 
-            foreach (var batch in fileBatches)
+            foreach (string file in files)
             {
-                var throttler = new SemaphoreSlim(8); // Adjust the degree of parallelism as needed
+                string fileHash = await ComputeFileHashAsync(file);
+                string fileName = Path.GetFileName(file);
+                string fileDirectory = Path.GetDirectoryName(file);
 
-                // Process the batch with limited parallelism
-                var tasks = batch.Select(async file =>
+                // Only add new hashes that are not in storedHashes
+                if (!storedHashes.Contains(fileHash))
                 {
-                    await throttler.WaitAsync();
-                    try
+                    lock (globalHashes)
                     {
-                        string hash = await ComputeFileHashAsync(file);
-
-                        // Lock to ensure thread safety when accessing shared resources
-                        lock (uniqueHashes)
-                        {
-                            uniqueHashes.Add(hash); // `HashSet` ensures no duplicates
-                        }
-
-                        // Update the progress bar safely
-                        Invoke(new Action(() =>
-                        {
-                            progressBar1.Value++;
-                        }));
+                        globalHashes.Add(fileHash);
                     }
-                    finally
+
+                    newEntries.Add($"File Name: {fileName}{Environment.NewLine}Path: {fileDirectory}{Environment.NewLine}Hash: {fileHash}{Environment.NewLine}");
+
+                    // Log newly found hash in the UI
+                    textBox_Logs.Invoke(new Action(() =>
                     {
-                        throttler.Release(); // Release semaphore
-                    }
-                });
+                        textBox_Logs.SelectionStart = textBox_Logs.TextLength;
+                        textBox_Logs.SelectionLength = 0;
+                        textBox_Logs.SelectionColor = Color.Green;
+                        textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Bold);
+                        textBox_Logs.AppendText($"{Environment.NewLine}New Hash Found!{Environment.NewLine}");
+                        textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Regular);
+                        textBox_Logs.SelectionColor = textBox_Logs.ForeColor;
+                        textBox_Logs.AppendText($"File Name: {fileName}{Environment.NewLine}Path: {fileDirectory}{Environment.NewLine}Hash: {fileHash}{Environment.NewLine}");
+                    }));
+                }
 
-                await Task.WhenAll(tasks);
+                progressBar1.Invoke(new Action(() => { progressBar1.Value++; }));
             }
 
-            // Save the updated list of unique hashes to the JSON file
-            using (var writer = new StreamWriter(hashFilePath))
-            using (var jsonWriter = new JsonTextWriter(writer) { Formatting = Formatting.Indented })
+            // Append new hashes to JSON file without overwriting existing data
+            if (newEntries.Count > 0)
             {
-                var serializer = new JsonSerializer();
-                serializer.Serialize(jsonWriter, uniqueHashes.ToList());
+                try
+                {
+                    string updatedJson = JsonConvert.SerializeObject(globalHashes, Formatting.Indented);
+                    await File.WriteAllTextAsync(hashFilePath, updatedJson);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error updating JSON file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
-
-            progressBar1.Invoke(new Action(() =>
+            else
             {
-                progressBar1.Value = 0;
-            }));
-
-            MessageBox.Show("Hashing process completed.", "Hashing Completed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("No new hashes found.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
         // Global
@@ -1593,21 +1708,6 @@ namespace Tools
                 string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(destinationPath);
                 newDestinationPath = Path.Combine(Path.GetDirectoryName(destinationPath), $"{fileNameWithoutExtension} ({fileCount++}){fileExtension}");
             }
-
-            // Log the destination path to the TextBox
-            textBox_Logs.Invoke(new Action(() =>
-            {
-                string fileName = Path.GetFileName(sourcePath); // Get the file name
-                textBox_Logs.AppendText($"{Environment.NewLine}"); // Add a separator line (blank line)
-
-                textBox_Logs.SelectionStart = textBox_Logs.TextLength; // Set cursor position
-                textBox_Logs.SelectionLength = 0;
-                textBox_Logs.SelectionColor = Color.Blue; // Change text color to blue
-
-                textBox_Logs.AppendText($"Moving file \"{fileName}\" to: {newDestinationPath}{Environment.NewLine}");
-
-                textBox_Logs.SelectionColor = textBox_Logs.ForeColor; // Reset color to default
-            }));
 
             await Task.Run(() => File.Move(sourcePath, newDestinationPath));
         }
