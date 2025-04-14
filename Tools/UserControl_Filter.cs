@@ -1714,13 +1714,29 @@ namespace Tools
 
         public async Task Duplicate(string[] files)
         {
-            // Ensure the "Duplicates" folder exists
-            string duplicatesFolder = Path.Combine(PathSort, "Duplicates");
-            Directory.CreateDirectory(duplicatesFolder);
+            // Load hashes from JSON file (now treated as an array)
+            string jsonFilePath = "Hashes.json";
+            List<string> fileHashes = new List<string>();
 
+            if (File.Exists(jsonFilePath))
+            {
+                string jsonData = await File.ReadAllTextAsync(jsonFilePath);
+                fileHashes = JsonConvert.DeserializeObject<List<string>>(jsonData) ?? new List<string>();
+            }
+
+            // Build a dictionary for hash occurrences
             var fileHashCounts = new Dictionary<string, int>();
+            foreach (var hash in fileHashes)
+            {
+                if (fileHashCounts.ContainsKey(hash))
+                    fileHashCounts[hash]++;
+                else
+                    fileHashCounts[hash] = 1;
+            }
 
-            // Configure the ProgressBar for the first pass
+            bool duplicatesFound = false;
+
+            // Configure ProgressBar
             progressBar1.Invoke(new Action(() =>
             {
                 progressBar1.Minimum = 0;
@@ -1728,81 +1744,55 @@ namespace Tools
                 progressBar1.Value = 0;
             }));
 
-            // First pass: Compute hashes and count duplicates
+            // Process files based on JSON data
             for (int i = 0; i < files.Length; i++)
             {
                 string file = files[i];
                 string fileHash = await ComputeFileHashAsync(file);
 
-                if (fileHashCounts.ContainsKey(fileHash))
+                // Check if the hash has multiple occurrences
+                if (fileHashCounts.TryGetValue(fileHash, out int occurrence) && occurrence > 1)
                 {
-                    fileHashCounts[fileHash]++;
-                }
-                else
-                {
-                    fileHashCounts[fileHash] = 1;
-                }
+                    // If first duplicate found, create the folder
+                    if (!duplicatesFound)
+                    {
+                        string duplicatesFolder = Path.Combine(PathSort, "Duplicates");
+                        Directory.CreateDirectory(duplicatesFolder);
+                        duplicatesFound = true;
+                    }
 
-                // Update progress bar using Invoke
-                progressBar1.Invoke(new Action(() =>
-                {
-                    progressBar1.Value = i + 1;
-                }));
-            }
-
-            // Reset ProgressBar for the second pass
-            progressBar1.Invoke(new Action(() =>
-            {
-                progressBar1.Value = 0;
-            }));
-
-            // Second pass: Process files and move duplicates
-            for (int i = 0; i < files.Length; i++)
-            {
-                string file = files[i];
-                string fileHash = await ComputeFileHashAsync(file);
-
-                // Check if the hash occurs more than once
-                if (fileHashCounts[fileHash] > 1)
-                {
-                    // Define the destination path in the "Duplicates" folder
-                    string destinationPath = Path.Combine(duplicatesFolder, Path.GetFileName(file));
+                    // Define destination path in "Duplicates" folder
+                    string destinationPath = Path.Combine(PathSort, "Duplicates", Path.GetFileName(file));
                     await MoveFileAsync(file, destinationPath);
 
-                    // Do not decrement the count to allow all duplicates to be moved
+                    // Log occurrences
+                    textBox_Logs.Invoke(new Action(() =>
+                    {
+                        textBox_Logs.SelectionStart = textBox_Logs.TextLength;
+                        textBox_Logs.SelectionLength = 0;
+                        textBox_Logs.SelectionColor = Color.Red;
+                        textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Bold);
+                        textBox_Logs.AppendText($"{Environment.NewLine}Duplicate found! Hash: {fileHash}, Occurrences: {occurrence}");
+                        textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Regular);
+                        textBox_Logs.SelectionColor = textBox_Logs.ForeColor;
+                    }));
                 }
 
-                // Update progress bar using Invoke
-                progressBar1.Invoke(new Action(() =>
-                {
-                    progressBar1.Value = i + 1;
-                }));
+                // Update ProgressBar
+                progressBar1.Invoke(new Action(() => { progressBar1.Value++; }));
             }
 
-            progressBar1.Invoke(new Action(() =>
+            // Final log message instead of MessageBox
+            textBox_Logs.Invoke(new Action(() =>
             {
-                progressBar1.Value = 0;
+                textBox_Logs.SelectionStart = textBox_Logs.TextLength;
+                textBox_Logs.SelectionLength = 0;
+                textBox_Logs.SelectionColor = Color.Green;
+                textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Bold);
+                textBox_Logs.AppendText($"{Environment.NewLine}File filtering and organization completed!");
+                textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Regular);
+                textBox_Logs.SelectionColor = textBox_Logs.ForeColor;
             }));
-
-            MessageBox.Show("Duplicate file processing completed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        private HashSet<string> LoadHashes(string filePath)
-        {
-            if (!File.Exists(filePath)) return new HashSet<string>();
-
-            string jsonContent = File.ReadAllText(filePath);
-            return JsonConvert.DeserializeObject<HashSet<string>>(jsonContent) ?? new HashSet<string>();
-        }
-
-        private async Task<string> ComputeFileHashAsync(string filePath)
-        {
-            using (FileStream stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, 30 * 1024 * 1024, true)) // Increased buffer size
-            using (SHA256 sha256 = SHA256.Create())
-            {
-                byte[] hash = await sha256.ComputeHashAsync(stream);
-                return BitConverter.ToString(hash).Replace("-", "");
-            }
         }
 
         public async Task Scan(string[] files)
@@ -1892,6 +1882,27 @@ namespace Tools
             await Task.Run(() => File.Move(sourcePath, newDestinationPath));
         }
 
+        private async Task<string> ComputeFileHashAsync(string filePath)
+        {
+            using (var sha256 = SHA256.Create())
+            {
+                const int bufferSize = 8 * 1024 * 1024; // 8 MB buffer size
+
+                using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize, useAsync: true))
+                {
+                    byte[] buffer = new byte[bufferSize];
+                    int bytesRead;
+                    while ((bytesRead = await fileStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                    {
+                        sha256.TransformBlock(buffer, 0, bytesRead, buffer, 0);
+                    }
+                    sha256.TransformFinalBlock(buffer, 0, 0);
+
+                    byte[] hashBytes = sha256.Hash;
+                    return BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
+                }
+            }
+        }
     }
 }
 
