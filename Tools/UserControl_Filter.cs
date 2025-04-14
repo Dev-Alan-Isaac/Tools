@@ -11,6 +11,15 @@ using static System.Net.Mime.MediaTypeNames;
 using static System.Windows.Forms.LinkLabel;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Font = System.Drawing.Font;
+using System.Collections.Concurrent;
+using Microsoft.VisualBasic.Devices;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
+using System.Runtime.CompilerServices;
+using System.Text;
+using System;
+using TheArtOfDev.HtmlRenderer.Adapters.Entities;
+using Microsoft.VisualBasic.ApplicationServices;
+using System.Windows.Forms;
 
 namespace Tools
 {
@@ -20,16 +29,13 @@ namespace Tools
         private FilterSettings filterSettings;
         private int totalFiles = 0;
         private string[] files;
-        private HashSet<string> globalHashes;
 
         public UserControl_Filter()
         {
             InitializeComponent();
-            LoadGlobalJson();
             PathSort = string.Empty; // Initialize PathSort
             filterSettings = new FilterSettings(); // Initialize filterSettings
             files = Array.Empty<string>(); // Initialize files
-            globalHashes = new HashSet<string>(); // Initialize globalHashes
         }
 
         private void UserControl_Filter_Load(object sender, EventArgs e)
@@ -1708,13 +1714,13 @@ namespace Tools
 
         public async Task Duplicate(string[] files)
         {
-            LoadGlobalJson();
-
+            // Ensure the "Duplicates" folder exists
             string duplicatesFolder = Path.Combine(PathSort, "Duplicates");
+            Directory.CreateDirectory(duplicatesFolder);
 
-            bool duplicatesFound = false;
-            List<(string SourcePath, string DestinationPath)> filesToMove = new List<(string, string)>();
+            var fileHashCounts = new Dictionary<string, int>();
 
+            // Configure the ProgressBar for the first pass
             progressBar1.Invoke(new Action(() =>
             {
                 progressBar1.Minimum = 0;
@@ -1722,129 +1728,86 @@ namespace Tools
                 progressBar1.Value = 0;
             }));
 
-            foreach (string file in files)
+            // First pass: Compute hashes and count duplicates
+            for (int i = 0; i < files.Length; i++)
             {
+                string file = files[i];
                 string fileHash = await ComputeFileHashAsync(file);
 
-                lock (globalHashes)
+                if (fileHashCounts.ContainsKey(fileHash))
                 {
-                    if (globalHashes.Contains(fileHash))
-                    {
-                        if (!duplicatesFound)
-                        {
-                            if (!Directory.Exists(duplicatesFolder))
-                            {
-                                Directory.CreateDirectory(duplicatesFolder);
-                            }
-                            duplicatesFound = true;
-                        }
-
-                        // Store duplicate file's move information
-                        string destinationPath = Path.Combine(duplicatesFolder, Path.GetFileName(file));
-                        filesToMove.Add((file, destinationPath));
-
-                        // Log the duplicate file's details
-                        textBox_Logs.Invoke(new Action(() =>
-                        {
-                            textBox_Logs.SelectionStart = textBox_Logs.TextLength;
-                            textBox_Logs.SelectionLength = 0;
-                            textBox_Logs.SelectionColor = Color.Red;
-                            textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Bold);
-                            textBox_Logs.AppendText($"{Environment.NewLine}Duplicate Found and Moved!{Environment.NewLine}");
-                            textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Regular);
-                            textBox_Logs.SelectionColor = textBox_Logs.ForeColor;
-                            textBox_Logs.AppendText($"File Name: {Path.GetFileName(file)}{Environment.NewLine}");
-                            textBox_Logs.AppendText($"Hash: {fileHash}{Environment.NewLine}");
-                            textBox_Logs.AppendText($"New Path: {destinationPath}{Environment.NewLine}");
-                        }));
-                    }
-                    else
-                    {
-                        globalHashes.Add(fileHash);
-                    }
-                }
-
-                progressBar1.Invoke(new Action(() => { progressBar1.Value++; }));
-            }
-
-            // Move files outside of lock statement
-            foreach (var fileInfo in filesToMove)
-            {
-                await MoveFileAsync(fileInfo.SourcePath, fileInfo.DestinationPath);
-            }
-
-            progressBar1.Invoke(new Action(() => { progressBar1.Value = 0; }));
-
-            // Save updated hashes to JSON without overwriting previous data
-            try
-            {
-                // Check if the file exists before reading
-                if (File.Exists("Hashes.json"))
-                {
-                    string existingJson = await File.ReadAllTextAsync("Hashes.json");
-                    var existingHashes = JsonConvert.DeserializeObject<HashSet<string>>(existingJson) ?? new HashSet<string>();
-
-                    // Merge with new hashes
-                    foreach (var hash in globalHashes)
-                    {
-                        existingHashes.Add(hash);
-                    }
-
-                    // Serialize and save back to JSON
-                    string updatedJson = JsonConvert.SerializeObject(existingHashes, Formatting.Indented);
-                    await File.WriteAllTextAsync("Hashes.json", updatedJson);
+                    fileHashCounts[fileHash]++;
                 }
                 else
                 {
-                    // If the file doesn't exist, write the current hashes directly
-                    string updatedJson = JsonConvert.SerializeObject(globalHashes, Formatting.Indented);
-                    await File.WriteAllTextAsync("Hashes.json", updatedJson);
+                    fileHashCounts[fileHash] = 1;
                 }
-            }
-            catch (Exception ex)
-            {
-                textBox_Logs.Invoke(new Action(() =>
+
+                // Update progress bar using Invoke
+                progressBar1.Invoke(new Action(() =>
                 {
-                    textBox_Logs.SelectionStart = textBox_Logs.TextLength;
-                    textBox_Logs.SelectionLength = 0;
-                    textBox_Logs.SelectionColor = Color.Red;
-                    textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Bold);
-                    textBox_Logs.AppendText($"{Environment.NewLine}Error updating JSON file:{Environment.NewLine}");
-                    textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Regular);
-                    textBox_Logs.SelectionColor = textBox_Logs.ForeColor;
-                    textBox_Logs.AppendText($"Error: {ex.Message}{Environment.NewLine}");
+                    progressBar1.Value = i + 1;
                 }));
             }
 
-            // Play a sound notification on completion
-            System.Media.SystemSounds.Asterisk.Play();
-
-            // Log completion in `textBox_Logs`
-            textBox_Logs.Invoke(new Action(() =>
+            // Reset ProgressBar for the second pass
+            progressBar1.Invoke(new Action(() =>
             {
-                textBox_Logs.SelectionStart = textBox_Logs.TextLength;
-                textBox_Logs.SelectionLength = 0;
-                textBox_Logs.SelectionColor = Color.Green;
-                textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Bold);
-                textBox_Logs.AppendText($"{Environment.NewLine}Duplicate file filtering completed!");
-                textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Regular);
-                textBox_Logs.SelectionColor = textBox_Logs.ForeColor;
+                progressBar1.Value = 0;
             }));
+
+            // Second pass: Process files and move duplicates
+            for (int i = 0; i < files.Length; i++)
+            {
+                string file = files[i];
+                string fileHash = await ComputeFileHashAsync(file);
+
+                // Check if the hash occurs more than once
+                if (fileHashCounts[fileHash] > 1)
+                {
+                    // Define the destination path in the "Duplicates" folder
+                    string destinationPath = Path.Combine(duplicatesFolder, Path.GetFileName(file));
+                    await MoveFileAsync(file, destinationPath);
+
+                    // Do not decrement the count to allow all duplicates to be moved
+                }
+
+                // Update progress bar using Invoke
+                progressBar1.Invoke(new Action(() =>
+                {
+                    progressBar1.Value = i + 1;
+                }));
+            }
+
+            progressBar1.Invoke(new Action(() =>
+            {
+                progressBar1.Value = 0;
+            }));
+
+            MessageBox.Show("Duplicate file processing completed!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private HashSet<string> LoadHashes(string filePath)
+        {
+            if (!File.Exists(filePath)) return new HashSet<string>();
+
+            string jsonContent = File.ReadAllText(filePath);
+            return JsonConvert.DeserializeObject<HashSet<string>>(jsonContent) ?? new HashSet<string>();
+        }
+
+        private async Task<string> ComputeFileHashAsync(string filePath)
+        {
+            using (FileStream stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, 30 * 1024 * 1024, true)) // Increased buffer size
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] hash = await sha256.ComputeHashAsync(stream);
+                return BitConverter.ToString(hash).Replace("-", "");
+            }
         }
 
         public async Task Scan(string[] files)
         {
-            LoadGlobalJson();
-
             const string hashFilePath = "Hashes.json";
-
-            // Ensure globalHashes is initialized
-            if (globalHashes == null)
-            {
-                globalHashes = new HashSet<string>();
-            }
-
-            List<string> newHashesFound = new List<string>();
 
             progressBar1.Invoke(new Action(() =>
             {
@@ -1852,94 +1815,6 @@ namespace Tools
                 progressBar1.Maximum = files.Length;
                 progressBar1.Value = 0;
             }));
-
-            foreach (string file in files)
-            {
-                string fileHash = await ComputeFileHashAsync(file);
-                string fileName = Path.GetFileName(file);
-                string fileDirectory = Path.GetDirectoryName(file);
-
-                // Check if hash is new
-                lock (globalHashes)
-                {
-                    if (!globalHashes.Contains(fileHash))
-                    {
-                        globalHashes.Add(fileHash);
-                        newHashesFound.Add(fileHash);
-
-                        // Log new hashes in `textBox_Logs`
-                        textBox_Logs.Invoke(new Action(() =>
-                        {
-                            textBox_Logs.SelectionStart = textBox_Logs.TextLength;
-                            textBox_Logs.SelectionLength = 0;
-                            textBox_Logs.SelectionColor = Color.Green;
-                            textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Bold);
-                            textBox_Logs.AppendText($"{Environment.NewLine}New Hash Found!{Environment.NewLine}");
-                            textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Regular);
-                            textBox_Logs.SelectionColor = textBox_Logs.ForeColor;
-                            textBox_Logs.AppendText($"File Name: {fileName}{Environment.NewLine}");
-                            textBox_Logs.AppendText($"Path: {fileDirectory}{Environment.NewLine}");
-                            textBox_Logs.AppendText($"Hash: {fileHash}{Environment.NewLine}");
-                        }));
-                    }
-                }
-
-                progressBar1.Invoke(new Action(() => { progressBar1.Value++; }));
-            }
-
-            progressBar1.Invoke(new Action(() => { progressBar1.Value = 0; }));
-
-            // Append new hashes to JSON file without overwriting previous data
-            if (newHashesFound.Count > 0)
-            {
-                try
-                {
-                    // Read existing hashes if the file exists
-                    HashSet<string> existingHashes = new HashSet<string>();
-                    if (File.Exists(hashFilePath))
-                    {
-                        string existingJson = await File.ReadAllTextAsync(hashFilePath);
-                        existingHashes = JsonConvert.DeserializeObject<HashSet<string>>(existingJson) ?? new HashSet<string>();
-                    }
-
-                    // Merge new hashes into the existing set
-                    existingHashes.UnionWith(globalHashes);
-
-                    // Serialize and save back to JSON without losing previous data
-                    string updatedJson = JsonConvert.SerializeObject(existingHashes, Formatting.Indented);
-                    await File.WriteAllTextAsync(hashFilePath, updatedJson);
-                }
-                catch (Exception ex)
-                {
-                    textBox_Logs.Invoke(new Action(() =>
-                    {
-                        textBox_Logs.SelectionStart = textBox_Logs.TextLength;
-                        textBox_Logs.SelectionLength = 0;
-                        textBox_Logs.SelectionColor = Color.Red;
-                        textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Bold);
-                        textBox_Logs.AppendText($"{Environment.NewLine}Error updating JSON file:{Environment.NewLine}");
-                        textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Regular);
-                        textBox_Logs.SelectionColor = textBox_Logs.ForeColor;
-                        textBox_Logs.AppendText($"Error: {ex.Message}{Environment.NewLine}");
-                    }));
-                }
-            }
-            else
-            {
-                textBox_Logs.Invoke(new Action(() =>
-                {
-                    textBox_Logs.SelectionStart = textBox_Logs.TextLength;
-                    textBox_Logs.SelectionLength = 0;
-                    textBox_Logs.SelectionColor = Color.Blue;
-                    textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Bold);
-                    textBox_Logs.AppendText($"{Environment.NewLine}No new hashes found.");
-                    textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Regular);
-                    textBox_Logs.SelectionColor = textBox_Logs.ForeColor;
-                }));
-            }
-
-            // Play a sound notification on completion
-            System.Media.SystemSounds.Asterisk.Play();
         }
 
         // Global
@@ -2002,44 +1877,6 @@ namespace Tools
             return files; // Return the list of file paths
         }
 
-        private void LoadGlobalJson()
-        {
-            const string hashFilePath = "Hashes.json";
-
-            globalHashes = new HashSet<string>();
-
-            if (File.Exists(hashFilePath))
-            {
-                try
-                {
-                    using (var reader = new StreamReader(hashFilePath))
-                    {
-                        var existingHashes = JsonConvert.DeserializeObject<HashSet<string>>(reader.ReadToEnd());
-                        if (existingHashes != null)
-                        {
-                            globalHashes = new HashSet<string>(existingHashes); // Initialize with existing hashes
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error loading JSON: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            else
-            {
-                try
-                {
-                    // Create an empty JSON file with an empty hash set
-                    File.WriteAllText(hashFilePath, JsonConvert.SerializeObject(globalHashes, Formatting.Indented));
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error creating JSON file: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-        }
-
         private async Task MoveFileAsync(string sourcePath, string destinationPath)
         {
             int fileCount = 1;
@@ -2055,27 +1892,6 @@ namespace Tools
             await Task.Run(() => File.Move(sourcePath, newDestinationPath));
         }
 
-        private async Task<string> ComputeFileHashAsync(string filePath)
-        {
-            using (var sha256 = SHA256.Create())
-            {
-                const int bufferSize = 8 * 1024 * 1024; // 8 MB buffer size
-
-                using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize, useAsync: true))
-                {
-                    byte[] buffer = new byte[bufferSize];
-                    int bytesRead;
-                    while ((bytesRead = await fileStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
-                    {
-                        sha256.TransformBlock(buffer, 0, bytesRead, buffer, 0);
-                    }
-                    sha256.TransformFinalBlock(buffer, 0, 0);
-
-                    byte[] hashBytes = sha256.Hash;
-                    return BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
-                }
-            }
-        }
     }
 }
 
