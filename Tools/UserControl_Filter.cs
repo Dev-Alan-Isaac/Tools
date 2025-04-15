@@ -1714,27 +1714,7 @@ namespace Tools
 
         public async Task Duplicate(string[] files)
         {
-            // Load hashes from JSON file (now treated as an array)
-            string jsonFilePath = "Hashes.json";
-            List<string> fileHashes = new List<string>();
-
-            if (File.Exists(jsonFilePath))
-            {
-                string jsonData = await File.ReadAllTextAsync(jsonFilePath);
-                fileHashes = JsonConvert.DeserializeObject<List<string>>(jsonData) ?? new List<string>();
-            }
-
-            // Build a dictionary for hash occurrences
             var fileHashCounts = new Dictionary<string, int>();
-            foreach (var hash in fileHashes)
-            {
-                if (fileHashCounts.ContainsKey(hash))
-                    fileHashCounts[hash]++;
-                else
-                    fileHashCounts[hash] = 1;
-            }
-
-            bool duplicatesFound = false;
 
             // Configure ProgressBar
             progressBar1.Invoke(new Action(() =>
@@ -1744,16 +1724,47 @@ namespace Tools
                 progressBar1.Value = 0;
             }));
 
-            // Process files based on JSON data
-            for (int i = 0; i < files.Length; i++)
+
+            // Log each file being processed
+            textBox_Logs.Invoke(new Action(() =>
             {
-                string file = files[i];
+                textBox_Logs.SelectionStart = textBox_Logs.TextLength;
+                textBox_Logs.SelectionLength = 0;
+                textBox_Logs.SelectionColor = Color.Blue;
+                textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Bold);
+                textBox_Logs.AppendText($"{Environment.NewLine}Compute hashes and counting occurrences");
+                textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Regular);
+                textBox_Logs.SelectionColor = textBox_Logs.ForeColor;
+            }));
+
+
+            // Compute hashes dynamically and count occurrences
+            foreach (var file in files)
+            {
                 string fileHash = await ComputeFileHashAsync(file);
 
-                // Check if the hash has multiple occurrences
-                if (fileHashCounts.TryGetValue(fileHash, out int occurrence) && occurrence > 1)
+                if (fileHashCounts.ContainsKey(fileHash))
+                    fileHashCounts[fileHash]++;
+                else
+                    fileHashCounts[fileHash] = 1;
+
+                // Update ProgressBar as each file is processed
+                progressBar1.Invoke(new Action(() =>
                 {
-                    // If first duplicate found, create the folder
+                    progressBar1.Value++;
+                }));
+            }
+
+            bool duplicatesFound = false;
+
+            // Process files again to move duplicates
+            foreach (var file in files)
+            {
+                string fileHash = await ComputeFileHashAsync(file);
+
+                // If hash appears more than once, it's a duplicate
+                if (fileHashCounts[fileHash] > 1)
+                {
                     if (!duplicatesFound)
                     {
                         string duplicatesFolder = Path.Combine(PathSort, "Duplicates");
@@ -1772,7 +1783,7 @@ namespace Tools
                         textBox_Logs.SelectionLength = 0;
                         textBox_Logs.SelectionColor = Color.Red;
                         textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Bold);
-                        textBox_Logs.AppendText($"{Environment.NewLine}Duplicate found! Hash: {fileHash}, Occurrences: {occurrence}");
+                        textBox_Logs.AppendText($"{Environment.NewLine}Duplicate found! Hash: {fileHash}, Occurrences: {fileHashCounts[fileHash]}");
                         textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Regular);
                         textBox_Logs.SelectionColor = textBox_Logs.ForeColor;
                     }));
@@ -1782,7 +1793,7 @@ namespace Tools
                 progressBar1.Invoke(new Action(() => { progressBar1.Value++; }));
             }
 
-            // Final log message instead of MessageBox
+            // Final log message
             textBox_Logs.Invoke(new Action(() =>
             {
                 textBox_Logs.SelectionStart = textBox_Logs.TextLength;
@@ -1793,6 +1804,8 @@ namespace Tools
                 textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Regular);
                 textBox_Logs.SelectionColor = textBox_Logs.ForeColor;
             }));
+
+            progressBar1.Invoke(new Action(() => { progressBar1.Value=0; }));
         }
 
         public async Task Scan(string[] files)
