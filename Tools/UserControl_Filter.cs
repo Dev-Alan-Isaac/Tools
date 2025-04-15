@@ -20,6 +20,7 @@ using System;
 using TheArtOfDev.HtmlRenderer.Adapters.Entities;
 using Microsoft.VisualBasic.ApplicationServices;
 using System.Windows.Forms;
+using System.Security.Policy;
 
 namespace Tools
 {
@@ -1715,82 +1716,87 @@ namespace Tools
         public async Task Duplicate(string[] files)
         {
             var fileHashCounts = new Dictionary<string, int>();
+            var duplicateFiles = new List<(string file, string hash)>();
 
-            // Configure ProgressBar
-            progressBar1.Invoke(new Action(() =>
+            // Limit concurrent tasks to prevent excessive memory usage
+            using (var semaphore = new SemaphoreSlim(4)) // Adjust thread count based on system capacity
             {
-                progressBar1.Minimum = 0;
-                progressBar1.Maximum = files.Length;
-                progressBar1.Value = 0;
-            }));
-
-
-            // Log each file being processed
-            textBox_Logs.Invoke(new Action(() =>
-            {
-                textBox_Logs.SelectionStart = textBox_Logs.TextLength;
-                textBox_Logs.SelectionLength = 0;
-                textBox_Logs.SelectionColor = Color.Blue;
-                textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Bold);
-                textBox_Logs.AppendText($"{Environment.NewLine}Compute hashes and counting occurrences");
-                textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Regular);
-                textBox_Logs.SelectionColor = textBox_Logs.ForeColor;
-            }));
-
-
-            // Compute hashes dynamically and count occurrences
-            foreach (var file in files)
-            {
-                string fileHash = await ComputeFileHashAsync(file);
-
-                if (fileHashCounts.ContainsKey(fileHash))
-                    fileHashCounts[fileHash]++;
-                else
-                    fileHashCounts[fileHash] = 1;
-
-                // Update ProgressBar as each file is processed
+                // Configure ProgressBar
                 progressBar1.Invoke(new Action(() =>
                 {
-                    progressBar1.Value++;
+                    progressBar1.Minimum = 0;
+                    progressBar1.Maximum = files.Length;
+                    progressBar1.Value = 0;
                 }));
-            }
 
-            bool duplicatesFound = false;
-
-            // Process files again to move duplicates
-            foreach (var file in files)
-            {
-                string fileHash = await ComputeFileHashAsync(file);
-
-                // If hash appears more than once, it's a duplicate
-                if (fileHashCounts[fileHash] > 1)
+                // Log Start
+                textBox_Logs.Invoke(new Action(() =>
                 {
-                    if (!duplicatesFound)
+                    textBox_Logs.SelectionStart = textBox_Logs.TextLength;
+                    textBox_Logs.SelectionLength = 0;
+                    textBox_Logs.SelectionColor = Color.Blue;
+                    textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Bold);
+                    textBox_Logs.AppendText($"{Environment.NewLine}Compute hashes and counting occurrences");
+                    textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Regular);
+                    textBox_Logs.SelectionColor = textBox_Logs.ForeColor;
+                }));
+
+                // Compute hashes dynamically with controlled concurrency
+                await Task.WhenAll(files.Select(async file =>
+                {
+                    await semaphore.WaitAsync(); // Limit concurrency
+
+                    try
                     {
-                        string duplicatesFolder = Path.Combine(PathSort, "Duplicates");
-                        Directory.CreateDirectory(duplicatesFolder);
-                        duplicatesFound = true;
+                        string fileHash = await ComputeFileHashAsync(file);
+
+                        lock (fileHashCounts)
+                        {
+                            if (fileHashCounts.ContainsKey(fileHash))
+                                fileHashCounts[fileHash]++;
+                            else
+                                fileHashCounts[fileHash] = 1;
+                        }
+
+                        // Track duplicates for later processing
+                        lock (duplicateFiles)
+                        {
+                            if (fileHashCounts[fileHash] > 1)
+                                duplicateFiles.Add((file, fileHash));
+                        }
+
+                        // Update ProgressBar Efficiently
+                        progressBar1.Invoke(new Action(() => progressBar1.Value++));
                     }
-
-                    // Define destination path in "Duplicates" folder
-                    string destinationPath = Path.Combine(PathSort, "Duplicates", Path.GetFileName(file));
-                    await MoveFileAsync(file, destinationPath);
-
-                    // Log occurrences
-                    textBox_Logs.Invoke(new Action(() =>
+                    finally
                     {
-                        textBox_Logs.SelectionStart = textBox_Logs.TextLength;
-                        textBox_Logs.SelectionLength = 0;
-                        textBox_Logs.SelectionColor = Color.Red;
-                        textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Bold);
-                        textBox_Logs.AppendText($"{Environment.NewLine}Duplicate found! Hash: {fileHash}, Occurrences: {fileHashCounts[fileHash]}");
-                        textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Regular);
-                        textBox_Logs.SelectionColor = textBox_Logs.ForeColor;
-                    }));
-                }
+                        semaphore.Release(); // Release slot for next task
+                    }
+                }));
 
-                // Update ProgressBar
-                progressBar1.Invoke(new Action(() => { progressBar1.Value++; }));
+                if (duplicateFiles.Count > 0)
+                {
+                    string duplicatesFolder = Path.Combine(PathSort, "Duplicates");
+                    Directory.CreateDirectory(duplicatesFolder);
+
+                    foreach (var (file, hash) in duplicateFiles)
+                    {
+                        string destinationPath = Path.Combine(duplicatesFolder, Path.GetFileName(file));
+                        await MoveFileAsync(file, destinationPath);
+
+                        // Log duplicate detection efficiently
+                        textBox_Logs.Invoke(new Action(() =>
+                       {
+                           textBox_Logs.SelectionStart = textBox_Logs.TextLength;
+                           textBox_Logs.SelectionLength = 0;
+                           textBox_Logs.SelectionColor = Color.Red;
+                           textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Bold);
+                           textBox_Logs.AppendText($"{Environment.NewLine}Duplicate found! Hash: {hash}");
+                           textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Regular);
+                           textBox_Logs.SelectionColor = textBox_Logs.ForeColor;
+                       }));
+                    }
+                }
             }
 
             // Final log message
@@ -1805,7 +1811,7 @@ namespace Tools
                 textBox_Logs.SelectionColor = textBox_Logs.ForeColor;
             }));
 
-            progressBar1.Invoke(new Action(() => { progressBar1.Value=0; }));
+            progressBar1.Invoke(new Action(() => progressBar1.Value = 0));
         }
 
         public async Task Scan(string[] files)
