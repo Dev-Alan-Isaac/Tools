@@ -1791,7 +1791,7 @@ namespace Tools
                            textBox_Logs.SelectionLength = 0;
                            textBox_Logs.SelectionColor = Color.Red;
                            textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Bold);
-                           textBox_Logs.AppendText($"{Environment.NewLine}Duplicate found! Hash: {hash}");
+                           textBox_Logs.AppendText($"{Environment.NewLine}Duplicate found! Hash: {hash}{Environment.NewLine}");
                            textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Regular);
                            textBox_Logs.SelectionColor = textBox_Logs.ForeColor;
                        }));
