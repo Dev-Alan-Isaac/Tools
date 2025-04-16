@@ -2,25 +2,7 @@
 using System.Diagnostics;
 using System.Security.Cryptography;
 using NReco.VideoInfo;
-using Newtonsoft.Json;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Xml.Linq;
-using Microsoft.VisualBasic;
-using RestSharp.Validation;
-using static System.Net.Mime.MediaTypeNames;
-using static System.Windows.Forms.LinkLabel;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Font = System.Drawing.Font;
-using System.Collections.Concurrent;
-using Microsoft.VisualBasic.Devices;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System;
-using TheArtOfDev.HtmlRenderer.Adapters.Entities;
-using Microsoft.VisualBasic.ApplicationServices;
-using System.Windows.Forms;
-using System.Security.Policy;
 
 namespace Tools
 {
