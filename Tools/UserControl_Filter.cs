@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Security.Cryptography;
 using NReco.VideoInfo;
 using Font = System.Drawing.Font;
+using Blake3;
 
 namespace Tools
 {
@@ -1698,102 +1699,118 @@ namespace Tools
         public async Task Duplicate(string[] files)
         {
             var fileHashCounts = new Dictionary<string, int>();
+            var hashToFiles = new Dictionary<string, List<string>>();
             var duplicateFiles = new List<(string file, string hash)>();
+            string duplicatesFolder = Path.Combine(PathSort, "Duplicates");
+            Directory.CreateDirectory(duplicatesFolder);
 
-            // Limit concurrent tasks to prevent excessive memory usage
-            using (var semaphore = new SemaphoreSlim(4)) // Adjust thread count based on system capacity
+            using var semaphore = new SemaphoreSlim(6); // Cap concurrency
+
+            progressBar1.Invoke(() =>
             {
-                // Configure ProgressBar
-                progressBar1.Invoke(new Action(() =>
-                {
-                    progressBar1.Minimum = 0;
-                    progressBar1.Maximum = files.Length;
-                    progressBar1.Value = 0;
-                }));
+                progressBar1.Minimum = 0;
+                progressBar1.Maximum = files.Length;
+                progressBar1.Value = 0;
+            });
 
-                // Log Start
-                textBox_Logs.Invoke(new Action(() =>
-                {
-                    textBox_Logs.SelectionStart = textBox_Logs.TextLength;
-                    textBox_Logs.SelectionLength = 0;
-                    textBox_Logs.SelectionColor = Color.Blue;
-                    textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Bold);
-                    textBox_Logs.AppendText($"{Environment.NewLine}Compute hashes and counting occurrences");
-                    textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Regular);
-                    textBox_Logs.SelectionColor = textBox_Logs.ForeColor;
-                }));
+            LogToTextBox("Starting file hash computation and duplicate detection...", Color.DarkCyan, FontStyle.Bold);
 
-                // Compute hashes dynamically with controlled concurrency
-                await Task.WhenAll(files.Select(async file =>
+            await Task.WhenAll(files.Select(async file =>
+            {
+                await semaphore.WaitAsync();
+                try
                 {
-                    await semaphore.WaitAsync(); // Limit concurrency
+                    if (!File.Exists(file)) return;
+
+                    string fileHash = await ComputeFileHashAsync(file);
+
+                    lock (fileHashCounts)
+                    {
+                        if (!fileHashCounts.ContainsKey(fileHash))
+                            fileHashCounts[fileHash] = 0;
+                        fileHashCounts[fileHash]++;
+                    }
+
+                    lock (hashToFiles)
+                    {
+                        if (!hashToFiles.ContainsKey(fileHash))
+                            hashToFiles[fileHash] = new List<string>();
+
+                        hashToFiles[fileHash].Add(file);
+                    }
+
+                    progressBar1.Invoke(() => progressBar1.Value++);
+                }
+                catch (Exception ex)
+                {
+                    LogToTextBox($"[ERROR] Hash failed for {file}: {ex.Message}", Color.Red, FontStyle.Bold);
+                }
+                finally
+                {
+                    semaphore.Release();
+                }
+            }));
+
+            foreach (var kvp in hashToFiles.Where(kvp => kvp.Value.Count > 1))
+            {
+                string hash = kvp.Key;
+                var duplicateGroup = kvp.Value.Skip(1); // Keep first occurrence untouched
+
+                LogToTextBox($"[DUPLICATES] Hash: {hash}", Color.Red, FontStyle.Bold);
+
+                foreach (var file in duplicateGroup)
+                {
+                    string fileName = Path.GetFileName(file);
+                    string destinationPath = Path.Combine(duplicatesFolder, fileName);
+                    int count = 1;
+
+                    // Avoid overwriting
+                    while (File.Exists(destinationPath))
+                    {
+                        string newName = $"{Path.GetFileNameWithoutExtension(fileName)}_{count}{Path.GetExtension(fileName)}";
+                        destinationPath = Path.Combine(duplicatesFolder, newName);
+                        count++;
+                    }
 
                     try
                     {
-                        string fileHash = await ComputeFileHashAsync(file);
-
-                        lock (fileHashCounts)
-                        {
-                            if (fileHashCounts.ContainsKey(fileHash))
-                                fileHashCounts[fileHash]++;
-                            else
-                                fileHashCounts[fileHash] = 1;
-                        }
-
-                        // Track duplicates for later processing
-                        lock (duplicateFiles)
-                        {
-                            if (fileHashCounts[fileHash] > 1)
-                                duplicateFiles.Add((file, fileHash));
-                        }
-
-                        // Update ProgressBar Efficiently
-                        progressBar1.Invoke(new Action(() => progressBar1.Value++));
-                    }
-                    finally
-                    {
-                        semaphore.Release(); // Release slot for next task
-                    }
-                }));
-
-                if (duplicateFiles.Count > 0)
-                {
-                    string duplicatesFolder = Path.Combine(PathSort, "Duplicates");
-                    Directory.CreateDirectory(duplicatesFolder);
-
-                    foreach (var (file, hash) in duplicateFiles)
-                    {
-                        string destinationPath = Path.Combine(duplicatesFolder, Path.GetFileName(file));
                         await MoveFileAsync(file, destinationPath);
-
-                        // Log duplicate detection efficiently
-                        textBox_Logs.Invoke(new Action(() =>
-                       {
-                           textBox_Logs.SelectionStart = textBox_Logs.TextLength;
-                           textBox_Logs.SelectionLength = 0;
-                           textBox_Logs.SelectionColor = Color.Red;
-                           textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Bold);
-                           textBox_Logs.AppendText($"{Environment.NewLine}Duplicate found! Hash: {hash}{Environment.NewLine}");
-                           textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Regular);
-                           textBox_Logs.SelectionColor = textBox_Logs.ForeColor;
-                       }));
+                        LogToTextBox($"[MOVED] {file} → {destinationPath}", Color.Orange, FontStyle.Regular);
+                    }
+                    catch (Exception ex)
+                    {
+                        LogToTextBox($"[FAIL] Could not move {file}: {ex.Message}", Color.Red, FontStyle.Bold);
                     }
                 }
             }
 
-            // Final log message
-            textBox_Logs.Invoke(new Action(() =>
-            {
-                textBox_Logs.SelectionStart = textBox_Logs.TextLength;
-                textBox_Logs.SelectionLength = 0;
-                textBox_Logs.SelectionColor = Color.Green;
-                textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Bold);
-                textBox_Logs.AppendText($"{Environment.NewLine}File filtering and organization completed!");
-                textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Regular);
-                textBox_Logs.SelectionColor = textBox_Logs.ForeColor;
-            }));
+            LogToTextBox("File filtering and organization completed!", Color.Green, FontStyle.Bold);
+            progressBar1.Invoke(() => progressBar1.Value = 0);
+        }
 
-            progressBar1.Invoke(new Action(() => progressBar1.Value = 0));
+        private async Task<string> ComputeFileHashAsync(string filePath)
+        {
+            using var hasher = Hasher.New();
+
+            const int bufferSize = 8 * 1024 * 1024; // 8MB chunks
+            byte[] buffer = new byte[bufferSize];
+
+            await using var stream = new FileStream(
+                filePath,
+                FileMode.Open,
+                FileAccess.Read,
+                FileShare.Read,
+                bufferSize,
+                FileOptions.SequentialScan | FileOptions.Asynchronous);
+
+            int bytesRead;
+            while ((bytesRead = await stream.ReadAsync(buffer.AsMemory(0, buffer.Length))) > 0)
+            {
+                hasher.Update(buffer.AsSpan(0, bytesRead));
+            }
+
+            var hash = hasher.Finalize();
+            return hash.ToString(); // 64-char lowercase hex string
         }
 
         public async Task Scan(string[] files)
@@ -1883,26 +1900,18 @@ namespace Tools
             await Task.Run(() => File.Move(sourcePath, newDestinationPath));
         }
 
-        private async Task<string> ComputeFileHashAsync(string filePath)
+        private void LogToTextBox(string message, Color color, FontStyle style)
         {
-            using (var sha256 = SHA256.Create())
+            textBox_Logs.Invoke(() =>
             {
-                const int bufferSize = 8 * 1024 * 1024; // 8 MB buffer size
-
-                using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize, useAsync: true))
-                {
-                    byte[] buffer = new byte[bufferSize];
-                    int bytesRead;
-                    while ((bytesRead = await fileStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
-                    {
-                        sha256.TransformBlock(buffer, 0, bytesRead, buffer, 0);
-                    }
-                    sha256.TransformFinalBlock(buffer, 0, 0);
-
-                    byte[] hashBytes = sha256.Hash;
-                    return BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
-                }
-            }
+                textBox_Logs.SelectionStart = textBox_Logs.TextLength;
+                textBox_Logs.SelectionLength = 0;
+                textBox_Logs.SelectionColor = color;
+                textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, style);
+                textBox_Logs.AppendText($"{message}{Environment.NewLine}");
+                textBox_Logs.SelectionColor = textBox_Logs.ForeColor;
+                textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Regular);
+            });
         }
     }
 }
