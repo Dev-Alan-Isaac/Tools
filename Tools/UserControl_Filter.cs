@@ -1751,24 +1751,29 @@ namespace Tools
                 }
             }));
 
+            int groupIndex = 1;
+
             foreach (var kvp in hashToFiles.Where(kvp => kvp.Value.Count > 1))
             {
                 string hash = kvp.Key;
-                var duplicateGroup = kvp.Value.Skip(1); // Keep first occurrence untouched
+                var duplicateGroup = kvp.Value; // Include all files with this hash
 
-                LogToTextBox($"[DUPLICATES] Hash: {hash}", Color.Red, FontStyle.Bold);
+                string groupFolder = Path.Combine(duplicatesFolder, groupIndex.ToString());
+                Directory.CreateDirectory(groupFolder);
+
+                LogToTextBox($"[DUPLICATES] Group {groupIndex} | Hash: {hash}", Color.Red, FontStyle.Bold);
 
                 foreach (var file in duplicateGroup)
                 {
                     string fileName = Path.GetFileName(file);
-                    string destinationPath = Path.Combine(duplicatesFolder, fileName);
+                    string destinationPath = Path.Combine(groupFolder, fileName);
                     int count = 1;
 
                     // Avoid overwriting
                     while (File.Exists(destinationPath))
                     {
                         string newName = $"{Path.GetFileNameWithoutExtension(fileName)}_{count}{Path.GetExtension(fileName)}";
-                        destinationPath = Path.Combine(duplicatesFolder, newName);
+                        destinationPath = Path.Combine(groupFolder, newName);
                         count++;
                     }
 
@@ -1782,10 +1787,9 @@ namespace Tools
                         LogToTextBox($"[FAIL] Could not move {file}: {ex.Message}", Color.Red, FontStyle.Bold);
                     }
                 }
-            }
 
-            LogToTextBox("File filtering and organization completed!", Color.Green, FontStyle.Bold);
-            progressBar1.Invoke(() => progressBar1.Value = 0);
+                groupIndex++;
+            }
         }
 
         private async Task<string> ComputeFileHashAsync(string filePath)
