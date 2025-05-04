@@ -1790,6 +1790,23 @@ namespace Tools
 
                 groupIndex++;
             }
+
+            progressBar1.Invoke(new Action(() => { progressBar1.Value = 0; }));
+
+            // Play a sound notification on completion
+            System.Media.SystemSounds.Asterisk.Play(); // Windows default system sound
+
+            // Log completion in `textBox_Logs`
+            textBox_Logs.Invoke(new Action(() =>
+            {
+                textBox_Logs.SelectionStart = textBox_Logs.TextLength;
+                textBox_Logs.SelectionLength = 0;
+                textBox_Logs.SelectionColor = Color.Green;
+                textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Bold);
+                textBox_Logs.AppendText($"{Environment.NewLine}File filtering and organization completed!");
+                textBox_Logs.SelectionFont = new Font(textBox_Logs.Font, FontStyle.Regular);
+                textBox_Logs.SelectionColor = textBox_Logs.ForeColor;
+            }));
         }
 
         private async Task<string> ComputeFileHashAsync(string filePath)
