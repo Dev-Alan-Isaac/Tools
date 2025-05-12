@@ -252,13 +252,13 @@ namespace Tools
             // Define a dictionary to map file types to their corresponding settings and lists
             var typeToSettings = new Dictionary<string, (bool IsEnabled, List<string> Extensions)>
             {
-                { "Image", (filterSettings.Image, filterSettings.Image_List) },
-                { "Video", (filterSettings.Video, filterSettings.Video_List) },
-                { "Document", (filterSettings.Document, filterSettings.Document_List) },
-                { "Audio", (filterSettings.Audio, filterSettings.Audio_List) },
-                { "Archive", (filterSettings.Archive, filterSettings.Archive_List) },
-                { "Executable", (filterSettings.Executable, filterSettings.Executable_List) },
-                { "Other", (filterSettings.Other, filterSettings.Other_List) }
+                { "Images", (filterSettings.Image, filterSettings.Image_List) },
+                { "Videos", (filterSettings.Video, filterSettings.Video_List) },
+                { "Documents", (filterSettings.Document, filterSettings.Document_List) },
+                { "Audios", (filterSettings.Audio, filterSettings.Audio_List) },
+                { "Archives", (filterSettings.Archive, filterSettings.Archive_List) },
+                { "Executables", (filterSettings.Executable, filterSettings.Executable_List) },
+                { "Others", (filterSettings.Other, filterSettings.Other_List) }
             };
 
             progressBar1.Invoke(new Action(() =>
@@ -285,6 +285,14 @@ namespace Tools
 
                         // Determine the destination file path
                         string destinationFilePath = Path.Combine(folderPath, Path.GetFileName(file));
+
+                        // Skip if source and destination are the same (case-insensitive on Windows)
+                        if (string.Equals(file, destinationFilePath, StringComparison.OrdinalIgnoreCase))
+                        {
+                            // Optionally log that the file is already in place
+                            continue;
+                        }
+
                         int counter = 1;
 
                         // If the file already exists, append a unique identifier to avoid conflicts
