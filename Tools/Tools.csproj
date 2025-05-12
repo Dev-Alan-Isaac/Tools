@@ -11,6 +11,7 @@
   <ItemGroup>
     <PackageReference Include="Blake3" Version="2.0.0" />
     <PackageReference Include="Bunifu.UI.WinForms" Version="6.0.1" />
+    <PackageReference Include="DocX" Version="4.0.25105.5786" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NReco.VideoInfo" Version="1.2.1" />
   </ItemGroup>
