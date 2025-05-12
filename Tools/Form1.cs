@@ -175,16 +175,16 @@ namespace Tools
             var jsonObject = new JObject(
                 new JProperty("Filter", new JObject(
                     new JProperty("Types", new JArray(
-                        new JObject(new JProperty("Images", true)),
-                        new JObject(new JProperty("Videos", true)),
-                        new JObject(new JProperty("Documents", true)),
-                        new JObject(new JProperty("Audios", true)),
-                        new JObject(new JProperty("Archives", true)),
-                        new JObject(new JProperty("Executables", true)),
-                        new JObject(new JProperty("Others", true)),
+                        new JObject(new JProperty("Image", true)),
+                        new JObject(new JProperty("Video", true)),
+                        new JObject(new JProperty("Document", true)),
+                        new JObject(new JProperty("Audio", true)),
+                        new JObject(new JProperty("Archive", true)),
+                        new JObject(new JProperty("Executable", true)),
+                        new JObject(new JProperty("Other", true)),
                         new JObject(new JProperty("Image_List", new JArray("jpg", "png", "gif", "bmp", "jpeg"))),
                         new JObject(new JProperty("Video_List", new JArray("mp4", "m4v", "avi", "mkv", "3gp", "mov", "wmv", "webm", "ts", "mpg", "asf", "flv", "mpeg"))),
-                        new JObject(new JProperty("Document_List", new JArray("txt", "docx", "pdf", "pptx"))),
+                        new JObject(new JProperty("Document_List", new JArray("txt","doc" ,"docx", "pdf", "pptx", "csv", "xls", "xlsx"))),
                         new JObject(new JProperty("Audio_List", new JArray("mp3", "wav", "aac", "flac", "ogg", "m4a", "wma", "alac", "aiff"))),
                         new JObject(new JProperty("Archive_List", new JArray("zip", "rar", "7z", "tar", "gz", "bz2", "iso", "xz"))),
                         new JObject(new JProperty("Executable_List", new JArray("exe", "bat", "sh", "msi", "bin", "cmd", "apk", "com", "jar"))),
@@ -240,7 +240,7 @@ namespace Tools
                 new JProperty("Extract", new JObject(
                     new JProperty("Additional", new JArray(
                         new JObject(new JProperty("Delete", true)),
-                        new JObject(new JProperty("Subfolder", true)), 
+                        new JObject(new JProperty("Subfolder", true)),
                         new JObject(new JProperty("Folder", true))
                     ))
                 )),
