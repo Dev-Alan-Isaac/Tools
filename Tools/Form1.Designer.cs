@@ -476,7 +476,7 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Form";
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Form1";
+            Text = "Tool KIT 3.0";
             Load += Form_Load;
             panel_NavBar.ResumeLayout(false);
             panel_TopBar.ResumeLayout(false);
